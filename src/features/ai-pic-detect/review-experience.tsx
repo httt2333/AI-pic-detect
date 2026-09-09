@@ -10,6 +10,7 @@ import {
   type DragEvent,
 } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import {
   ANALYSIS_DIMENSIONS,
   type AnalysisDimensionId,
@@ -350,6 +351,24 @@ function ProductHeader({
           >
             产品边界
           </a>
+          <Link
+            href="/pricing"
+            className="hidden hover:text-violet-950 lg:block"
+          >
+            购买额度
+          </Link>
+          <Link
+            href="/reviews"
+            className="hidden hover:text-violet-950 xl:block"
+          >
+            检查记录
+          </Link>
+          <Link
+            href="/sign-in?callbackUrl=/reviews"
+            className="hidden hover:text-violet-950 sm:block"
+          >
+            登录
+          </Link>
           <button
             type="button"
             onClick={openUpload}
@@ -807,13 +826,23 @@ export function ReviewExperience({
       setSelectedIssueId(nextResponse.issues[0]?.id ?? null);
       setStatus(nextResponse.status);
     } catch (error) {
+      const quotaExhausted =
+        error instanceof Error && error.message === 'quota_exhausted';
       const timedOut =
         error instanceof Error && error.message === 'analysis_timeout';
-      setStatus(timedOut ? 'timeout' : 'analysis_failed');
+      setStatus(
+        quotaExhausted
+          ? 'quota_exhausted'
+          : timedOut
+            ? 'timeout'
+            : 'analysis_failed'
+      );
       setErrorMessage(
-        timedOut
-          ? '分析时间较长，暂未完成。请重试，或重新选择一张图片。'
-          : '分析暂时没有返回结果，请稍后重试。'
+        quotaExhausted
+          ? '游客体验次数或账户检查额度已用完。购买入口开放后可继续检查。'
+          : timedOut
+            ? '分析时间较长，暂未完成。请重试，或重新选择一张图片。'
+            : '分析暂时没有返回结果，请稍后重试。'
       );
     }
   }
@@ -855,6 +884,38 @@ export function ReviewExperience({
           <p className="mt-8 text-sm text-violet-950/55">
             请保持此页面开启，完成后会显示结果。
           </p>
+        </div>
+      </div>
+    </main>
+  ) : view === 'workspace' && status === 'quota_exhausted' ? (
+    <main className="mx-auto max-w-4xl px-5 py-14 sm:px-8">
+      <div className="grid min-h-[50dvh] place-items-center rounded-2xl border border-amber-200 bg-amber-50 p-8 text-center shadow-xl shadow-amber-950/5">
+        <div className="max-w-md space-y-5">
+          <IconAlertCircle
+            className="mx-auto text-amber-700"
+            size={42}
+            stroke={1.5}
+          />
+          <h1 className="text-3xl font-semibold tracking-tight text-violet-950">
+            本次检查额度已用完
+          </h1>
+          <p className="leading-7 text-violet-950/70">{errorMessage}</p>
+          <div className="flex flex-wrap justify-center gap-3">
+            <Link
+              href="/pricing"
+              className="inline-flex items-center gap-2 bg-violet-800 px-5 py-3 text-sm font-semibold text-white transition hover:bg-violet-950"
+            >
+              查看额度包
+              <IconArrowRight size={17} stroke={1.8} />
+            </Link>
+            <button
+              type="button"
+              onClick={startAnotherReview}
+              className="inline-flex items-center gap-2 border border-violet-300 px-5 py-3 text-sm font-semibold text-violet-900 transition hover:bg-white"
+            >
+              重新选择图片
+            </button>
+          </div>
         </div>
       </div>
     </main>
@@ -1026,6 +1087,9 @@ export function ReviewExperience({
           </h1>
           <p className="mt-7 max-w-xl text-lg leading-8 text-violet-950/70">
             上传一张人物图。扫描会定位值得复核的局部，说明检查原因，并给出可执行的修改建议。
+          </p>
+          <p className="mt-3 text-sm leading-6 text-violet-950/55">
+            游客可直接体验 1 次检查；登录后可管理检查额度与保存记录。
           </p>
           <div className="mt-9 flex flex-wrap items-center gap-4">
             <button

@@ -6,7 +6,7 @@
   },
   "sign": {
     "sign_in_title": "Sign In",
-    "sign_in_description": "Sign in to your account",
+    "sign_in_description": "Sign in to manage review history and credits",
     "sign_up_title": "Sign Up",
     "sign_up_description": "Create an account",
     "email_title": "Email",
@@ -29,7 +29,7 @@
     "name_placeholder": "Input your name here",
     "email_verification_hint": "Use an email address you can access. You must verify your email after signing up.",
     "admin_title": "Admin System",
-    "credits_title": "Credits: {credits}",
+    "credits_title": "Review credits: {credits}",
     "verify_email_sent": "Verification email sent. Please check your inbox.",
     "verify_email_required": "Please verify your email address before signing in.",
     "resend_verification": "Resend verification email",

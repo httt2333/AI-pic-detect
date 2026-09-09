@@ -4,13 +4,13 @@
     "description": "Description",
     "type": "Type",
     "scene": "Scene",
-    "credits": "Credits",
+    "credits": "Review credits",
     "expires_at": "Expires At",
     "created_at": "Created At",
     "action": "Action"
   },
   "list": {
-    "title": "Credits Records",
+    "title": "Review credit records",
     "tabs": {
       "all": "All",
       "grant": "Grant",
@@ -18,9 +18,9 @@
     }
   },
   "view": {
-    "title": "Credits Balance",
+    "title": "Review credit balance",
     "buttons": {
-      "purchase": "Purchase Credits"
+      "purchase": "View credit packs"
     }
   }
 }

@@ -8,17 +8,12 @@
         "icon": "User"
       },
       {
-        "title": "Billing",
-        "url": "/settings/billing",
-        "icon": "CreditCard"
-      },
-      {
-        "title": "Payments",
+        "title": "Purchase records",
         "url": "/settings/payments",
         "icon": "DollarSign"
       },
       {
-        "title": "Credits",
+        "title": "Review credits",
         "url": "/settings/credits",
         "icon": "Coins"
       },

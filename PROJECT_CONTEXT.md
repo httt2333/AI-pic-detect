@@ -17,3 +17,12 @@ An unauthenticated creator can complete one image analysis directly. Login is
 not an analysis prerequisite. If an account system is added later, its value is
 to support history, repeat reviews, and usage allowances rather than to block
 the initial core workflow.
+
+The approved first commercial layer is guest access with one free review,
+followed by one-time CNY review-credit packs of 10, 50, and 200 checks. The
+50-pack is recommended. Price fields remain configurable placeholders until
+the actual model/API cost is measured; subscriptions are not planned. The
+template account, credit balance, purchase-record, and review-history surfaces
+may be exposed as a safe frontend shell, but server-side entitlement,
+consumption, persistence, and a verified payment provider must be implemented
+before any purchase is enabled.

@@ -4,13 +4,13 @@
     "description": "描述",
     "type": "类型",
     "scene": "场景",
-    "credits": "积分",
+    "credits": "检查额度",
     "expires_at": "过期时间",
     "created_at": "创建时间",
     "action": "操作"
   },
   "list": {
-    "title": "积分记录",
+    "title": "检查额度记录",
     "tabs": {
       "all": "全部",
       "grant": "授予",
@@ -18,9 +18,9 @@
     }
   },
   "view": {
-    "title": "积分余额",
+    "title": "检查额度余额",
     "buttons": {
-      "purchase": "购买积分"
+      "purchase": "查看额度包"
     }
   }
 }

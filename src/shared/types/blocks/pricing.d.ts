@@ -49,6 +49,7 @@ export interface PricingItem {
 export interface Pricing {
   id?: string;
   disabled?: boolean;
+  purchase_enabled?: boolean;
   name?: string;
   title?: string;
   description?: string;

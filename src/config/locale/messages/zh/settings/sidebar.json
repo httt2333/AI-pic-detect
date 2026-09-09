@@ -8,17 +8,12 @@
         "icon": "User"
       },
       {
-        "title": "账单",
-        "url": "/settings/billing",
-        "icon": "CreditCard"
-      },
-      {
-        "title": "支付",
+        "title": "购买记录",
         "url": "/settings/payments",
         "icon": "DollarSign"
       },
       {
-        "title": "积分",
+        "title": "检查额度",
         "url": "/settings/credits",
         "icon": "Coins"
       },

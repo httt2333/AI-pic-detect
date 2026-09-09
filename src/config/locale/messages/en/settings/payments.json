@@ -18,13 +18,13 @@
     }
   },
   "list": {
-    "title": "Payments",
-    "description": "View your payments",
+    "title": "Purchase records",
+    "description": "View completed review-credit purchases",
     "tabs": {
       "all": "All",
       "one-time": "One-Time",
-      "subscription": "Subscription",
-      "renew": "Renew"
+      "subscription": "Subscription (not enabled)",
+      "renew": "Renew (not enabled)"
     }
   }
 }

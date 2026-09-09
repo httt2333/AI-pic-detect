@@ -11,6 +11,7 @@ export type ReviewStatus =
   | 'no_issue'
   | 'unsupported'
   | 'timeout'
+  | 'quota_exhausted'
   | 'analysis_failed';
 
 export type IssueDecision = 'ignored';

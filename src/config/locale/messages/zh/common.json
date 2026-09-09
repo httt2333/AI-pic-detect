@@ -6,7 +6,7 @@
   },
   "sign": {
     "sign_in_title": "登录",
-    "sign_in_description": "登录到您的账户",
+    "sign_in_description": "登录后管理检查记录与剩余额度",
     "sign_up_title": "注册",
     "sign_up_description": "创建一个新账户",
     "email_title": "邮箱",
@@ -29,7 +29,7 @@
     "name_placeholder": "请输入您的姓名",
     "email_verification_hint": "请输入可正常接收邮件的邮箱。注册后需完成邮箱验证才能正常使用。",
     "admin_title": "管理后台",
-    "credits_title": "积分: {credits}",
+    "credits_title": "检查额度: {credits}",
     "verify_email_sent": "验证邮件已发送，请前往邮箱完成验证。",
     "verify_email_required": "请先完成邮箱验证后再登录。",
     "resend_verification": "重新发送验证邮件",

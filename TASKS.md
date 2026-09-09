@@ -38,9 +38,22 @@
 - [x] Install Playwright Chromium and run the browser journey.
 - [ ] Add an API integration test once the backend contract is available.
 
-## Explicitly deferred beyond P0
+## Approved P1 commercial shell
 
-- [ ] Login and account flows: only after history, repeat-review, or allowance
-      requirements are approved; never gate the first analysis behind login.
-- [ ] Pricing, checkout, subscriptions, and allowances: remain P1/P2 until
-      product rules and real provider integration are approved.
+- [x] Map the template pricing surface to one-time CNY packs (10/50/200),
+      with 50 marked as recommended and all price fields configurable.
+- [x] Keep purchase buttons disabled while the payment provider and formal
+      price configuration are unavailable.
+- [x] Add public entry points for sign-in, review history, credit balance, and
+      purchase records without blocking the guest review.
+- [ ] Enforce the one-free-review policy and credit consumption server-side
+      after the API/auth contract is approved.
+- [ ] Configure formal prices only after a reproducible model/API cost review.
+- [ ] Connect and verify a real payment provider, checkout, and webhook flow.
+- [ ] Persist review history and repeat-review data after the analysis API is
+      available.
+
+## Still deferred
+
+- [ ] Subscriptions, automatic retouching, bulk upload, team collaboration,
+      and AI-truth verdicts.

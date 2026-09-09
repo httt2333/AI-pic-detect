@@ -53,6 +53,12 @@ Tests may be omitted only for documentation/comment-only, formatting-only, or no
 - Validate inputs at trust boundaries and return actionable, non-sensitive errors. Add timeouts and controlled failure behavior around external services.
 - Use strict TypeScript; do not introduce `any`, unsafe casts, disabled lint rules, or swallowed errors without a documented reason.
 - Update README or relevant docs whenever setup, commands, environment variables, behavior, or architecture changes.
+- Before any major product, architecture, schema, authentication, payment, or
+  data-flow change, create a local Git checkpoint commit. Keep the checkpoint
+  focused and named after the change so it can be used for rollback or review.
+- At the end of each change session, report the checkpoint commit (or clearly
+  state why no commit was created) and never imply that uncommitted work is
+  backed up remotely.
 - Before finishing, inspect the final diff for accidental secrets, generated files, debug code, skipped tests, and scope creep.
 
 ## Definition of done

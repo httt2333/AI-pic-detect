@@ -108,9 +108,13 @@ claims, or edit images automatically.
 - The current result is an in-browser mock response using the same structured
   contract as `src/features/analyze/contract.ts`; no uploaded file is sent to
   a provider from this UI yet.
-- The public P0 surface has no login, pricing, checkout, subscription, or
-  allowance entry points. Inherited template routes remain inactive until an
-  explicit product decision authorizes them.
+- The public P0 review flow remains usable without login. The approved first
+  commercial layer exposes account, review-history, credit-balance,
+  purchase-record, and pricing entry points without blocking the guest review.
+  It uses one-time CNY credit packs of 10, 50, and 200 checks; the 50-pack is
+  recommended. Prices are placeholders until model/API costs are validated,
+  and purchase controls remain disabled until a verified provider is ready.
+  Subscriptions are not part of the product direction.
 
 Relevant project memory is kept in `PROJECT_CONTEXT.md`, `CURRENT_STATE.md`,
 `DECISIONS.md`, `TASKS.md`, and `HANDOFF.md`. Read those with `AGENTS.md`

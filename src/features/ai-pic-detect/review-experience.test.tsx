@@ -253,4 +253,31 @@ describe('ReviewExperience', () => {
       await screen.findByRole('heading', { name: '检查结果' })
     ).toBeVisible();
   });
+
+  it('guides a creator to credit packs when a future analysis boundary reports no quota', async () => {
+    const analyzeImage = vi
+      .fn<() => Promise<ReturnType<typeof getMockAnalysisResponse>>>()
+      .mockRejectedValue(new Error('quota_exhausted'));
+    render(
+      <ReviewExperience initialView="upload" analyzeImage={analyzeImage} />
+    );
+
+    fireEvent.change(screen.getByLabelText('选择要检查的图片'), {
+      target: {
+        files: [new File(['image'], 'character.png', { type: 'image/png' })],
+      },
+    });
+    await waitFor(() =>
+      expect(screen.getByRole('button', { name: '开始分析' })).toBeEnabled()
+    );
+    fireEvent.click(screen.getByRole('button', { name: '开始分析' }));
+
+    expect(
+      await screen.findByRole('heading', { name: '本次检查额度已用完' })
+    ).toBeVisible();
+    expect(screen.getByRole('link', { name: '查看额度包' })).toHaveAttribute(
+      'href',
+      '/pricing'
+    );
+  });
 });

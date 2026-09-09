@@ -18,13 +18,13 @@
     }
   },
   "list": {
-    "title": "支付",
-    "description": "查看你的支付",
+    "title": "购买记录",
+    "description": "查看已完成的额度包购买记录",
     "tabs": {
       "all": "全部",
       "one-time": "一次性",
-      "subscription": "订阅",
-      "renew": "续费"
+      "subscription": "订阅（未启用）",
+      "renew": "续费（未启用）"
     }
   }
 }

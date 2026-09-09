@@ -9,12 +9,18 @@
   uploaded aspect ratios.
 - `priority` communicates editing order, not a definitive severity judgment.
 - Low-confidence candidates are filtered before the result workspace.
-- P0 has no automatic retouching, bulk upload, account complexity, payment,
-  collaboration, or AI-truth verdict.
-- Do not activate the template's existing login, pricing, checkout,
-  subscription, or allowance features during P0. An unauthenticated creator
-  can complete one image analysis without login. Any later account system
-  exists for history, repeat reviews, and allowances, not as an analysis gate.
+- P0 has no automatic retouching, bulk upload, collaboration, or AI-truth
+  verdict. An unauthenticated creator can complete one image analysis without
+  login.
+- The approved first commercial layer is guest free one review plus one-time
+  CNY review-credit packs of 10, 50, and 200 checks. The 50-pack is the
+  recommended pack. There are no subscriptions.
+- Price amounts stay configurable and unset until the actual model/API cost is
+  measured. Existing template payment code must remain disabled until a
+  verified provider, checkout contract, and webhook behavior are configured.
+  The server, not the browser, owns free-trial and credit consumption rules.
+- Login supports history, repeat reviews, remaining credits, and purchase
+  records; it is not an analysis gate.
 - The front-end mock must use the same response shape as the future analysis
   API. Mock data stays in `src/features/ai-pic-detect/mock.ts`.
 - The primary result action advances to the next candidate. “确认需要处理” is

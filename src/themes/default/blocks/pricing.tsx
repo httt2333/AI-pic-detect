@@ -88,13 +88,8 @@ export function Pricing({
   const locale = useLocale();
   const t = useTranslations('pages.pricing.messages');
 
-  const {
-    user,
-    isShowPaymentModal,
-    setIsShowSignModal,
-    setIsShowPaymentModal,
-    configs,
-  } = useAppContext();
+  const { user, setIsShowSignModal, setIsShowPaymentModal, configs } =
+    useAppContext();
 
   const [group, setGroup] = useState(() => {
     // find current pricing item
@@ -241,10 +236,13 @@ export function Pricing({
       configs.promotekit_enabled === 'true' &&
       ['stripe'].includes(paymentProvider)
     ) {
+      const browserReferral =
+        typeof window !== 'undefined'
+          ? (window as Window & { promotekit_referral?: string })
+              .promotekit_referral
+          : undefined;
       const promotekitReferral =
-        typeof window !== 'undefined' && (window as any).promotekit_referral
-          ? (window as any).promotekit_referral
-          : getCookie('promotekit_referral') || '';
+        browserReferral || getCookie('promotekit_referral') || '';
       affiliateMetadata.promotekit_referral = promotekitReferral;
     }
 
@@ -307,9 +305,8 @@ export function Pricing({
       }
 
       window.location.href = checkoutUrl;
-    } catch (e: any) {
-      console.log('checkout failed: ', e);
-      toast.error('checkout failed: ' + e.message);
+    } catch {
+      toast.error('checkout failed');
 
       setIsLoading(false);
       setProductId(null);
@@ -386,6 +383,8 @@ export function Pricing({
             const selectedCurrency =
               currencyState?.selectedCurrency || item.currency;
             const currencies = getCurrenciesFromItem(item);
+            const isPurchaseUnavailable =
+              section.purchase_enabled === false || displayedItem.amount <= 0;
 
             return (
               <Card key={idx} className="relative">
@@ -419,6 +418,11 @@ export function Pricing({
                         ''
                       )}
                     </div>
+                    <span className="text-muted-foreground text-xs font-normal">
+                      {displayedItem.currency === 'CNY'
+                        ? 'CNY · ¥'
+                        : displayedItem.currency}
+                    </span>
 
                     {currencies.length > 1 && (
                       <Select
@@ -470,7 +474,7 @@ export function Pricing({
                   ) : (
                     <Button
                       onClick={() => handlePayment(item)}
-                      disabled={isLoading}
+                      disabled={isLoading || isPurchaseUnavailable}
                       className={cn(
                         'focus-visible:ring-ring inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap transition-colors focus-visible:ring-1 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50',
                         'mt-4 h-9 w-full px-4 py-2',

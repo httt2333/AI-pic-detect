@@ -48,3 +48,19 @@ test('a creator can review a marked local issue in the result workspace', async 
   ).toBeVisible();
   await expect(page.getByRole('button', { name: '下一项' })).toBeVisible();
 });
+
+test('a creator can view configured credit packs without starting an unavailable payment', async ({
+  page,
+}) => {
+  await page.goto('/zh/pricing');
+
+  await expect(
+    page.getByRole('heading', { name: '购买检查额度' })
+  ).toBeVisible();
+  await expect(page.getByText('50 次检查额度')).toBeVisible();
+  await expect(page.getByText('价格待定')).toHaveCount(3);
+  await expect(page.getByText('CNY · ¥')).toHaveCount(3);
+  await expect(
+    page.getByRole('button', { name: '支付接入准备中' }).first()
+  ).toBeDisabled();
+});

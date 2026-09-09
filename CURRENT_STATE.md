@@ -7,13 +7,18 @@ product header, value proposition, example bbox treatment, upload CTA,
 capability flow, and product-boundary copy.
 
 The client workflow implements `idle`, `uploading`, `analysing`, `success`,
-`no_issue`, `unsupported`, `timeout`, and `analysis_failed` states. It validates a single
+`no_issue`, `unsupported`, `timeout`, `quota_exhausted`, and `analysis_failed` states. It validates a single
 PNG/JPEG/WebP file under 10MB, previews it locally, provides failure retry, and
 renders a desktop-first workspace where the issue list and bbox markers select
 one another. Markers are positioned against the actual rendered image area, so
 they stay aligned when landscape or square images are letterboxed. A creator
 can move to the next issue or ignore an item; the ignore decision is local for
 this session. `timeout` and `analysis_failed` are separate recoverable states.
+
+The workflow also has a guarded `quota_exhausted` state. It points to the
+configured credit-pack page without retrying an exhausted request. The browser
+does not calculate, persist, or spend entitlements; this result must come from
+a future server boundary.
 
 The analysis result is mock-only. No uploaded image, prompt, provider response,
 or personal data is logged or sent from this UI.
@@ -33,16 +38,24 @@ unsupported-file, and failed-analysis states each explain the outcome and offer
 one clear recovery path. The public home metadata and visual surface are
 AI-PIC-DETECT rather than ShipAny, and the hero uses an original local example
 image to show a normal-looking illustration becoming locally marked after a
-scan. No login, pricing, subscription, checkout, or allowance UI was enabled.
+scan. The approved commercial shell exposes links for sign-in, review history,
+one-time credit packs, remaining credits, and purchase records. The three CNY
+pack cards (10/50/200, with 50 recommended) have configurable placeholder
+prices and disabled purchase buttons. No subscription or real checkout is
+enabled.
 
-The inherited template contains sign-in, pricing, subscription, and payment
-code, but none of those routes or commercial controls are part of the active
-AI-PIC-DETECT P0 surface. Keep the direct unauthenticated single-analysis
-workflow intact until a real analysis API contract is available.
+The inherited template supplies account, credit, purchase-record, and payment
+route primitives. They are mapped to the approved commercial shell; billing
+and subscription navigation is removed from the active Chinese settings
+sidebar. Keep the direct unauthenticated single-analysis workflow intact until
+a real analysis API contract and server-side entitlement policy are available.
 
-Focused Vitest coverage and TypeScript type checking pass. Playwright Chromium
-is installed; both the public upload-entry journey and result-workspace
-selection journey, including dimension-to-bbox selection, pass.
+The previous P0-focused Vitest and Playwright journeys passed, and the current
+commercial changes pass TypeScript checking and direct browser smoke checks for
+`/zh/pricing` and `/reviews`. The newly added Vitest and E2E cases still need a
+normal runner pass: this session's Windows process policy returned `spawn EPERM`
+for Vitest/Playwright workers, and the elevated retry was blocked by the Codex
+usage limit. Do not treat those new automated cases as passed until rerun.
 
 The repository-wide `pnpm verify` baseline remains blocked by pre-existing
 formatting and ESLint debt outside this feature. The feature's own lint check
