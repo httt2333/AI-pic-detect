@@ -25,6 +25,11 @@ Updated: 2026-09-09
   `dim_id` can navigate to a bbox. `no_issue`, `unsupported`, `timeout`,
   `quota_exhausted`, and `analysis_failed` use cautious outcome language with
   clear next actions.
+- The image and selected-candidate detail now form the top result row. The A/B/C
+  state panel is renamed “详细检查报告” and spans the full row beneath them, so it
+  no longer controls the image panel height. Credit links use `/zh/pricing` in
+  the same tab; the pricing shell has a return link and skips account/database
+  loading while purchases remain disabled.
 - `public/images/ai-pic-detect/hero-review-sample.png` is an original local
   illustrative sample. It is a product demo asset only, not an uploaded user
   image or model validation evidence.
@@ -40,6 +45,14 @@ Updated: 2026-09-09
   issue selection, next-item review in Chromium, and the disabled CNY credit
   pack page. The new commercial Vitest/E2E cases need a normal runner pass;
   this session hit Windows `spawn EPERM` and could not use an elevated retry.
+- Current environment check: the working tree was clean and `tsc --noEmit`
+  passed. Dependency restoration was blocked by an incomplete offline cache and
+  a refused registry connection. Vitest, Playwright, `next build`, and
+  `next dev` each stopped before application checks because this restricted
+  environment prohibits their required child processes (`spawn EPERM`). Do not
+  retry these operations here. In a normal local terminal, run
+  `pnpm install --frozen-lockfile`, `pnpm verify`, `pnpm test:e2e`, then
+  `pnpm dev` for final acceptance.
 
 ## Next agent
 
@@ -71,3 +84,7 @@ Updated: 2026-09-09
 9. A three-call plain-description probe received non-empty text twice and then
    failed with `TypeError`. Treat EvoLink image description as demo-usable but
    unstable; do not rely on it for the production analysis path.
+10. The main product is intentionally paused at the Mock/Demo fallback. Wait
+    for the Harness's reproducible Provider validation before adding
+    `/api/analyze`, a Provider Adapter, R2/S3, or any other object-storage
+    dependency.

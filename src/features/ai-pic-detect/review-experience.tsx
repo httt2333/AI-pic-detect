@@ -352,7 +352,7 @@ function ProductHeader({
             产品边界
           </a>
           <Link
-            href="/pricing"
+            href="/zh/pricing"
             className="hidden hover:text-violet-950 lg:block"
           >
             购买额度
@@ -393,7 +393,7 @@ function ProductFooter() {
   );
 }
 
-function DimensionPanel({
+function DetailedReport({
   dimensions,
   issues,
   onSelectIssue,
@@ -403,21 +403,24 @@ function DimensionPanel({
   onSelectIssue: (issueId: string) => void;
 }) {
   return (
-    <section className="mt-5 overflow-hidden rounded-2xl border border-violet-200 bg-white shadow-xl shadow-violet-950/5">
-      <div className="border-b border-violet-100 px-5 py-4">
-        <h2 className="font-semibold text-violet-950">检查维度</h2>
+    <section
+      data-testid="detailed-report"
+      className="mt-6 overflow-hidden rounded-2xl border border-violet-200 bg-white shadow-xl shadow-violet-950/5"
+    >
+      <div className="border-b border-violet-100 px-5 py-5 sm:px-6">
+        <h2 className="text-lg font-semibold text-violet-950">详细检查报告</h2>
         <p className="mt-1 text-xs leading-5 text-violet-950/60">
-          这是检查状态，不是错误清单；仅有合法定位的项目可跳转原图。
+          汇总画面、人物与局部细节的检查状态；仅检测到候选问题的项目可定位原图。
         </p>
       </div>
-      <div className="divide-y divide-violet-100">
+      <div className="grid divide-y divide-violet-100 lg:grid-cols-3 lg:divide-x lg:divide-y-0">
         {(['A', 'B', 'C'] as const).map((group) => {
           const groupDimensions = ANALYSIS_DIMENSIONS.filter(
             (dimension) => dimension.group === group
           );
 
           return (
-            <details key={group} open={group === 'B'} className="group">
+            <details key={group} open className="group">
               <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-5 py-3.5 text-sm font-semibold text-violet-950 marker:content-none focus-visible:ring-2 focus-visible:ring-violet-600 focus-visible:outline-none">
                 <span>{dimensionGroupCopy[group]}</span>
                 <span className="text-xs font-medium text-violet-950/55">
@@ -522,8 +525,14 @@ function ResultWorkspace({
             检查另一张图片
           </button>
         </div>
-        <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_440px]">
-          <section className="rounded-2xl border border-violet-200 bg-white p-3 shadow-xl shadow-violet-950/5 sm:p-5">
+        <div
+          data-testid="result-overview"
+          className="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_440px]"
+        >
+          <section
+            data-testid="image-panel"
+            className="self-start rounded-2xl border border-violet-200 bg-white p-3 shadow-xl shadow-violet-950/5 sm:p-5"
+          >
             <div className="mb-4 flex items-center justify-between gap-3 px-1">
               <p className="text-sm font-medium text-violet-950">原图</p>
               <p className="text-xs text-violet-950/60">当前没有局部定位</p>
@@ -535,7 +544,7 @@ function ResultWorkspace({
               onSelectIssue={onSelectIssue}
             />
           </section>
-          <aside>
+          <aside data-testid="issue-panel" className="self-start">
             <section className="rounded-2xl border border-violet-200 bg-white p-6 shadow-xl shadow-violet-950/5">
               <IconCircleCheck
                 className="text-violet-700"
@@ -552,13 +561,13 @@ function ResultWorkspace({
                 仍可按作品用途复核脸部、手部与边缘细节。
               </p>
             </section>
-            <DimensionPanel
-              dimensions={response.dimensions}
-              issues={response.issues}
-              onSelectIssue={onSelectIssue}
-            />
           </aside>
         </div>
+        <DetailedReport
+          dimensions={response.dimensions}
+          issues={response.issues}
+          onSelectIssue={onSelectIssue}
+        />
       </main>
     );
   }
@@ -588,8 +597,14 @@ function ResultWorkspace({
           换一张图片
         </button>
       </div>
-      <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_440px]">
-        <section className="rounded-2xl border border-violet-200 bg-white p-3 shadow-xl shadow-violet-950/5 sm:p-5">
+      <div
+        data-testid="result-overview"
+        className="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_440px]"
+      >
+        <section
+          data-testid="image-panel"
+          className="self-start rounded-2xl border border-violet-200 bg-white p-3 shadow-xl shadow-violet-950/5 sm:p-5"
+        >
           <div className="mb-4 flex items-center justify-between gap-3 px-1">
             <p className="text-sm font-medium text-violet-950">图片定位</p>
             <p className="text-xs text-violet-950/60">
@@ -603,7 +618,7 @@ function ResultWorkspace({
             onSelectIssue={onSelectIssue}
           />
         </section>
-        <aside>
+        <aside data-testid="issue-panel" className="self-start">
           <section className="overflow-hidden rounded-2xl border border-violet-200 bg-white shadow-xl shadow-violet-950/5">
             <div className="border-b border-violet-100 bg-violet-50 px-5 py-5">
               <p className="text-sm font-semibold text-violet-950">整体摘要</p>
@@ -712,13 +727,13 @@ function ResultWorkspace({
               </div>
             </section>
           </section>
-          <DimensionPanel
-            dimensions={response.dimensions}
-            issues={response.issues}
-            onSelectIssue={onSelectIssue}
-          />
         </aside>
       </div>
+      <DetailedReport
+        dimensions={response.dimensions}
+        issues={response.issues}
+        onSelectIssue={onSelectIssue}
+      />
     </main>
   );
 }
@@ -902,7 +917,7 @@ export function ReviewExperience({
           <p className="leading-7 text-violet-950/70">{errorMessage}</p>
           <div className="flex flex-wrap justify-center gap-3">
             <Link
-              href="/pricing"
+              href="/zh/pricing"
               className="inline-flex items-center gap-2 bg-violet-800 px-5 py-3 text-sm font-semibold text-white transition hover:bg-violet-950"
             >
               查看额度包

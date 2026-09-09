@@ -324,7 +324,7 @@ export function Pricing({
   return (
     <section
       id={section.id}
-      className={cn('py-24 md:py-36', section.className, className)}
+      className={cn('py-12 md:py-16', section.className, className)}
     >
       <div className="mx-auto mb-12 px-4 text-center md:px-8">
         {section.sr_only_title && (
@@ -339,8 +339,8 @@ export function Pricing({
       </div>
 
       <div className="container">
-        {section.groups && section.groups.length > 0 && (
-          <div className="mx-auto mt-8 mb-16 flex w-full justify-center md:max-w-lg">
+        {section.groups && section.groups.length > 1 && (
+          <div className="mx-auto mt-8 mb-10 flex w-full justify-center md:max-w-lg">
             <Tabs value={group} onValueChange={setGroup} className="">
               <TabsList>
                 {section.groups.map((item, i) => {
@@ -358,12 +358,7 @@ export function Pricing({
           </div>
         )}
 
-        <div
-          className={`mx-auto mt-0 grid w-full gap-6 md:grid-cols-${
-            section.items?.filter((item) => !item.group || item.group === group)
-              ?.length
-          }`}
-        >
+        <div className="mx-auto mt-0 grid w-full max-w-5xl gap-6 md:grid-cols-3">
           {section.items?.map((item: PricingItem, idx) => {
             if (item.group && item.group !== group) {
               return null;
@@ -387,7 +382,14 @@ export function Pricing({
               section.purchase_enabled === false || displayedItem.amount <= 0;
 
             return (
-              <Card key={idx} className="relative">
+              <Card
+                key={idx}
+                className={cn(
+                  'relative border-violet-100 bg-white shadow-lg shadow-violet-950/5',
+                  item.is_featured &&
+                    'border-violet-400 bg-violet-50/50 shadow-xl shadow-violet-950/10'
+                )}
+              >
                 {item.label && (
                   <span className="absolute inset-x-0 -top-3 mx-auto flex h-6 w-fit items-center rounded-full bg-linear-to-br/increasing from-purple-400 to-amber-300 px-3 py-1 text-xs font-medium text-amber-950 ring-1 ring-white/20 ring-offset-1 ring-offset-gray-950/5 ring-inset">
                     {item.label}
@@ -478,7 +480,7 @@ export function Pricing({
                       className={cn(
                         'focus-visible:ring-ring inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap transition-colors focus-visible:ring-1 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50',
                         'mt-4 h-9 w-full px-4 py-2',
-                        'bg-primary text-primary-foreground hover:bg-primary/90 border-[0.5px] border-white/25 shadow-md shadow-black/20'
+                        'bg-primary text-primary-foreground hover:bg-primary/90 border-[0.5px] border-white/25 shadow-md shadow-black/20 disabled:border-violet-100 disabled:bg-violet-100 disabled:text-violet-500 disabled:opacity-100 disabled:shadow-none'
                       )}
                     >
                       {isLoading && item.product_id === productId ? (

@@ -1,4 +1,10 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import {
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
 import { getMockAnalysisResponse } from './mock';
@@ -124,7 +130,14 @@ describe('ReviewExperience', () => {
     });
     expect(screen.getByText('修改优先级')).toBeVisible();
     expect(screen.getAllByText('高修改优先级')).not.toHaveLength(0);
-    expect(screen.getByText('检查维度')).toBeVisible();
+    expect(screen.getByText('详细检查报告')).toBeVisible();
+    const resultOverview = screen.getByTestId('result-overview');
+    expect(within(resultOverview).getByTestId('image-panel')).toBeVisible();
+    expect(within(resultOverview).getByTestId('issue-panel')).toBeVisible();
+    expect(
+      within(resultOverview).queryByTestId('detailed-report')
+    ).not.toBeInTheDocument();
+    expect(screen.getByTestId('detailed-report')).toBeVisible();
 
     fireEvent.click(
       screen.getByRole('button', { name: '问题 2：眼部比例建议检查' })
@@ -189,7 +202,12 @@ describe('ReviewExperience', () => {
     expect(
       screen.getByText('本次扫描未给出需要优先修改的局部。')
     ).toBeVisible();
-    expect(screen.getByText('检查维度')).toBeVisible();
+    expect(screen.getByText('详细检查报告')).toBeVisible();
+    expect(
+      within(screen.getByTestId('result-overview')).queryByTestId(
+        'detailed-report'
+      )
+    ).not.toBeInTheDocument();
 
     fireEvent.click(screen.getByRole('button', { name: '检查另一张图片' }));
     expect(
@@ -277,7 +295,16 @@ describe('ReviewExperience', () => {
     ).toBeVisible();
     expect(screen.getByRole('link', { name: '查看额度包' })).toHaveAttribute(
       'href',
-      '/pricing'
+      '/zh/pricing'
+    );
+  });
+
+  it('opens the Chinese credit page from the product header', () => {
+    render(<ReviewExperience />);
+
+    expect(screen.getByRole('link', { name: '购买额度' })).toHaveAttribute(
+      'href',
+      '/zh/pricing'
     );
   });
 });

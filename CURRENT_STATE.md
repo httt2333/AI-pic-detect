@@ -50,17 +50,32 @@ and subscription navigation is removed from the active Chinese settings
 sidebar. Keep the direct unauthenticated single-analysis workflow intact until
 a real analysis API contract and server-side entitlement policy are available.
 
-The previous P0-focused Vitest and Playwright journeys passed, and the current
-commercial changes pass TypeScript checking and direct browser smoke checks for
-`/zh/pricing` and `/reviews`. The newly added Vitest and E2E cases still need a
-normal runner pass: this session's Windows process policy returned `spawn EPERM`
-for Vitest/Playwright workers, and the elevated retry was blocked by the Codex
-usage limit. Do not treat those new automated cases as passed until rerun.
+The review workspace now uses a two-level result layout: the image and detected
+candidate detail share the top row, while the 17-dimension state summary sits
+below them as a full-width “详细检查报告”. This prevents the report from stretching
+the image panel. Credit entry points open the Chinese pricing route in the same
+tab, and that page provides a clear return path. While purchases are disabled,
+the pricing page skips account/subscription database reads so the frontend shell
+does not surface an unrelated schema failure.
 
-The repository-wide `pnpm verify` baseline remains blocked by pre-existing
-formatting and ESLint debt outside this feature. The feature's own lint check
-has no errors; the two remaining warnings intentionally concern local Blob
-image previews, which must not be routed through an external optimizer.
+Historical P0-focused Vitest and Playwright journeys have passed in a normal
+runner, but the current restricted environment has not completed a fresh runtime
+acceptance. This session confirmed a clean working tree and passed
+`tsc --noEmit` directly. Dependency restoration could not complete because the
+offline cache is incomplete and the registry connection was refused. Vitest,
+Playwright, `next build`, and `next dev` were then blocked before application
+checks by the environment's child-process `spawn EPERM` policy. Do not retry
+installation, build, or process-permission remediation in this environment.
+
+The repository-wide `pnpm verify` baseline also remains blocked by pre-existing
+formatting and ESLint debt outside this feature. Final runtime acceptance must
+run in a normal local terminal, in order: `pnpm install --frozen-lockfile`,
+`pnpm verify`, `pnpm test:e2e`, and `pnpm dev`.
+
+The main product is paused at its mock/fallback boundary while the Harness
+performs reproducible Provider validation. Do not add a visual Provider,
+`/api/analyze` implementation, R2/S3, or another object-storage dependency
+until the Harness has supplied a mature Provider Adapter recommendation.
 
 The historical migration corpus now has a typed A/B/C dimension map and a
 local-only, Git-ignored sanitized-index command. A v10 index was generated

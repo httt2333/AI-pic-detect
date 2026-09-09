@@ -19,9 +19,18 @@
       dimension is an error or every result has three issues.
 - [x] Separate retryable `timeout` and `analysis_failed` states in the client
       workflow and cover them with unit and browser tests.
+- [x] Move the A/B/C state summary into a full-width “详细检查报告” below the
+      image-and-current-issue row so the image panel is not stretched.
+- [x] Keep credit entry points on the Chinese route, add a same-tab return path,
+      and avoid account/database reads while checkout is disabled.
 
 ## Pending, requiring in-scope backend or environment work
 
+- [ ] In a normal local terminal, complete final runtime acceptance in order:
+      `pnpm install --frozen-lockfile`, `pnpm verify`, `pnpm test:e2e`, and
+      `pnpm dev`. The restricted Agent environment passed TypeScript but cannot
+      restore dependencies or spawn the child processes required for the other
+      checks; do not retry those operations there.
 - [ ] Replace the mock executor with a real, privacy-reviewed analysis API.
 - [ ] Agree the versioned API shape for validated dimension states and `dim_id`
       links before replacing the mock executor. The browser must never consume
@@ -37,6 +46,10 @@
       image retention/deletion guarantees.
 - [x] Install Playwright Chromium and run the browser journey.
 - [ ] Add an API integration test once the backend contract is available.
+
+The main product remains paused at the mock/fallback boundary until the Harness
+has produced reproducible real-Provider validation. Do not add a Provider,
+`/api/analyze` implementation, or object-storage dependency before that result.
 
 ## Approved P1 commercial shell
 

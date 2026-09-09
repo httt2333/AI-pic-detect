@@ -36,7 +36,9 @@ test('a creator can review a marked local issue in the result workspace', async 
   await expect(page.getByRole('heading', { name: '检查结果' })).toBeVisible();
   await expect(page.getByText('修改优先级', { exact: true })).toBeVisible();
   await expect(page.getByRole('button', { name: '定位问题 1' })).toBeVisible();
-  await expect(page.getByRole('heading', { name: '检查维度' })).toBeVisible();
+  await expect(
+    page.getByRole('heading', { name: '详细检查报告' })
+  ).toBeVisible();
 
   await page.getByRole('button', { name: '问题 2：眼部比例建议检查' }).click();
   await expect(
@@ -63,4 +65,8 @@ test('a creator can view configured credit packs without starting an unavailable
   await expect(
     page.getByRole('button', { name: '支付接入准备中' }).first()
   ).toBeDisabled();
+  await expect(page.getByRole('link', { name: '返回图片检查' })).toHaveAttribute(
+    'href',
+    '/'
+  );
 });
