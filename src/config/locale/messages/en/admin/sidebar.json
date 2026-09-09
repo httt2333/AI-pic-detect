@@ -1,0 +1,162 @@
+{
+  "header": {
+    "brand": {
+      "title": "ShipAny Two",
+      "logo": {
+        "src": "/logo.png",
+        "alt": "ShipAny Two"
+      },
+      "url": "/admin"
+    },
+    "show_trigger": false
+  },
+  "main_navs": [
+    {
+      "title": "System",
+      "items": [
+        {
+          "title": "Users & Permissions",
+          "icon": "User",
+          "is_expand": true,
+          "children": [
+            {
+              "title": "Users",
+              "url": "/admin/users",
+              "icon": "User"
+            },
+            {
+              "title": "Roles",
+              "url": "/admin/roles",
+              "icon": "Users"
+            },
+            {
+              "title": "Permissions",
+              "url": "/admin/permissions",
+              "icon": "ShieldCheck"
+            }
+          ]
+        },
+        {
+          "title": "Pages & Content",
+          "icon": "FileText",
+          "children": [
+            {
+              "title": "Categories",
+              "icon": "Folder",
+              "url": "/admin/categories"
+            },
+            {
+              "title": "Posts",
+              "icon": "FileText",
+              "url": "/admin/posts"
+            }
+          ]
+        },
+        {
+          "title": "Payments & Credits",
+          "icon": "DollarSign",
+          "children": [
+            {
+              "title": "Payments",
+              "url": "/admin/payments",
+              "icon": "DollarSign"
+            },
+            {
+              "title": "Subscriptions",
+              "url": "/admin/subscriptions",
+              "icon": "CreditCard"
+            },
+            {
+              "title": "Credits",
+              "url": "/admin/credits",
+              "icon": "Coins"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Business",
+      "items": [
+        {
+          "title": "AI Tasks",
+          "url": "/admin/ai-tasks",
+          "icon": "Brain"
+        },
+        {
+          "title": "AI Chats",
+          "url": "/admin/chats",
+          "icon": "MessageCircle"
+        }
+      ]
+    }
+  ],
+  "bottom_nav": {
+    "items": [
+      {
+        "title": "Settings",
+        "url": "/admin/settings/general",
+        "icon": "Settings"
+      },
+      {
+        "title": "API Keys",
+        "url": "/admin/apikeys",
+        "icon": "Key"
+      }
+    ]
+  },
+  "user": {
+    "nav": {
+      "items": [
+        {
+          "title": "Profile",
+          "url": "/settings/profile",
+          "icon": "User",
+          "target": "_blank"
+        }
+      ]
+    },
+    "show_email": false,
+    "show_signout": true,
+    "signout_callback": "/"
+  },
+  "footer": {
+    "nav": {
+      "items": [
+        {
+          "title": "Home",
+          "url": "/",
+          "icon": "Home",
+          "target": "_blank"
+        },
+        {
+          "title": "GitHub",
+          "url": "https://github.com/your-app-name",
+          "icon": "Github",
+          "target": "_blank"
+        },
+        {
+          "title": "Twitter",
+          "url": "https://twitter.com/your-app-name",
+          "icon": "RiTwitterXFill",
+          "target": "_blank"
+        },
+        {
+          "title": "Discord",
+          "url": "https://discord.gg/your-app-name",
+          "icon": "RiDiscordFill",
+          "target": "_blank"
+        },
+        {
+          "title": "Email",
+          "url": "mailto:support@your-domain.com",
+          "icon": "Mail",
+          "target": "_blank"
+        }
+      ]
+    },
+    "show_theme": true,
+    "show_locale": false
+  },
+  "variant": "sidebar"
+}

@@ -1,0 +1,233 @@
+{
+  "header": {
+    "id": "header",
+    "brand": {
+      "title": "ShipAny Two",
+      "logo": {
+        "src": "/logo.png",
+        "alt": "ShipAny Two",
+        "width": 100,
+        "height": 100
+      },
+      "url": "/"
+    },
+    "nav": {
+      "items": [
+        {
+          "title": "Features",
+          "url": "/#features",
+          "icon": "Sparkles"
+        },
+        {
+          "title": "Showcases",
+          "url": "/showcases",
+          "icon": "Box"
+        },
+        {
+          "title": "Pricing",
+          "url": "/pricing",
+          "icon": "DollarSign"
+        },
+        {
+          "title": "AI",
+          "icon": "RiRobot2Line",
+          "children": [
+            {
+              "title": "AI Image Generator",
+              "description": "Use AI to generate images",
+              "url": "/ai-image-generator",
+              "icon": "RiImage2Line"
+            },
+            {
+              "title": "AI Music Generator",
+              "description": "Use AI to generate music",
+              "url": "/ai-music-generator",
+              "icon": "RiMusic2Line"
+            },
+            {
+              "title": "AI Video Generator",
+              "description": "Use AI to generate videos",
+              "url": "/ai-video-generator",
+              "icon": "RiVideoLine"
+            },
+            {
+              "title": "AI Chatbot",
+              "description": "Chat with AI chatbot",
+              "url": "/chat",
+              "icon": "RiMessage2Line"
+            }
+          ]
+        },
+        {
+          "title": "Content",
+          "icon": "FileText",
+          "children": [
+            {
+              "title": "Blog",
+              "description": "Read Blog Posts",
+              "url": "/blog",
+              "icon": "Newspaper"
+            },
+            {
+              "title": "Updates",
+              "description": "Read Update Logs",
+              "url": "/updates",
+              "icon": "Clock"
+            },
+            {
+              "title": "Docs",
+              "description": "Read Documentation",
+              "url": "/docs",
+              "target": "_blank",
+              "icon": "BookOpenText"
+            }
+          ]
+        }
+      ]
+    },
+    "buttons": [],
+    "user_nav": {
+      "show_name": true,
+      "show_credits": true,
+      "show_sign_out": true,
+      "items": [
+        {
+          "title": "Billing",
+          "url": "/settings/billing",
+          "icon": "CreditCard"
+        },
+        {
+          "title": "Activity",
+          "url": "/activity",
+          "icon": "Activity"
+        }
+      ]
+    },
+    "show_sign": true,
+    "show_theme": true,
+    "show_locale": true,
+    "topbanner": {
+      "text": "This website is a demo site for the ShipAny template. To purchase the ShipAny template, please visit the <a href='https://shipany.ai/pricing' class='text-orange-300' target='_blank'>ShipAny website</a>"
+    }
+  },
+  "footer": {
+    "id": "footer",
+    "brand": {
+      "title": "ShipAny Two",
+      "description": "ShipAny is a NextJS boilerplate for building AI SaaS startups. Ship Fast with a variety of templates and components.",
+      "logo": {
+        "src": "/logo.png",
+        "alt": "ShipAny Two",
+        "width": 1024,
+        "height": 1024
+      },
+      "url": "/"
+    },
+    "nav": {
+      "items": [
+        {
+          "title": "About",
+          "children": [
+            {
+              "title": "Features",
+              "url": "/#features",
+              "target": "_self"
+            },
+            {
+              "title": "Showcases",
+              "url": "/showcases",
+              "target": "_self"
+            },
+            {
+              "title": "Pricing",
+              "url": "/pricing",
+              "target": "_self"
+            }
+          ]
+        },
+        {
+          "title": "Resources",
+          "children": [
+            {
+              "title": "Documents",
+              "url": "/docs",
+              "target": "_self"
+            },
+            {
+              "title": "Blog",
+              "url": "/blog",
+              "target": "_self"
+            },
+            {
+              "title": "Chat",
+              "url": "/chat",
+              "target": "_self"
+            }
+          ]
+        },
+        {
+          "title": "Friends",
+          "children": [
+            {
+              "title": "ShipAny",
+              "url": "https://shipany.ai",
+              "target": "_blank"
+            },
+            {
+              "title": "ThinkAny",
+              "url": "https://thinkany.ai",
+              "target": "_blank"
+            },
+            {
+              "title": "MCP.so",
+              "url": "https://mcp.so",
+              "target": "_blank"
+            }
+          ]
+        }
+      ]
+    },
+    "social": {
+      "items": [
+        {
+          "title": "X",
+          "icon": "RiTwitterXFill",
+          "url": "https://x.com/your-app-name",
+          "target": "_blank"
+        },
+        {
+          "title": "Github",
+          "icon": "Github",
+          "url": "https://github.com/your-app-name",
+          "target": "_blank"
+        },
+        {
+          "title": "Discord",
+          "icon": "RiDiscordFill",
+          "url": "https://discord.gg/your-app-name",
+          "target": "_blank"
+        },
+        {
+          "title": "Email",
+          "icon": "Mail",
+          "url": "mailto:support@your-domain.com",
+          "target": "_self"
+        }
+      ]
+    },
+    "agreement": {
+      "items": [
+        {
+          "title": "Privacy Policy",
+          "url": "/privacy-policy"
+        },
+        {
+          "title": "Terms of Service",
+          "url": "/terms-of-service"
+        }
+      ]
+    },
+    "show_theme": true,
+    "show_locale": true
+  }
+}

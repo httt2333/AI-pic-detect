@@ -1,0 +1,31 @@
+{
+  "fields": {
+    "title": "Title",
+    "media_type": "Media Type",
+    "provider": "Provider",
+    "model": "Model",
+    "prompt": "Prompt",
+    "options": "Options",
+    "status": "Status",
+    "result": "Result",
+    "cost_credits": "Cost Credits",
+    "created_at": "Created At",
+    "action": "Action"
+  },
+  "list": {
+    "title": "AI Tasks",
+    "tabs": {
+      "all": "All",
+      "music": "Music",
+      "image": "Image",
+      "video": "Video",
+      "audio": "Audio",
+      "text": "Text"
+    },
+    "buttons": {
+      "view": "View Task",
+      "refresh": "Refresh Task"
+    },
+    "empty_message": "No tasks found"
+  }
+}

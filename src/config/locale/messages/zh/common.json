@@ -1,0 +1,56 @@
+{
+  "metadata": {
+    "title": "AI-PIC-DETECT",
+    "description": "面向二次元人物图创作者的单图发布前局部复核工具。",
+    "keywords": "二次元图片检查, 局部视觉复核, 创作发布前检查"
+  },
+  "sign": {
+    "sign_in_title": "登录",
+    "sign_in_description": "登录到您的账户",
+    "sign_up_title": "注册",
+    "sign_up_description": "创建一个新账户",
+    "email_title": "邮箱",
+    "email_placeholder": "请输入您的邮箱",
+    "password_title": "密码",
+    "password_placeholder": "请输入您的密码",
+    "forgot_password": "忘记密码？",
+    "or": "或",
+    "continue": "继续",
+    "no_account": "还没有账户？",
+    "already_have_account": "已经有一个账户？",
+    "email_sign_in": "使用邮箱登录",
+    "google_sign_in_title": "使用 Google 登录",
+    "github_sign_in_title": "使用 GitHub 登录",
+    "close_title": "关闭",
+    "cancel_title": "取消",
+    "sign_out_title": "登出",
+    "billing_title": "账单",
+    "name_title": "姓名",
+    "name_placeholder": "请输入您的姓名",
+    "email_verification_hint": "请输入可正常接收邮件的邮箱。注册后需完成邮箱验证才能正常使用。",
+    "admin_title": "管理后台",
+    "credits_title": "积分: {credits}",
+    "verify_email_sent": "验证邮件已发送，请前往邮箱完成验证。",
+    "verify_email_required": "请先完成邮箱验证后再登录。",
+    "resend_verification": "重新发送验证邮件",
+    "resend_verification_sent": "验证邮件已重新发送，请查收。",
+    "verify_email_page_title": "请查收邮件",
+    "verify_email_page_description": "继续操作前，请点击发送到以下邮箱的验证链接：",
+    "verify_email_continue": "继续",
+    "verify_email_tip": "完成验证后，请点击「继续」按钮。",
+    "verify_email_not_verified_yet": "尚未完成验证，请先前往邮箱点击验证链接。",
+    "verify_email_account_mismatch": "当前已登录 {current}，本页面等待 {expected} 的验证结果。",
+    "resend_verification_countdown": "重新发送验证邮件（{seconds}秒）",
+    "resend_verification_wait": "请等待 {seconds} 秒后再重新发送。",
+    "back_to_sign_in": "返回登录"
+  },
+  "payment": {
+    "choose_payment_method": "选择支付方式",
+    "choose_payment_method_description": "",
+    "cancel_title": "取消"
+  },
+  "locale_detector": {
+    "title": "检测到浏览器语言是: {locale}，是否切换？",
+    "switch_to": "切换到{locale}"
+  }
+}

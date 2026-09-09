@@ -1,0 +1,29 @@
+{
+  "fields": {
+    "title": "Title",
+    "user": "User",
+    "status": "Status",
+    "model": "Model",
+    "provider": "Provider",
+    "created_at": "Created At",
+    "action": "Action"
+  },
+  "list": {
+    "title": "AI Chats",
+    "crumbs": {
+      "admin": "Admin",
+      "chats": "AI Chats"
+    },
+    "tabs": {
+      "all": "All",
+      "pending": "Pending",
+      "completed": "Completed",
+      "failed": "Failed"
+    },
+    "buttons": {
+      "view": "View Chat",
+      "new": "New Chat"
+    },
+    "empty_message": "No chats found"
+  }
+}

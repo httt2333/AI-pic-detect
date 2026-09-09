@@ -1,0 +1,27 @@
+{
+  "fields": {
+    "transaction_no": "交易单号",
+    "user": "用户",
+    "amount": "金额",
+    "remaining": "剩余",
+    "type": "类型",
+    "scene": "场景",
+    "description": "描述",
+    "created_at": "创建时间",
+    "expires_at": "过期时间",
+    "metadata": "元数据",
+    "action": "操作"
+  },
+  "list": {
+    "title": "积分",
+    "crumbs": {
+      "admin": "管理后台",
+      "credits": "积分"
+    },
+    "tabs": {
+      "all": "全部",
+      "grant": "授予",
+      "consume": "消费"
+    }
+  }
+}

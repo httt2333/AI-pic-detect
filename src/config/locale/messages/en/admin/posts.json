@@ -1,0 +1,60 @@
+{
+  "fields": {
+    "slug": "Slug",
+    "title": "Title",
+    "description": "Description",
+    "image": "Image",
+    "content": "Content",
+    "categories": "Categories",
+    "tags": "Tags",
+    "author_name": "Author Name",
+    "author_role": "Author Role",
+    "author_image": "Author Image",
+    "status": "Status",
+    "created_at": "Created At",
+    "updated_at": "Updated At",
+    "deleted_at": "Deleted At"
+  },
+  "list": {
+    "title": "Posts",
+    "crumbs": {
+      "admin": "Admin",
+      "posts": "Posts"
+    },
+    "buttons": {
+      "add": "Add Post",
+      "edit": "Edit Post",
+      "view": "View Post",
+      "delete": "Delete Post"
+    },
+    "tabs": {
+      "all": "All",
+      "published": "Published",
+      "pending": "Pending",
+      "draft": "Draft",
+      "archived": "Archived"
+    }
+  },
+  "add": {
+    "title": "Add Post",
+    "crumbs": {
+      "admin": "Admin",
+      "posts": "Posts",
+      "add": "Add Post"
+    },
+    "buttons": {
+      "submit": "Add Post"
+    }
+  },
+  "edit": {
+    "title": "Edit Post",
+    "crumbs": {
+      "admin": "Admin",
+      "posts": "Posts",
+      "edit": "Edit Post"
+    },
+    "buttons": {
+      "submit": "Edit Post"
+    }
+  }
+}

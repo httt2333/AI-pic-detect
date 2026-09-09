@@ -1,0 +1,59 @@
+{
+  "fields": {
+    "subscription_no": "Subscription No",
+    "interval": "Interval",
+    "provider": "Provider",
+    "current_period": "Current Period",
+    "plan": "Plan",
+    "status": "Status",
+    "amount": "Amount",
+    "created_at": "Created At",
+    "end_time": "End Time",
+    "action": "Action"
+  },
+  "view": {
+    "title": "Current Plan",
+    "tip": "Your subscription will auto renew on {date}",
+    "end_tip": "Your subscription will be auto canceled on {date}",
+    "no_subscription": "No plan",
+    "buttons": {
+      "adjust": "Adjust Plan",
+      "subscribe": "Subscribe",
+      "manage": "Manage Subscription",
+      "cancel": "Cancel Subscription"
+    }
+  },
+  "list": {
+    "title": "Subscriptions History",
+    "tabs": {
+      "all": "All",
+      "active": "Active",
+      "pending_cancel": "Pending Cancel",
+      "canceled": "Canceled",
+      "trialing": "Trialing",
+      "paused": "Paused",
+      "expired": "Expired"
+    }
+  },
+  "cancel": {
+    "title": "Cancel Subscription",
+    "description": "Are you sure you want to cancel your subscription?",
+    "fields": {
+      "subscription_no": "Subscription No",
+      "subscription_amount": "Subscription Amount",
+      "interval_cycle": "Interval Cycle",
+      "subscription_created_at": "Subscription Created At",
+      "current_period": "Current Period",
+      "start_at": "Start At",
+      "end_at": "End At"
+    },
+    "crumbs": {
+      "settings": "Settings",
+      "billing": "Billing",
+      "cancel": "Cancel Subscription"
+    },
+    "buttons": {
+      "confirm_cancel": "Confirm Cancel"
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "metadata": {
+    "title": "Update Logs",
+    "description": "View product update logs, including latest features and improvements."
+  },
+  "page": {
+    "sections": {
+      "updates": {
+        "id": "updates",
+        "title": "Update Logs",
+        "description": "View product update logs, including latest features and improvements."
+      }
+    }
+  }
+}

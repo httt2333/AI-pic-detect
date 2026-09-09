@@ -1,0 +1,121 @@
+{
+  "sidebar": {
+    "header": {
+      "brand": {
+        "title": "ShipAny Chat",
+        "logo": {
+          "src": "/logo.png",
+          "alt": "ShipAny Chat"
+        },
+        "url": "/chat"
+      },
+      "show_trigger": false
+    },
+    "buttons": [
+      {
+        "title": "新建对话",
+        "icon": "Plus",
+        "url": "/chat",
+        "variant": "outline"
+      }
+    ],
+    "main_navs": [
+      {
+        "items": [
+          {
+            "title": "历史对话",
+            "icon": "History",
+            "url": "/chat/history"
+          }
+        ]
+      }
+    ],
+    "bottom_nav": {
+      "items": []
+    },
+    "user": {
+      "nav": {
+        "items": [
+          {
+            "title": "个人资料",
+            "url": "/settings/profile",
+            "icon": "User",
+            "target": "_blank"
+          }
+        ]
+      },
+      "show_email": false,
+      "show_signout": true,
+      "signout_callback": "/chat",
+      "signin_callback": "/chat"
+    },
+    "footer": {
+      "nav": {
+        "items": [
+          {
+            "title": "首页",
+            "url": "/",
+            "icon": "Home",
+            "target": "_blank"
+          },
+          {
+            "title": "GitHub",
+            "url": "https://github.com/your-app-name",
+            "icon": "Github",
+            "target": "_blank"
+          },
+          {
+            "title": "推特",
+            "url": "https://twitter.com/your-app-name",
+            "icon": "RiTwitterXFill",
+            "target": "_blank"
+          },
+          {
+            "title": "Discord",
+            "url": "https://discord.gg/your-app-name",
+            "icon": "RiDiscordFill",
+            "target": "_blank"
+          },
+          {
+            "title": "邮箱",
+            "url": "mailto:support@your-domain.com",
+            "icon": "Mail",
+            "target": "_blank"
+          }
+        ]
+      },
+      "show_theme": true,
+      "show_locale": false
+    },
+    "variant": "sidebar"
+  },
+  "library": {
+    "title": "历史对话",
+    "icon": "History",
+    "url": "/chat/history",
+    "more": "更多",
+    "actions": {
+      "edit_title": "编辑标题",
+      "share": "分享",
+      "delete": "删除"
+    }
+  },
+  "generator": {
+    "title": "今天有什么可以帮到你？",
+    "input_placeholder": "你可以问我任何问题"
+  },
+  "history": {
+    "title": "历史对话",
+    "description": "查看你之前的对话。",
+    "empty": "暂无对话记录。",
+    "error": "加载对话列表失败。",
+    "retry": "重试",
+    "signin": "登录后可查看历史对话。",
+    "summary": "正在显示第 {from}-{to} 条，共 {total} 条",
+    "perPage": "每页",
+    "prev": "上一页",
+    "next": "下一页",
+    "open": "进入对话",
+    "untitled": "未命名对话"
+  }
+}

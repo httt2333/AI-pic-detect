@@ -1,0 +1,151 @@
+{
+  "metadata": {
+    "title": "案例展示",
+    "description": "用 ShipAny 打造的精彩项目"
+  },
+  "page": {
+    "title": "案例展示",
+    "sections": {
+      "showcases": {
+        "id": "showcases",
+        "title": "用 ShipAny 构建的 AI SaaS 创业项目",
+        "description": "简单、快速、高效。",
+        "groups": [
+          {
+            "name": "all",
+            "title": "所有项目"
+          },
+          {
+            "name": "ai-chatbot",
+            "title": "AI 聊天机器人"
+          },
+          {
+            "name": "ai-image",
+            "title": "AI 图片"
+          },
+          {
+            "name": "ai-video",
+            "title": "AI 视频"
+          },
+          {
+            "name": "ai-audio",
+            "title": "AI 音频"
+          },
+          {
+            "name": "ai-music",
+            "title": "AI 音乐"
+          },
+          {
+            "name": "ai-coding",
+            "title": "AI 编程"
+          },
+          {
+            "name": "other",
+            "title": "其他"
+          }
+        ],
+        "items": [
+          {
+            "title": "ThinkAny",
+            "description": "AI 搜索引擎",
+            "url": "https://thinkany.ai",
+            "target": "_blank",
+            "image": {
+              "src": "/imgs/cases/7.png",
+              "alt": "案例展示"
+            },
+            "group": "ai-chatbot"
+          },
+          {
+            "title": "HeyBeauty",
+            "description": "AI 虚拟试妆",
+            "url": "https://heybeauty.ai",
+            "target": "_blank",
+            "image": {
+              "src": "/imgs/cases/5.png",
+              "alt": "案例展示"
+            },
+            "group": "ai-image"
+          },
+          {
+            "title": "AI Wallpaper",
+            "description": "AI 壁纸生成器",
+            "url": "https://aiwallpaper.shop",
+            "target": "_blank",
+            "image": {
+              "src": "/imgs/cases/1.png",
+              "alt": "案例展示"
+            },
+            "group": "ai-image"
+          },
+          {
+            "title": "AI Cover",
+            "description": "AI 封面生成器",
+            "url": "https://aicover.design",
+            "target": "_blank",
+            "image": {
+              "src": "/imgs/cases/2.png",
+              "alt": "案例展示"
+            },
+            "group": "ai-image"
+          },
+          {
+            "title": "GPTs Works",
+            "description": "GPTs 导航",
+            "url": "https://gpts.works",
+            "target": "_blank",
+            "image": {
+              "src": "/imgs/cases/3.png",
+              "alt": "案例展示"
+            },
+            "group": "other"
+          },
+          {
+            "title": "Melodisco",
+            "description": "AI 音乐播放器",
+            "url": "https://melodis.co",
+            "target": "_blank",
+            "image": {
+              "src": "/imgs/cases/4.png",
+              "alt": "案例展示"
+            },
+            "group": "ai-music"
+          },
+          {
+            "title": "Pagen",
+            "description": "AI 落地页生成器",
+            "url": "https://pagen.so",
+            "target": "_blank",
+            "image": {
+              "src": "/imgs/cases/6.png",
+              "alt": "案例展示"
+            },
+            "group": "ai-coding"
+          },
+          {
+            "title": "SoraFM",
+            "description": "AI 视频生成器",
+            "url": "https://sorafm.trys.ai",
+            "target": "_blank",
+            "image": {
+              "src": "/imgs/cases/8.png",
+              "alt": "案例展示"
+            },
+            "group": "ai-video"
+          },
+          {
+            "title": "PodLM",
+            "description": "AI 播客生成器",
+            "url": "https://podlm.ai",
+            "target": "_blank",
+            "image": {
+              "src": "/imgs/cases/9.png",
+              "alt": "案例展示"
+            },
+            "group": "ai-audio"
+          }
+        ]
+      }
+    }
+  }
+}

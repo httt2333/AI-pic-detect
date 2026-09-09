@@ -1,0 +1,43 @@
+{
+  "metadata": {
+    "title": "AI 图片生成器",
+    "description": "使用 AI 模型生成图片，支持文本到图片和图片到图片。"
+  },
+  "page": {
+    "title": "AI 图片生成器",
+    "description": "使用 AI 模型生成图片，支持文本到图片和图片到图片。"
+  },
+  "generator": {
+    "title": "图片生成器",
+    "description": "使用 AI 模型生成图片，支持文本到图片和图片到图片。",
+    "tabs": {
+      "text-to-image": "文生图",
+      "image-to-image": "图生图"
+    },
+    "form": {
+      "provider": "服务商",
+      "model": "模型",
+      "select_provider": "选择服务商",
+      "select_model": "选择模型",
+      "prompt": "提示词",
+      "prompt_placeholder": "描述图片的细节，如颜色、形状、纹理等",
+      "reference_image": "参考图片",
+      "reference_image_placeholder": "上传参考图片，支持多张",
+      "some_images_failed_to_upload": "一些图片上传失败，请删除它们并重新上传",
+      "prompt_too_long": "提示词太长，请删除一些内容"
+    },
+    "generate": "生成图片",
+    "checking_account": "检查账户...",
+    "loading": "加载中...",
+    "generating": "生成中...",
+    "sign_in_to_generate": "登录生成图片",
+    "credits_cost": "消耗 {credits} 积分",
+    "credits_remaining": "剩余 {credits} 积分",
+    "buy_credits": "购买积分",
+    "progress": "进度",
+    "generated_images": "图片预览",
+    "ready_to_generate": "准备生成",
+    "no_images_generated": "没有生成图片",
+    "ready_for_generating": "准备生成"
+  }
+}

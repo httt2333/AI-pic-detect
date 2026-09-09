@@ -1,0 +1,49 @@
+# Dependencies
+node_modules
+pnpm-lock.yaml
+package-lock.json
+yarn.lock
+
+# Build outputs
+.next
+out
+dist
+build
+.vercel
+.turbo
+
+# Cache
+.cache
+*.log
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Generated files
+*.d.ts
+!src/**/*.d.ts
+
+# Public assets
+public
+
+# Config files that shouldn't be formatted
+.prettierrc
+.prettierrc.*
+prettier.config.*
+
+# Markdown (optional - remove if you want to format markdown)
+# *.md
+# *.mdx
+
+# Other
+coverage
+.DS_Store
+
+src/shared/components

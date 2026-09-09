@@ -1,0 +1,22 @@
+{
+  "metadata": {
+    "title": "Blog",
+    "description": "Read latest product features, solutions, and updates."
+  },
+  "page": {
+    "title": "ShipAny Blog",
+    "sections": {
+      "blog": {
+        "id": "blog",
+        "title": "Blog",
+        "description": "Read latest product features, solutions, and updates."
+      }
+    }
+  },
+  "messages": {
+    "all": "All",
+    "no_content": "No Content",
+    "crumb": "Blog",
+    "toc": "Table of Contents"
+  }
+}

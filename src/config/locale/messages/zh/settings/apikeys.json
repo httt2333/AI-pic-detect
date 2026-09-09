@@ -1,0 +1,47 @@
+{
+  "fields": {
+    "title": "标题",
+    "key": "密钥",
+    "created_at": "创建时间",
+    "action": "操作"
+  },
+  "list": {
+    "title": "API 密钥",
+    "empty_message": "没有 API 密钥",
+    "buttons": {
+      "add": "创建 API 密钥",
+      "edit": "编辑",
+      "delete": "删除"
+    }
+  },
+  "add": {
+    "title": "创建 API 密钥",
+    "crumbs": {
+      "apikeys": "API 密钥",
+      "add": "创建 API 密钥"
+    },
+    "buttons": {
+      "submit": "创建"
+    }
+  },
+  "edit": {
+    "title": "编辑 API 密钥",
+    "crumbs": {
+      "apikeys": "API 密钥",
+      "edit": "编辑 API 密钥"
+    },
+    "buttons": {
+      "submit": "更新"
+    }
+  },
+  "delete": {
+    "title": "删除 API 密钥",
+    "crumbs": {
+      "apikeys": "API 密钥",
+      "delete": "删除 API 密钥"
+    },
+    "buttons": {
+      "submit": "确认删除"
+    }
+  }
+}

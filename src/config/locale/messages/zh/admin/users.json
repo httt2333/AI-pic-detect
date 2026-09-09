@@ -1,0 +1,77 @@
+{
+  "fields": {
+    "id": "ID",
+    "name": "名称",
+    "avatar": "头像",
+    "email": "邮箱",
+    "email_verified": "邮箱已验证",
+    "remaining_credits": "剩余积分",
+    "created_at": "创建时间",
+    "actions": "操作",
+    "roles": "角色",
+    "ip": "IP",
+    "locale": "语言",
+    "utm_source": "UTM Source"
+  },
+  "list": {
+    "title": "用户",
+    "crumbs": {
+      "admin": "管理后台",
+      "users": "用户"
+    },
+    "buttons": {
+      "add": "添加用户",
+      "edit": "编辑用户",
+      "view": "查看用户",
+      "delete": "删除用户",
+      "edit_roles": "编辑角色",
+      "grant_credits": "授予积分"
+    },
+    "search": {
+      "email": {
+        "title": "邮箱",
+        "placeholder": "邮箱"
+      }
+    }
+  },
+  "edit": {
+    "title": "编辑用户",
+    "crumbs": {
+      "admin": "管理后台",
+      "users": "用户",
+      "edit": "编辑用户"
+    },
+    "buttons": {
+      "submit": "更新"
+    }
+  },
+  "edit_roles": {
+    "title": "编辑角色",
+    "crumbs": {
+      "admin": "管理后台",
+      "users": "用户",
+      "edit_roles": "编辑角色"
+    },
+    "buttons": {
+      "submit": "更新"
+    }
+  },
+  "grant_credits": {
+    "title": "授予积分",
+    "crumbs": {
+      "admin": "管理后台",
+      "users": "用户",
+      "grant_credits": "授予积分"
+    },
+    "buttons": {
+      "submit": "授予"
+    },
+    "fields": {
+      "credits": "积分数量",
+      "valid_days": "积分有效天数",
+      "valid_days_tip": "0 表示永久有效",
+      "description": "积分授予描述",
+      "description_placeholder": "管理员授予积分"
+    }
+  }
+}

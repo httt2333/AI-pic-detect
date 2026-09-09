@@ -1,0 +1,53 @@
+{
+  "groups": {
+    "email_auth": "邮箱认证",
+    "google_auth": "Google认证",
+    "github_auth": "Github认证",
+    "basic_payment": "基础支付",
+    "stripe": "Stripe",
+    "creem": "Creem",
+    "paypal": "Paypal",
+    "resend": "Resend",
+    "r2": "Cloudflare R2",
+    "s3": "AWS S3",
+    "openrouter": "OpenRouter",
+    "replicate": "Replicate",
+    "fal": "Fal",
+    "google_analytics": "谷歌分析",
+    "clarity": "Clarity",
+    "plausible": "Plausible",
+    "openpanel": "OpenPanel",
+    "vercel_analytics": "Vercel Analytics",
+    "adsense": "Adsense",
+    "affonso": "Affonso",
+    "promotekit": "PromoteKit",
+    "tawk": "Tawk",
+    "crisp": "Crisp",
+    "credit": "积分",
+    "appinfo": "应用信息",
+    "user_role": "用户角色"
+  },
+  "edit": {
+    "title": "设置",
+    "crumbs": {
+      "admin": "管理后台",
+      "settings": "设置"
+    },
+    "tabs": {
+      "general": "通用",
+      "auth": "认证",
+      "payment": "支付",
+      "credit": "积分",
+      "email": "邮箱",
+      "storage": "存储",
+      "ai": "AI",
+      "analytics": "分析",
+      "ads": "广告",
+      "affiliate": "联盟营销",
+      "customer_service": "客服"
+    },
+    "buttons": {
+      "submit": "保存"
+    }
+  }
+}

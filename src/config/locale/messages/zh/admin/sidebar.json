@@ -1,0 +1,162 @@
+{
+  "header": {
+    "brand": {
+      "title": "ShipAny Two",
+      "logo": {
+        "src": "/logo.png",
+        "alt": "ShipAny Two"
+      },
+      "url": "/admin"
+    },
+    "show_trigger": false
+  },
+  "main_navs": [
+    {
+      "title": "系统",
+      "items": [
+        {
+          "title": "用户与权限",
+          "icon": "User",
+          "is_expand": true,
+          "children": [
+            {
+              "title": "用户",
+              "url": "/admin/users",
+              "icon": "User"
+            },
+            {
+              "title": "角色",
+              "url": "/admin/roles",
+              "icon": "Users"
+            },
+            {
+              "title": "权限",
+              "url": "/admin/permissions",
+              "icon": "ShieldCheck"
+            }
+          ]
+        },
+        {
+          "title": "页面与内容",
+          "icon": "FileText",
+          "children": [
+            {
+              "title": "分类",
+              "icon": "Folder",
+              "url": "/admin/categories"
+            },
+            {
+              "title": "文章",
+              "icon": "FileText",
+              "url": "/admin/posts"
+            }
+          ]
+        },
+        {
+          "title": "支付与积分",
+          "icon": "DollarSign",
+          "children": [
+            {
+              "title": "支付",
+              "url": "/admin/payments",
+              "icon": "DollarSign"
+            },
+            {
+              "title": "订阅",
+              "url": "/admin/subscriptions",
+              "icon": "CreditCard"
+            },
+            {
+              "title": "积分",
+              "url": "/admin/credits",
+              "icon": "Coins"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "业务",
+      "items": [
+        {
+          "title": "AI任务",
+          "url": "/admin/ai-tasks",
+          "icon": "Brain"
+        },
+        {
+          "title": "AI 对话",
+          "url": "/admin/chats",
+          "icon": "MessageCircle"
+        }
+      ]
+    }
+  ],
+  "bottom_nav": {
+    "items": [
+      {
+        "title": "设置",
+        "url": "/admin/settings/general",
+        "icon": "Settings"
+      },
+      {
+        "title": "API密钥",
+        "url": "/admin/apikeys",
+        "icon": "Key"
+      }
+    ]
+  },
+  "user": {
+    "nav": {
+      "items": [
+        {
+          "title": "个人资料",
+          "url": "/settings/profile",
+          "icon": "User",
+          "target": "_blank"
+        }
+      ]
+    },
+    "show_email": false,
+    "show_signout": true,
+    "signout_callback": "/"
+  },
+  "footer": {
+    "nav": {
+      "items": [
+        {
+          "title": "首页",
+          "url": "/",
+          "icon": "Home",
+          "target": "_blank"
+        },
+        {
+          "title": "GitHub",
+          "url": "https://github.com/your-app-name",
+          "icon": "Github",
+          "target": "_blank"
+        },
+        {
+          "title": "推特",
+          "url": "https://twitter.com/your-app-name",
+          "icon": "RiTwitterXFill",
+          "target": "_blank"
+        },
+        {
+          "title": "Discord",
+          "url": "https://discord.gg/your-app-name",
+          "icon": "RiDiscordFill",
+          "target": "_blank"
+        },
+        {
+          "title": "邮箱",
+          "url": "mailto:support@your-domain.com",
+          "icon": "Mail",
+          "target": "_blank"
+        }
+      ]
+    },
+    "show_theme": true,
+    "show_locale": false
+  },
+  "variant": "sidebar"
+}

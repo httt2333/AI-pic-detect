@@ -1,0 +1,44 @@
+# Dependencies
+node_modules
+
+# Build outputs
+.next
+out
+dist
+build
+
+# Development
+.env.local
+.env.development
+
+# Testing
+coverage
+*.test.ts
+*.test.tsx
+*.spec.ts
+*.spec.tsx
+
+# Debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Local files
+.DS_Store
+*.db
+*.db-shm
+*.db-wal
+
+# Documentation
+*.md
+!README.md
+
+# Config files that aren't needed for build
+.vscode
+.idea
+.debug
+.test
+wrangler.toml
+wrangler.toml.example
+

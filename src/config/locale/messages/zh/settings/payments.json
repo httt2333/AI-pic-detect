@@ -1,0 +1,30 @@
+{
+  "fields": {
+    "order_no": "订单号",
+    "user": "用户",
+    "amount": "金额",
+    "product_name": "产品名称",
+    "price": "标价",
+    "paid_amount": "支付金额",
+    "discount_amount": "优惠金额",
+    "description": "描述",
+    "type": "类型",
+    "provider": "提供商",
+    "created_at": "创建时间",
+    "status": "状态",
+    "action": "操作",
+    "actions": {
+      "view_invoice": "查看发票"
+    }
+  },
+  "list": {
+    "title": "支付",
+    "description": "查看你的支付",
+    "tabs": {
+      "all": "全部",
+      "one-time": "一次性",
+      "subscription": "订阅",
+      "renew": "续费"
+    }
+  }
+}

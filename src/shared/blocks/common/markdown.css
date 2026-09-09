@@ -1,0 +1,65 @@
+.markdown-body {
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+.markdown-body a {
+  color: var(--primary);
+}
+
+.markdown-body a:hover {
+  color: var(--primary);
+}
+
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3,
+.markdown-body h4,
+.markdown-body h5,
+.markdown-body h6,
+.markdown-body p,
+.markdown-body em,
+.markdown-body table,
+.markdown-body th,
+.markdown-body td {
+  border-color: var(--border);
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+.markdown-body pre {
+  background-color: var(--background);
+  color: var(--foreground);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem;
+  margin-bottom: 1rem;
+  overflow-x: auto;
+}
+
+.markdown-body ul,
+.markdown-body ol {
+  padding-left: 1.5em !important;
+}
+
+.markdown-body ul {
+  list-style-type: disc !important;
+}
+
+.markdown-body ol {
+  list-style-type: decimal !important;
+}
+
+.markdown-body ul ul {
+  list-style-type: circle !important;
+  padding-left: 1.5em !important;
+}
+
+.markdown-body ul ul ul {
+  list-style-type: square !important;
+}
+
+.markdown-body li {
+  margin-top: 0.25em !important;
+  margin-bottom: 0.25em !important;
+}

@@ -1,0 +1,47 @@
+{
+  "metadata": {
+    "title": "AI Video Generator",
+    "description": "Generate videos with AI models, support text-to-video, image-to-video and video-to-video."
+  },
+  "page": {
+    "title": "AI Video Generator",
+    "description": "Generate videos with AI models, support text-to-video, image-to-video and video-to-video."
+  },
+  "generator": {
+    "title": "Video Generator",
+    "description": "Generate videos with AI models, support text-to-video, image-to-video and video-to-video.",
+    "tabs": {
+      "text-to-video": "Text to Video",
+      "image-to-video": "Image to Video",
+      "video-to-video": "Video to Video"
+    },
+    "form": {
+      "provider": "Provider",
+      "model": "Model",
+      "select_provider": "Select Provider",
+      "select_model": "Select Model",
+      "prompt": "Prompt",
+      "prompt_placeholder": "Describe the video content, such as scene, action, style, etc.",
+      "reference_image": "Reference Image",
+      "reference_image_placeholder": "Upload a reference image for video generation",
+      "reference_video": "Reference Video URL",
+      "reference_video_placeholder": "Enter the URL of the reference video",
+      "some_images_failed_to_upload": "Image failed to upload, please delete and re-upload",
+      "prompt_too_long": "Prompt is too long, please delete some content"
+    },
+    "generate": "Generate Video",
+    "checking_account": "Checking Account...",
+    "loading": "Loading...",
+    "generating": "Generating...",
+    "sign_in_to_generate": "Sign In to Generate Video",
+    "credits_cost": "Cost {credits} credits",
+    "credits_remaining": "Remaining {credits} credits",
+    "buy_credits": "Buy Credits",
+    "progress": "Progress",
+    "generated_videos": "Video Preview",
+    "ready_to_generate": "Ready to Generate",
+    "ready_for_generating": "Ready for Generating",
+    "no_videos_generated": "No Videos Generated"
+  }
+}
+

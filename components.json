@@ -1,0 +1,25 @@
+{
+  "$schema": "https://ui.shadcn.com/schema.json",
+  "style": "new-york",
+  "rsc": true,
+  "tsx": true,
+  "tailwind": {
+    "config": "",
+    "css": "src/config/style/global.css",
+    "baseColor": "neutral",
+    "cssVariables": true,
+    "prefix": ""
+  },
+  "iconLibrary": "lucide",
+  "aliases": {
+    "components": "@/shared/components",
+    "utils": "@/shared/lib/utils",
+    "ui": "@/shared/components/ui",
+    "lib": "@/shared/lib",
+    "hooks": "@/shared/hooks"
+  },
+  "registries": {
+    "@tailark": "https://tailark.com/r/{name}.json",
+    "@magicui": "https://magicui.design/r/{name}.json"
+  }
+}

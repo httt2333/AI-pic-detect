@@ -1,0 +1,37 @@
+{
+  "fields": {
+    "task_id": "任务ID",
+    "media_type": "类型",
+    "provider": "提供商",
+    "model": "模型",
+    "prompt": "提示词",
+    "options": "选项",
+    "user": "用户",
+    "status": "状态",
+    "cost_credits": "消耗积分",
+    "result": "结果",
+    "created_at": "创建时间",
+    "action": "操作",
+    "scene": "场景"
+  },
+  "list": {
+    "title": "AI任务",
+    "crumbs": {
+      "admin": "管理后台",
+      "ai-tasks": "AI任务"
+    },
+    "tabs": {
+      "all": "全部",
+      "music": "音乐",
+      "image": "图片",
+      "video": "视频",
+      "audio": "音频",
+      "text": "文本"
+    },
+    "buttons": {
+      "view": "查看任务",
+      "refresh": "刷新任务"
+    },
+    "empty_message": "无任务"
+  }
+}

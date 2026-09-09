@@ -1,0 +1,46 @@
+{
+  "metadata": {
+    "title": "AI Music Generator",
+    "description": "Generate amazing music with AI"
+  },
+  "page": {
+    "title": "AI Music Generator",
+    "description": "Generate amazing music with AI"
+  },
+  "generator": {
+    "title": "Music Generator",
+    "prompt": "Prompt",
+    "prompt_placeholder": "A love story of Romeo and Juliet",
+    "generate": "Generate Music",
+    "loading": "Loading...",
+    "generating": "Generating...",
+    "sign_in_to_generate": "Sign In to Generate Music",
+    "credits_cost": "{credits} credits cost",
+    "credits_remaining": "{credits} credits remaining",
+    "buy_credits": "Buy Credits",
+    "generation_progress": "Generation Progress",
+    "time_cost": "This may take up to 2-3 minutes...",
+    "generated_song": "Generated Song",
+    "ready_to_play": "Ready to Play",
+    "audio_generating": "Audio Generating...",
+    "generating_song": "Generating Song...",
+    "waiting_generation": "Please wait while we create your masterpiece",
+    "no_song_generated": "No Song Generated",
+    "downloading": "Downloading...",
+    "download_success": "Download completed successfully",
+    "download_failed": "Failed to download audio",
+    "form": {
+      "custom_mode": "Custom Mode",
+      "title": "Title",
+      "title_placeholder": "The Sound of Silence",
+      "style": "Style of Music",
+      "style_placeholder": "indie, electronic, synths, 120bpm, distorted",
+      "instrumental": "Instrumental",
+      "prompt": "Prompt",
+      "prompt_placeholder": "A country folk song about love",
+      "model": "Model",
+      "lyrics": "Lyrics",
+      "lyrics_placeholder": "Write your own lyrics, two verses (8 lines) for the best result"
+    }
+  }
+}

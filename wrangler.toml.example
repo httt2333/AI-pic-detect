@@ -1,0 +1,37 @@
+name = "your-app-name"
+main = ".open-next/worker.js"
+compatibility_date = "2025-03-01"
+compatibility_flags = ["nodejs_compat"]
+
+[assets]
+binding = "ASSETS"
+directory = ".open-next/assets"
+
+[[hyperdrive]]
+binding = "HYPERDRIVE"
+id = ""
+localConnectionString = ""
+
+[observability]
+enabled = true
+
+[vars]
+# app
+NEXT_PUBLIC_APP_URL = "http://localhost:3000"
+NEXT_PUBLIC_APP_NAME = "Your App Name"
+
+# theme
+NEXT_PUBLIC_THEME = "default"
+
+# appearance
+NEXT_PUBLIC_APPEARANCE = "system"
+
+# database
+DATABASE_PROVIDER = "postgresql"
+DATABASE_URL = ""
+DB_SINGLETON_ENABLED = "true"
+DB_MAX_CONNECTIONS = "1"
+
+# auth secret
+# openssl rand -base64 32
+AUTH_SECRET = ""

@@ -1,0 +1,56 @@
+{
+  "metadata": {
+    "title": "AI-PIC-DETECT",
+    "description": "A single-image review workspace for anime-character creators to inspect local visual details before publishing.",
+    "keywords": "anime image review, visual detail check, creator workflow"
+  },
+  "sign": {
+    "sign_in_title": "Sign In",
+    "sign_in_description": "Sign in to your account",
+    "sign_up_title": "Sign Up",
+    "sign_up_description": "Create an account",
+    "email_title": "Email",
+    "email_placeholder": "Input your email here",
+    "password_title": "Password",
+    "password_placeholder": "Input your password here",
+    "forgot_password": "Forgot password?",
+    "or": "Or",
+    "continue": "Continue",
+    "no_account": "Don't have an account?",
+    "already_have_account": "Already have an account?",
+    "email_sign_in": "Sign in with Email",
+    "google_sign_in_title": "Sign in with Google",
+    "github_sign_in_title": "Sign in with GitHub",
+    "close_title": "Close",
+    "cancel_title": "Cancel",
+    "sign_out_title": "Sign Out",
+    "billing_title": "Billing",
+    "name_title": "Name",
+    "name_placeholder": "Input your name here",
+    "email_verification_hint": "Use an email address you can access. You must verify your email after signing up.",
+    "admin_title": "Admin System",
+    "credits_title": "Credits: {credits}",
+    "verify_email_sent": "Verification email sent. Please check your inbox.",
+    "verify_email_required": "Please verify your email address before signing in.",
+    "resend_verification": "Resend verification email",
+    "resend_verification_sent": "Verification email resent. Please check your inbox.",
+    "verify_email_page_title": "Check your email",
+    "verify_email_page_description": "To continue, click the link sent to",
+    "verify_email_continue": "Continue",
+    "verify_email_tip": "After verifying, click “Continue”.",
+    "verify_email_not_verified_yet": "Not verified yet. Please click the link in your email first.",
+    "verify_email_account_mismatch": "Signed in as {current}. This page is waiting for {expected}.",
+    "resend_verification_countdown": "Resend verification email ({seconds}s)",
+    "resend_verification_wait": "Please wait {seconds}s before resending.",
+    "back_to_sign_in": "Back to Sign In"
+  },
+  "payment": {
+    "choose_payment_method": "Choose Payment Method",
+    "choose_payment_method_description": "",
+    "cancel_title": "Cancel"
+  },
+  "locale_detector": {
+    "title": "We detected your browser language is {locale}. Switch to it?",
+    "switch_to": "Switch to {locale}"
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "metadata": {
+    "title": "AI 视频生成器",
+    "description": "使用 AI 模型生成视频，支持文本到视频、图片到视频和视频到视频。"
+  },
+  "page": {
+    "title": "AI 视频生成器",
+    "description": "使用 AI 模型生成视频，支持文本到视频、图片到视频和视频到视频。"
+  },
+  "generator": {
+    "title": "视频生成器",
+    "description": "使用 AI 模型生成视频，支持文本到视频、图片到视频和视频到视频。",
+    "tabs": {
+      "text-to-video": "文生视频",
+      "image-to-video": "图生视频",
+      "video-to-video": "视频转视频"
+    },
+    "form": {
+      "provider": "服务商",
+      "model": "模型",
+      "select_provider": "选择服务商",
+      "select_model": "选择模型",
+      "prompt": "提示词",
+      "prompt_placeholder": "描述视频内容，如场景、动作、风格等",
+      "reference_image": "参考图片",
+      "reference_image_placeholder": "上传参考图片用于视频生成",
+      "reference_video": "参考视频链接",
+      "reference_video_placeholder": "输入参考视频的链接",
+      "some_images_failed_to_upload": "图片上传失败，请删除并重新上传",
+      "prompt_too_long": "提示词太长，请删除一些内容"
+    },
+    "generate": "生成视频",
+    "checking_account": "检查账户...",
+    "loading": "加载中...",
+    "generating": "生成中...",
+    "sign_in_to_generate": "登录生成视频",
+    "credits_cost": "消耗 {credits} 积分",
+    "credits_remaining": "剩余 {credits} 积分",
+    "buy_credits": "购买积分",
+    "progress": "进度",
+    "generated_videos": "视频预览",
+    "ready_to_generate": "准备生成",
+    "ready_for_generating": "准备生成",
+    "no_videos_generated": "没有生成视频"
+  }
+}
+

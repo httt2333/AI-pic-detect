@@ -1,0 +1,43 @@
+{
+  "metadata": {
+    "title": "AI Image Generator",
+    "description": "Generate images with AI models, support text-to-image and image-to-image."
+  },
+  "page": {
+    "title": "AI Image Generator",
+    "description": "Generate images with AI models, support text-to-image and image-to-image."
+  },
+  "generator": {
+    "title": "Image Generator",
+    "description": "Generate images with AI models, support text-to-image and image-to-image.",
+    "tabs": {
+      "text-to-image": "Text to Image",
+      "image-to-image": "Image to Image"
+    },
+    "form": {
+      "provider": "Provider",
+      "model": "Model",
+      "select_provider": "Select Provider",
+      "select_model": "Select Model",
+      "prompt": "Prompt",
+      "prompt_placeholder": "Describe the details of the image, such as color, shape, texture, etc.",
+      "reference_image": "Reference Image",
+      "reference_image_placeholder": "Upload reference images, support multiple images",
+      "some_images_failed_to_upload": "Some images failed to upload, please delete them and re-upload",
+      "prompt_too_long": "Prompt is too long, please delete some content"
+    },
+    "generate": "Generate Images",
+    "checking_account": "Checking Account...",
+    "loading": "Loading...",
+    "generating": "Generating...",
+    "sign_in_to_generate": "Sign In to Generate Image",
+    "credits_cost": "Cost {credits} credits",
+    "credits_remaining": "Remaining {credits} credits",
+    "buy_credits": "Buy Credits",
+    "progress": "Progress",
+    "generated_images": "Image Preview",
+    "ready_to_generate": "Ready to Generate",
+    "ready_for_generating": "Ready for Generating",
+    "no_images_generated": "No Images Generated"
+  }
+}

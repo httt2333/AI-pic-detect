@@ -1,0 +1,77 @@
+{
+  "fields": {
+    "id": "ID",
+    "name": "Name",
+    "avatar": "Avatar",
+    "email": "Email",
+    "email_verified": "Email Verified",
+    "remaining_credits": "Remaining Credits",
+    "created_at": "Created At",
+    "actions": "Actions",
+    "roles": "Roles",
+    "ip": "IP",
+    "locale": "Locale",
+    "utm_source": "UTM Source"
+  },
+  "list": {
+    "title": "Users",
+    "crumbs": {
+      "admin": "Admin",
+      "users": "Users"
+    },
+    "buttons": {
+      "add": "Add User",
+      "edit": "Edit User",
+      "view": "View User",
+      "delete": "Delete User",
+      "edit_roles": "Edit Roles",
+      "grant_credits": "Grant Credits"
+    },
+    "search": {
+      "email": {
+        "title": "Email",
+        "placeholder": "Email"
+      }
+    }
+  },
+  "edit": {
+    "title": "Edit User",
+    "crumbs": {
+      "admin": "Admin",
+      "users": "Users",
+      "edit": "Edit"
+    },
+    "buttons": {
+      "submit": "Update"
+    }
+  },
+  "edit_roles": {
+    "title": "Edit Roles",
+    "crumbs": {
+      "admin": "Admin",
+      "users": "Users",
+      "edit_roles": "Edit Roles"
+    },
+    "buttons": {
+      "submit": "Update"
+    }
+  },
+  "grant_credits": {
+    "title": "Grant Credits",
+    "crumbs": {
+      "admin": "Admin",
+      "users": "Users",
+      "grant_credits": "Grant Credits"
+    },
+    "buttons": {
+      "submit": "Grant"
+    },
+    "fields": {
+      "credits": "Credits Amount",
+      "valid_days": "Credits Valid Days",
+      "valid_days_tip": "0 means no expiration",
+      "description": "Credits Grant Description",
+      "description_placeholder": "Admin grant credits"
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "buildCommand": "pnpm build",
+  "installCommand": "pnpm install --frozen-lockfile",
+  "framework": "nextjs",
+  "build": {
+    "env": {
+      "NODE_OPTIONS": "--max-old-space-size=4096",
+      "NEXT_TELEMETRY_DISABLED": "1"
+    }
+  },
+  "functions": {
+    "src/app/api/**/*.ts": {
+      "maxDuration": 30
+    },
+    "src/app/api/ai/**/*.ts": {
+      "maxDuration": 60
+    },
+    "src/app/api/payment/**/*.ts": {
+      "maxDuration": 30
+    },
+    "src/app/api/storage/**/*.ts": {
+      "maxDuration": 30
+    }
+  },
+  "crons": []
+}

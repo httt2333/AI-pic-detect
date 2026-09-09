@@ -1,0 +1,151 @@
+{
+  "metadata": {
+    "title": "Showcases",
+    "description": "Awesome projects built with ShipAny"
+  },
+  "page": {
+    "title": "Showcases",
+    "sections": {
+      "showcases": {
+        "id": "showcases",
+        "title": "AI SaaS Startups built with ShipAny",
+        "description": "Easy to use and fast to ship.",
+        "groups": [
+          {
+            "name": "all",
+            "title": "All"
+          },
+          {
+            "name": "ai-chatbot",
+            "title": "AI Chatbot"
+          },
+          {
+            "name": "ai-image",
+            "title": "AI Image"
+          },
+          {
+            "name": "ai-video",
+            "title": "AI Video"
+          },
+          {
+            "name": "ai-audio",
+            "title": "AI Audio"
+          },
+          {
+            "name": "ai-music",
+            "title": "AI Music"
+          },
+          {
+            "name": "ai-coding",
+            "title": "AI Coding"
+          },
+          {
+            "name": "other",
+            "title": "Other"
+          }
+        ],
+        "items": [
+          {
+            "title": "ThinkAny",
+            "description": "AI Search Engine",
+            "url": "https://thinkany.ai",
+            "target": "_blank",
+            "image": {
+              "src": "/imgs/cases/7.png",
+              "alt": "showcases"
+            },
+            "group": "ai-chatbot"
+          },
+          {
+            "title": "HeyBeauty",
+            "description": "AI Virtual Try On",
+            "url": "https://heybeauty.ai",
+            "target": "_blank",
+            "image": {
+              "src": "/imgs/cases/5.png",
+              "alt": "showcases"
+            },
+            "group": "ai-image"
+          },
+          {
+            "title": "AI Wallpaper",
+            "description": "AI Wallpaper Generator",
+            "url": "https://aiwallpaper.shop",
+            "target": "_blank",
+            "image": {
+              "src": "/imgs/cases/1.png",
+              "alt": "showcases"
+            },
+            "group": "ai-image"
+          },
+          {
+            "title": "AI Cover",
+            "description": "AI Cover Generator",
+            "url": "https://aicover.design",
+            "target": "_blank",
+            "image": {
+              "src": "/imgs/cases/2.png",
+              "alt": "showcases"
+            },
+            "group": "ai-image"
+          },
+          {
+            "title": "GPTs Works",
+            "description": "GPTs Directory",
+            "url": "https://gpts.works",
+            "target": "_blank",
+            "image": {
+              "src": "/imgs/cases/3.png",
+              "alt": "showcases"
+            },
+            "group": "other"
+          },
+          {
+            "title": "Melodisco",
+            "description": "AI Music Player",
+            "url": "https://melodis.co",
+            "target": "_blank",
+            "image": {
+              "src": "/imgs/cases/4.png",
+              "alt": "showcases"
+            },
+            "group": "ai-music"
+          },
+          {
+            "title": "Pagen",
+            "description": "AI Landing Page Generator",
+            "url": "https://pagen.so",
+            "target": "_blank",
+            "image": {
+              "src": "/imgs/cases/6.png",
+              "alt": "showcases"
+            },
+            "group": "ai-coding"
+          },
+          {
+            "title": "SoraFM",
+            "description": "AI Video Generator",
+            "url": "https://sorafm.trys.ai",
+            "target": "_blank",
+            "image": {
+              "src": "/imgs/cases/8.png",
+              "alt": "showcases"
+            },
+            "group": "ai-video"
+          },
+          {
+            "title": "PodLM",
+            "description": "AI Podcast Generator",
+            "url": "https://podlm.ai",
+            "target": "_blank",
+            "image": {
+              "src": "/imgs/cases/9.png",
+              "alt": "showcases"
+            },
+            "group": "ai-audio"
+          }
+        ]
+      }
+    }
+  }
+}

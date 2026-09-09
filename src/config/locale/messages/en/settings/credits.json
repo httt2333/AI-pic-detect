@@ -1,0 +1,26 @@
+{
+  "fields": {
+    "transaction_no": "Transaction No",
+    "description": "Description",
+    "type": "Type",
+    "scene": "Scene",
+    "credits": "Credits",
+    "expires_at": "Expires At",
+    "created_at": "Created At",
+    "action": "Action"
+  },
+  "list": {
+    "title": "Credits Records",
+    "tabs": {
+      "all": "All",
+      "grant": "Grant",
+      "consume": "Consume"
+    }
+  },
+  "view": {
+    "title": "Credits Balance",
+    "buttons": {
+      "purchase": "Purchase Credits"
+    }
+  }
+}
