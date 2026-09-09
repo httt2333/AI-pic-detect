@@ -10,7 +10,7 @@ Updated: 2026-09-09
   `src/features/analyze/image-input.ts`.
 - `review-experience.tsx` uses `analyze-client.ts` to post one image to
   `POST /api/ai-pic-detect/analyze`. The server validates file bytes, calls the
-  EvoLink Responses adapter, and sanitizes output before returning it. `mock.ts`
+  EvoLink Claude Messages adapter, and sanitizes output before returning it. `mock.ts`
   remains a deterministic test/demo dependency only; the contract accepts zero
   through five candidates. `bbox.ts` maps them to the actual contained-image
   frame displayed in the review workspace.
@@ -40,6 +40,9 @@ Updated: 2026-09-09
   handler, and its workspace preview reads the centralized mock response
   without changing review state. `DESIGN.md` records the durable visual and
   product-copy constraints for future landing work.
+- The Find / Understand / Fix story now renders three numbered crop tiles beside
+  the corresponding copy. They are visual placeholders backed by the existing
+  local sample asset, not additional analysis results or API data.
 
 ## Tests and checks
 
@@ -88,8 +91,9 @@ Updated: 2026-09-09
 9. A three-call plain-description probe received non-empty text twice and then
    failed with `TypeError`. Treat EvoLink image description as demo-usable but
    unstable; do not rely on it for the production analysis path.
-10. The Harness's multi-issue Responses route is integrated at
-    `/api/ai-pic-detect/analyze`; the older Gemini-style probes remain failure
-    evidence only. One real sample passed the external PoC, but clean, blurry,
-    and `no_issue` live cases remain unverified. Rotate the exposed provider key
-    before any live call. Do not add R2/S3 or other object storage.
+10. The Harness's Claude Messages route is integrated at
+    `/api/ai-pic-detect/analyze`; older Gemini and DeepSeek probes remain failure
+    evidence only. Two real Claude calls passed the external PoC, but clean,
+    blurry, and `no_issue` live cases remain unverified and bbox placement is not
+    consistently precise. Rotate the exposed provider key before any live call.
+    Do not add R2/S3 or other object storage.

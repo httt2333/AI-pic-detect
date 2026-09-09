@@ -27,6 +27,8 @@
       Hero, creator pain, brand value, Find/Understand/Fix, read-only workspace
       preview, product boundary, and final CTA. Preserve the existing guest
       upload callback and all analysis/result behavior.
+- [x] Add numbered local image placeholders for the three Find/Understand/Fix
+      steps, with active-step emphasis and a mobile-safe stacked layout.
 
 ## Pending, requiring in-scope backend or environment work
 
@@ -34,8 +36,8 @@
       separate, explicitly scoped cleanup. The current Landing files pass
       targeted lint, TypeScript, Vitest coverage, and Playwright; do not mix the
       template-wide cleanup into product work.
-- [x] Replace the default mock executor with a server-only EvoLink Responses
-      adapter at `POST /api/ai-pic-detect/analyze`; validate images and sanitize
+- [x] Replace the default mock executor with a server-only EvoLink Claude
+      Messages adapter at `POST /api/ai-pic-detect/analyze`; validate images and sanitize
       all results before returning the provider-independent contract.
 - [x] Preserve the validated dimension-state and `dim_id` links at the server
       boundary. The browser never consumes raw provider output or upload URLs.

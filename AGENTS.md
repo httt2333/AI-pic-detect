@@ -64,3 +64,17 @@ Tests may be omitted only for documentation/comment-only, formatting-only, or no
 ## Definition of done
 
 A code change is complete only when acceptance criteria are met, tests were written first, relevant automated checks pass, documentation is current, and remaining risks or unverified external dependencies are disclosed.
+
+## Version history and backup ledger
+
+Git 与版本记录规则：
+
+- Git 备份由用户主动提示，不需要 Agent 自行创建 commit 或 checkpoint。
+- 当用户要求 Git 备份时，Agent 先确认当前修改已完成并经过必要验证。
+- 如项目维护 `VERSION_HISTORY.md`，只在 Git 备份时同步记录一次。
+- 零碎修改、文案、样式调整不单独记录。
+- 同一任务中的连续修改合并为一条版本记录。
+- `VERSION_HISTORY.md` 只记录：本次完成内容、重要改动、测试结果、已知问题。
+- 不要为了版本记录额外运行昂贵测试或重复读取大量项目文档。
+- Git 是版本恢复依据，版本记录只用于快速理解每个重要节点。
+- 台账中不得记录密钥、Token、密码、上传图片、提示词、个人数据或供应商响应。

@@ -42,8 +42,8 @@
   pool. Its local, visible dimensions and failure lessons may guide provider
   prompts and automated tests, but it does not override the current product
   scope or establish any provider capability without fresh evidence.
-- The initial live adapter uses EvoLink's OpenAI-compatible Responses endpoint
-  with `deepseek-v4-flash-vision-exp` and strict JSON Schema. This is an
-  replaceable server adapter, not a browser dependency or a permanent taxonomy
-  decision. Images are sent as in-memory data URIs and are not persisted by the
-  application.
+- The initial live adapter uses EvoLink's Claude-compatible Messages endpoint
+  with `claude-sonnet-4-5-20250929`. Its schema is embedded in the prompt and
+  its response is parsed and sanitized by a replaceable server adapter, not a
+  browser dependency or a permanent taxonomy decision. Images are sent as
+  in-memory Base64 data and are not persisted by the application.

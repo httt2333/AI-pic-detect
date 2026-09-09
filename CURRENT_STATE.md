@@ -22,7 +22,7 @@ a future server boundary.
 
 The guest workflow now posts one image to
 `POST /api/ai-pic-detect/analyze`. The server validates file signatures, calls
-the configured EvoLink Responses vision model with a 120-second hard timeout,
+the configured EvoLink Claude Messages vision model with a 120-second hard timeout,
 and applies `sanitizeAnalysisOutput` before returning the provider-independent
 result. Uploaded image bytes, prompts, credentials, and raw provider responses
 are not logged or persisted. Tests still inject deterministic mock results and
@@ -72,13 +72,13 @@ remains blocked by pre-existing formatting and ESLint debt outside this feature:
 401 lint errors. These baseline files were not changed as part of the Landing
 scope.
 
-The Harness supplied a successful proof for EvoLink's OpenAI-compatible
-Responses endpoint with `deepseek-v4-flash-vision-exp`, strict JSON Schema,
-multiple issues, normalized bbox values, and 17 dimension states. That route is
-now integrated behind the server adapter. This is evidence from one real
-sample, not production-stability proof: clean, blurry, and `no_issue` samples
-still require reproducible validation. No R2/S3 or other object storage was
-added.
+The Harness supplied two successful, sanitized proofs for EvoLink's Claude
+Messages endpoint with structured JSON, normalized bbox values, and full
+dimension coverage. The active route now uses a Claude Messages adapter that
+maps output into the main contract before sanitization. This is evidence from
+two real samples, not production-stability proof: clean, blurry, and `no_issue`
+samples still require reproducible validation, and bbox visual placement was
+only partially reliable. No R2/S3 or other object storage was added.
 
 The public Landing Page now follows an editorial, image-first presentation for
 creator and portfolio review. It leads with the approved product hook, shows a
@@ -87,6 +87,11 @@ pain, then walks through Find, Understand, and Fix before presenting a compact
 read-only workspace preview and final upload CTA. Both upload CTAs still enter
 the existing guest upload flow; analysis, result handling, routing, and backend
 boundaries are unchanged.
+
+The Find / Understand / Fix narrative now includes three compact local image
+placeholders with numbered markers (1, 2, 3). Each tile uses a different crop of
+the existing local sample and highlights the active step, so the explanatory
+copy never sits beside an unexplained blank area.
 
 The historical migration corpus now has a typed A/B/C dimension map and a
 local-only, Git-ignored sanitized-index command. A v10 index was generated

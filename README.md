@@ -76,14 +76,14 @@ pnpm test -- src/features/analyze/contract.test.ts src/features/analyze/image-in
 
 The guest review flow posts the selected image to
 `POST /api/ai-pic-detect/analyze`. The Node.js route validates the image bytes,
-calls EvoLink's OpenAI-compatible Responses endpoint, sanitizes the result, and
+calls EvoLink's Claude-compatible Messages endpoint, sanitizes the result, and
 returns only the product contract. Configure these server-only variables in
 `.env.local`:
 
 ```bash
 EVOLINK_API_KEY="replace-with-a-rotated-key"
-EVOLINK_RESPONSES_URL="https://api.evolink.ai/v1/responses"
-EVOLINK_RESPONSES_MODEL="deepseek-v4-flash-vision-exp"
+EVOLINK_BASE_URL="https://api.evolink.ai"
+EVOLINK_CLAUDE_MODEL="claude-sonnet-4-5-20250929"
 ```
 
 Uploads, prompts, credentials, and raw provider responses are kept out of logs,

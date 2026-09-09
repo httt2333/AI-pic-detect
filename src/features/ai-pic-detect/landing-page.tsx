@@ -35,6 +35,12 @@ const storySteps = [
 
 type StoryStep = (typeof storySteps)[number]['key'];
 
+const storyCropClasses = [
+  'object-[68%_58%]',
+  'object-[51%_34%]',
+  'object-[74%_64%]',
+] as const;
+
 function ReviewImage({
   alt,
   className = '',
@@ -152,6 +158,39 @@ function StoryVisual({ activeStep }: { activeStep: StoryStep }) {
           </>
         )}
       </div>
+    </div>
+  );
+}
+
+function StoryStepImage({
+  step,
+  index,
+  active,
+}: {
+  step: StoryStep;
+  index: number;
+  active: boolean;
+}) {
+  return (
+    <div
+      data-testid="story-step-image"
+      className={`relative aspect-square overflow-hidden rounded-xl border bg-neutral-200 transition-[border-color,box-shadow,transform] duration-300 motion-reduce:transition-none sm:w-24 ${active ? 'scale-[1.02] border-violet-700 shadow-[0_12px_30px_rgba(109,76,167,0.18)]' : 'border-neutral-300 shadow-sm'}`}
+      data-story-image={step}
+    >
+      <ReviewImage
+        alt={`${index + 1} ${step} 局部示意图`}
+        className={storyCropClasses[index]}
+      />
+      <div className="absolute inset-0 bg-linear-to-t from-neutral-950/45 via-transparent to-transparent" />
+      <span className="absolute top-2 left-2 grid size-7 place-items-center rounded-full bg-[#f8f7f4] text-xs font-bold text-violet-900 shadow-sm">
+        {index + 1}
+      </span>
+      <span data-testid={`story-step-image-${step}`} className="sr-only">
+        {index + 1}
+      </span>
+      <span className="absolute right-2 bottom-2 text-[10px] font-semibold tracking-[0.12em] text-white">
+        局部示意
+      </span>
     </div>
   );
 }
@@ -351,17 +390,26 @@ export function LandingPage({ onUpload }: LandingPageProps) {
                   onClick={() => setActiveStep(step.key)}
                   className="group w-full text-left focus-visible:ring-2 focus-visible:ring-violet-600 focus-visible:ring-offset-4 focus-visible:outline-none"
                 >
-                  <span
-                    className={`text-xs font-semibold tracking-[0.16em] transition-colors ${activeStep === step.key ? 'text-violet-700' : 'text-neutral-400'}`}
-                  >
-                    {step.label}
-                  </span>
-                  <h2 className="mt-4 text-4xl leading-tight font-semibold tracking-[-0.035em] text-balance sm:text-5xl">
-                    {step.title}
-                  </h2>
-                  <p className="mt-5 max-w-lg text-base leading-7 text-neutral-600 sm:text-lg sm:leading-8">
-                    {step.description}
-                  </p>
+                  <div className="grid gap-6 sm:grid-cols-[96px_minmax(0,1fr)] sm:items-start sm:gap-7">
+                    <StoryStepImage
+                      step={step.key}
+                      index={index}
+                      active={activeStep === step.key}
+                    />
+                    <div>
+                      <span
+                        className={`text-xs font-semibold tracking-[0.16em] transition-colors ${activeStep === step.key ? 'text-violet-700' : 'text-neutral-400'}`}
+                      >
+                        {step.label}
+                      </span>
+                      <h2 className="mt-4 text-4xl leading-tight font-semibold tracking-[-0.035em] text-balance sm:text-5xl">
+                        {step.title}
+                      </h2>
+                      <p className="mt-5 max-w-lg text-base leading-7 text-neutral-600 sm:text-lg sm:leading-8">
+                        {step.description}
+                      </p>
+                    </div>
+                  </div>
                 </button>
               </div>
             ))}
