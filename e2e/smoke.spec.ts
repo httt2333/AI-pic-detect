@@ -1,5 +1,7 @@
 import { expect, test } from '@playwright/test';
 
+import { getMockAnalysisResponse } from '../src/features/ai-pic-detect/mock';
+
 test('a creator can begin a single-image review from the public landing page', async ({
   page,
 }) => {
@@ -52,6 +54,9 @@ test('the landing story remains usable on a narrow mobile viewport', async ({
 test('a creator can review a marked local issue in the result workspace', async ({
   page,
 }) => {
+  await page.route('**/api/ai-pic-detect/analyze', async (route) => {
+    await route.fulfill({ json: getMockAnalysisResponse() });
+  });
   await page.goto('/');
   await page.getByRole('button', { name: '上传图片开始检查' }).first().click();
   await page

@@ -45,9 +45,9 @@ Before running E2E tests for the first time, install Chromium with `pnpm exec pl
 
 ## Analysis safeguards
 
-The local image-analysis contract is deliberately provider-independent while the
-visual-model spike is in progress. It prevents untrusted model output from
-reaching the UI before the API integration exists.
+The local image-analysis contract is deliberately provider-independent. The
+server route validates and sanitizes untrusted model output before it can reach
+the UI.
 
 - `src/features/analyze/image-input.ts` accepts only PNG, JPEG, and WebP files
   up to 10MB, validating both declared MIME type and file signature.
@@ -73,6 +73,24 @@ Run the focused local contract checks with:
 ```bash
 pnpm test -- src/features/analyze/contract.test.ts src/features/analyze/image-input.test.ts
 ```
+
+The guest review flow posts the selected image to
+`POST /api/ai-pic-detect/analyze`. The Node.js route validates the image bytes,
+calls EvoLink's OpenAI-compatible Responses endpoint, sanitizes the result, and
+returns only the product contract. Configure these server-only variables in
+`.env.local`:
+
+```bash
+EVOLINK_API_KEY="replace-with-a-rotated-key"
+EVOLINK_RESPONSES_URL="https://api.evolink.ai/v1/responses"
+EVOLINK_RESPONSES_MODEL="deepseek-v4-flash-vision-exp"
+```
+
+Uploads, prompts, credentials, and raw provider responses are kept out of logs,
+fixtures, browser responses, and persistent storage. The request has a 120
+second provider timeout; the client allows 130 seconds before showing its
+recoverable timeout state. The mock remains available only through explicit
+test or component dependency injection.
 
 The non-production, user-authorized single-dimension provider probe is run
 locally and never from CI:
@@ -105,9 +123,9 @@ claims, or edit images automatically.
   capability or a final taxonomy.
 - Results explicitly distinguish `no_issue`, `timeout`, and `analysis_failed`;
   the latter two offer a retry without exposing provider diagnostics.
-- The current result is an in-browser mock response using the same structured
-  contract as `src/features/analyze/contract.ts`; no uploaded file is sent to
-  a provider from this UI yet.
+- The current result uses the server analysis route. Provider output is never
+  consumed directly by the browser; unit and browser tests replace the external
+  boundary with deterministic mocks.
 - The public P0 review flow remains usable without login. The approved first
   commercial layer exposes account, review-history, credit-balance,
   purchase-record, and pricing entry points without blocking the guest review.

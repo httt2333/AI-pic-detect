@@ -8,11 +8,12 @@ Updated: 2026-09-09
 - `validation.ts` performs browser-side declared-type, size, and empty-file
   checks. Server-side byte-signature validation remains in
   `src/features/analyze/image-input.ts`.
-- `mock.ts` is the sole temporary response source. Its issue objects follow the
-  analysis contract and use normalized bbox coordinates. It has three mock
-  candidates only to exercise interaction; the contract accepts zero through
-  five candidates. `bbox.ts` maps them to the actual contained-image frame
-  displayed in the review workspace.
+- `review-experience.tsx` uses `analyze-client.ts` to post one image to
+  `POST /api/ai-pic-detect/analyze`. The server validates file bytes, calls the
+  EvoLink Responses adapter, and sanitizes output before returning it. `mock.ts`
+  remains a deterministic test/demo dependency only; the contract accepts zero
+  through five candidates. `bbox.ts` maps them to the actual contained-image
+  frame displayed in the review workspace.
 - The public `/` page renders `ReviewExperience`; the landing route layout no
   longer shows the inherited ShipAny navigation or banner.
 - The public metadata is AI-PIC-DETECT, not ShipAny. The header now includes
@@ -60,10 +61,9 @@ Updated: 2026-09-09
 
 1. Read `AGENTS.md`, this file, `PROJECT_CONTEXT.md`, `CURRENT_STATE.md`,
    `DECISIONS.md`, and `TASKS.md` before changing behavior.
-2. When a backend is supplied, add a failing contract/integration test first;
-   replace only the `analyzeImage` boundary, not the UI response shape. It must
-   return validated candidate issues and safe dimension states, never provider
-   raw output or upload URLs.
+2. Preserve the provider-independent `analyzeImage` boundary. The implemented
+   server route must continue returning validated candidate issues and safe
+   dimension states, never provider raw output or upload URLs.
 3. Do not log or store the upload, model prompt, provider response, or secrets.
 4. Use `docs/migration-vision-evaluation.md` as the boundary for reusing the
    historical migration package: it supplies candidate test dimensions and
@@ -86,7 +86,8 @@ Updated: 2026-09-09
 9. A three-call plain-description probe received non-empty text twice and then
    failed with `TypeError`. Treat EvoLink image description as demo-usable but
    unstable; do not rely on it for the production analysis path.
-10. The main product is intentionally paused at the Mock/Demo fallback. Wait
-    for the Harness's reproducible Provider validation before adding
-    `/api/analyze`, a Provider Adapter, R2/S3, or any other object-storage
-    dependency.
+10. The Harness's multi-issue Responses route is integrated at
+    `/api/ai-pic-detect/analyze`; the older Gemini-style probes remain failure
+    evidence only. One real sample passed the external PoC, but clean, blurry,
+    and `no_issue` live cases remain unverified. Rotate the exposed provider key
+    before any live call. Do not add R2/S3 or other object storage.

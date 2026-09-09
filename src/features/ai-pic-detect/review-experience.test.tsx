@@ -8,9 +8,17 @@ import {
 import { describe, expect, it, vi } from 'vitest';
 
 import { getMockAnalysisResponse } from './mock';
-import { ImageStage, ReviewExperience } from './review-experience';
+import {
+  ANALYSIS_TIMEOUT_MS,
+  ImageStage,
+  ReviewExperience,
+} from './review-experience';
 
 describe('ReviewExperience', () => {
+  it('allows enough time for the validated vision provider to respond', () => {
+    expect(ANALYSIS_TIMEOUT_MS).toBeGreaterThanOrEqual(120_000);
+  });
+
   it('places markers inside the rendered image frame instead of its letterbox', () => {
     const issue = getMockAnalysisResponse().issues[0];
     const { getByTestId } = render(
@@ -120,6 +128,29 @@ describe('ReviewExperience', () => {
       screen.getByRole('heading', { name: '无法使用这张图片' })
     ).toBeVisible();
     expect(screen.getByText('仅支持 PNG、JPG 和 WebP 图片。')).toBeVisible();
+    expect(screen.getByRole('button', { name: '开始分析' })).toBeDisabled();
+  });
+
+  it('returns to upload when server-side signature validation rejects the image', async () => {
+    render(
+      <ReviewExperience
+        initialView="upload"
+        analyzeImage={vi.fn().mockRejectedValue(new Error('unsupported'))}
+      />
+    );
+    fireEvent.change(screen.getByLabelText('选择要检查的图片'), {
+      target: {
+        files: [new File(['spoofed'], 'character.png', { type: 'image/png' })],
+      },
+    });
+    await waitFor(() =>
+      expect(screen.getByRole('button', { name: '开始分析' })).toBeEnabled()
+    );
+    fireEvent.click(screen.getByRole('button', { name: '开始分析' }));
+
+    expect(
+      await screen.findByRole('heading', { name: '无法使用这张图片' })
+    ).toBeVisible();
     expect(screen.getByRole('button', { name: '开始分析' })).toBeDisabled();
   });
 

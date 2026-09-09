@@ -21,8 +21,9 @@
   The server, not the browser, owns free-trial and credit consumption rules.
 - Login supports history, repeat reviews, remaining credits, and purchase
   records; it is not an analysis gate.
-- The front-end mock must use the same response shape as the future analysis
-  API. Mock data stays in `src/features/ai-pic-detect/mock.ts`.
+- The front-end mock uses the same response shape as the analysis API. Mock
+  data stays in `src/features/ai-pic-detect/mock.ts` and is injected only for
+  tests or explicit demos; the default guest flow uses the server route.
 - The primary result action advances to the next candidate. “确认需要处理” is
   intentionally not used; users can still explicitly ignore a candidate.
 - The result contract remains provider-independent: the browser consumes only
@@ -41,3 +42,8 @@
   pool. Its local, visible dimensions and failure lessons may guide provider
   prompts and automated tests, but it does not override the current product
   scope or establish any provider capability without fresh evidence.
+- The initial live adapter uses EvoLink's OpenAI-compatible Responses endpoint
+  with `deepseek-v4-flash-vision-exp` and strict JSON Schema. This is an
+  replaceable server adapter, not a browser dependency or a permanent taxonomy
+  decision. Images are sent as in-memory data URIs and are not persisted by the
+  application.

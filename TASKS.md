@@ -34,10 +34,11 @@
       separate, explicitly scoped cleanup. The current Landing files pass
       targeted lint, TypeScript, Vitest coverage, and Playwright; do not mix the
       template-wide cleanup into product work.
-- [ ] Replace the mock executor with a real, privacy-reviewed analysis API.
-- [ ] Agree the versioned API shape for validated dimension states and `dim_id`
-      links before replacing the mock executor. The browser must never consume
-      raw provider output or temporary upload URLs.
+- [x] Replace the default mock executor with a server-only EvoLink Responses
+      adapter at `POST /api/ai-pic-detect/analyze`; validate images and sanitize
+      all results before returning the provider-independent contract.
+- [x] Preserve the validated dimension-state and `dim_id` links at the server
+      boundary. The browser never consumes raw provider output or upload URLs.
 - [ ] Agree the final visual-model category taxonomy after reproducible image
       testing; keep the current taxonomy provisional until then.
 - [ ] Create annotated Good/Bad API cases from the approved historical
@@ -45,14 +46,18 @@
       overlap, penetration, and accessory details.
 - [x] Create a private, sanitized migration-corpus index pipeline and typed
       historical dimension map without exposing the original corpus.
-- [ ] Define API authentication, timeout, response versioning, and server-side
-      image retention/deletion guarantees.
+- [ ] Define API authentication, response versioning, and entitlement policy.
+      The current guest route has a 120-second provider timeout and does not
+      retain images or provider responses.
 - [x] Install Playwright Chromium and run the browser journey.
-- [ ] Add an API integration test once the backend contract is available.
+- [x] Add API handler and client integration tests for validation, filtering,
+      `no_issue`, provider failure, and timeout behavior.
+- [ ] Run reproducible live-provider checks for clean, blurry, and `no_issue`
+      samples after rotating the exposed API key.
 
-The main product remains paused at the mock/fallback boundary until the Harness
-has produced reproducible real-Provider validation. Do not add a Provider,
-`/api/analyze` implementation, or object-storage dependency before that result.
+The server adapter is integrated from the Harness proof. Keep its taxonomy
+provisional and do not add object storage or claim production stability until
+the remaining live-provider cases are reproducible.
 
 ## Approved P1 commercial shell
 

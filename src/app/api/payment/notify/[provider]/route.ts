@@ -163,7 +163,9 @@ export async function POST(
         const orderNo = session.metadata?.order_no;
 
         if (!orderNo) {
-          console.log('one-time payment: order_no not found in metadata, skipping');
+          console.log(
+            'one-time payment: order_no not found in metadata, skipping'
+          );
           return Response.json({ message: 'success' });
         }
 

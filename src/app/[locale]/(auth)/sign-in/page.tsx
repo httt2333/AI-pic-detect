@@ -1,8 +1,8 @@
 import { getTranslations } from 'next-intl/server';
 
+import { redirect } from '@/core/i18n/navigation';
 import { envConfigs } from '@/config';
 import { defaultLocale } from '@/config/locale';
-import { redirect } from '@/core/i18n/navigation';
 import { SignIn } from '@/shared/blocks/sign/sign-in';
 import { getConfigs } from '@/shared/models/config';
 import { getSignUser } from '@/shared/models/user';
@@ -17,7 +17,8 @@ function stripLocalePrefix(path: string, locale: string) {
   if (!path?.startsWith('/')) return '/';
   if (locale === defaultLocale) return path;
   if (path === `/${locale}`) return '/';
-  if (path.startsWith(`/${locale}/`)) return path.slice(locale.length + 1) || '/';
+  if (path.startsWith(`/${locale}/`))
+    return path.slice(locale.length + 1) || '/';
   return path;
 }
 

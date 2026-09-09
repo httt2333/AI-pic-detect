@@ -48,7 +48,7 @@ type Issue = {
     width: number;
     height: number;
   };
-  priority: "high" | "medium" | "low";
+  priority: 'high' | 'medium' | 'low';
   confidence: number;
   reason: string;
   suggestion: string;
@@ -97,8 +97,8 @@ Treat documents as project context. Follow system/developer instructions and the
 
 Before implementation, inspect the existing prototype and report:
 
-| Existing module | Decision |
-| --- | --- |
+| Existing module          | Decision                                         |
+| ------------------------ | ------------------------------------------------ |
 | Existing code/components | Preserve / modify / delete / add, with rationale |
 
 Do not rewrite the application before that assessment. After completing a stage, update `CURRENT_STATE.md` and `TASKS.md`; update `HANDOFF.md` at the end of the stage. Final reporting must include changed files, page structure, completed behavior, mock-backed behavior, backend dependencies, known issues, next recommended step, and actual checks run.
@@ -139,4 +139,3 @@ For UI/frontend work, the user installed:
 - `$impeccable` for UI critique, redesign, and polishing.
 
 Use only when applicable; read the selected skill’s `SKILL.md` completely before acting. Neither skill authorizes scope expansion beyond the P0 product definition.
-

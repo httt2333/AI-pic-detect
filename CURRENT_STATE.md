@@ -20,8 +20,13 @@ configured credit-pack page without retrying an exhausted request. The browser
 does not calculate, persist, or spend entitlements; this result must come from
 a future server boundary.
 
-The analysis result is mock-only. No uploaded image, prompt, provider response,
-or personal data is logged or sent from this UI.
+The guest workflow now posts one image to
+`POST /api/ai-pic-detect/analyze`. The server validates file signatures, calls
+the configured EvoLink Responses vision model with a 120-second hard timeout,
+and applies `sanitizeAnalysisOutput` before returning the provider-independent
+result. Uploaded image bytes, prompts, credentials, and raw provider responses
+are not logged or persisted. Tests still inject deterministic mock results and
+never call the paid provider.
 
 The safe analysis contract now includes a provisional 17-dimension A/B/C
 status panel in addition to `status`, `summary`, and `issues[]`. The panel is a
@@ -67,10 +72,13 @@ remains blocked by pre-existing formatting and ESLint debt outside this feature:
 401 lint errors. These baseline files were not changed as part of the Landing
 scope.
 
-The main product is paused at its mock/fallback boundary while the Harness
-performs reproducible Provider validation. Do not add a visual Provider,
-`/api/analyze` implementation, R2/S3, or another object-storage dependency
-until the Harness has supplied a mature Provider Adapter recommendation.
+The Harness supplied a successful proof for EvoLink's OpenAI-compatible
+Responses endpoint with `deepseek-v4-flash-vision-exp`, strict JSON Schema,
+multiple issues, normalized bbox values, and 17 dimension states. That route is
+now integrated behind the server adapter. This is evidence from one real
+sample, not production-stability proof: clean, blurry, and `no_issue` samples
+still require reproducible validation. No R2/S3 or other object storage was
+added.
 
 The public Landing Page now follows an editorial, image-first presentation for
 creator and portfolio review. It leads with the approved product hook, shows a
@@ -94,3 +102,9 @@ performed.
 A separate three-call description probe received non-empty text twice, then
 failed with a client-side `TypeError` on the third call. The basic description
 path is demo-usable but not stable enough for a production dependency.
+
+Those two probes used an older Gemini-style gateway and forced single-label
+classification. They remain historical failure evidence and are not the
+protocol used by the current multi-issue server adapter. A previously exposed
+provider key must be rotated before live use; no real provider call was made
+from this repository during integration.

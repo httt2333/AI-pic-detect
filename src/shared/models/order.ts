@@ -305,7 +305,9 @@ export async function updateOrderInTransaction({
     // If no order was updated and we're trying to set status to PAID,
     // it means the order was already processed
     if (!orderResult && updateOrder.status === OrderStatus.PAID) {
-      console.log(`Order ${orderNo} already paid or not in CREATED status, skipping update`);
+      console.log(
+        `Order ${orderNo} already paid or not in CREATED status, skipping update`
+      );
     }
 
     result.order = orderResult;

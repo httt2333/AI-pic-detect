@@ -28,9 +28,9 @@ import {
   IconX,
 } from '@tabler/icons-react';
 
+import { analyzeRealImage } from './analyze-client';
 import { getContainedImageFrame } from './bbox';
 import { LandingPage } from './landing-page';
-import { analyzeMockImage } from './mock';
 import type {
   IssueDecision,
   ReviewIssue,
@@ -39,7 +39,7 @@ import type {
 } from './types';
 import { validateReviewImageFile } from './validation';
 
-const ANALYSIS_TIMEOUT_MS = 12_000;
+export const ANALYSIS_TIMEOUT_MS = 130_000;
 
 type ReviewExperienceProps = {
   initialView?: 'landing' | 'upload';
@@ -709,7 +709,7 @@ function ResultWorkspace({
 
 export function ReviewExperience({
   initialView = 'landing',
-  analyzeImage = analyzeMockImage,
+  analyzeImage = analyzeRealImage,
 }: ReviewExperienceProps) {
   const [view, setView] = useState<ExperienceView>(initialView);
   const [status, setStatus] = useState<ReviewStatus>('idle');
@@ -814,6 +814,23 @@ export function ReviewExperience({
         error instanceof Error && error.message === 'quota_exhausted';
       const timedOut =
         error instanceof Error && error.message === 'analysis_timeout';
+      const unsupported =
+        error instanceof Error && error.message === 'unsupported';
+
+      if (unsupported) {
+        setView('upload');
+        setStatus('unsupported');
+        setSelectedFile(null);
+        setResponse(null);
+        setSelectedIssueId(null);
+        setPreviewUrl((currentUrl) => {
+          revokePreviewUrl(currentUrl);
+          return null;
+        });
+        setErrorMessage('图片内容与声明的文件格式不一致，请重新选择。');
+        return;
+      }
+
       setStatus(
         quotaExhausted
           ? 'quota_exhausted'

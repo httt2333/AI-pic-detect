@@ -1,8 +1,8 @@
-import { getTranslations, setRequestLocale } from 'next-intl/server';
 import Link from 'next/link';
+import { shouldLoadAccountPricingState } from '@/features/pricing/pricing-access';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 
 import { getThemePage } from '@/core/theme';
-import { shouldLoadAccountPricingState } from '@/features/pricing/pricing-access';
 import { getMetadata } from '@/shared/lib/seo';
 import { getCurrentSubscription } from '@/shared/models/subscription';
 import { getUserInfo } from '@/shared/models/user';
