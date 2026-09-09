@@ -28,7 +28,7 @@ describe('createAnalyzeHandler', () => {
     const handler = createAnalyzeHandler({ analyze });
     const response = await handler(
       imageRequest(
-        new File([Uint8Array.from([0xff, 0xd8, 0xff])], 'spoofed.png', {
+        new File([Uint8Array.from([0x00, 0x11, 0x22])], 'unknown.png', {
           type: 'image/png',
         })
       )
@@ -82,6 +82,25 @@ describe('createAnalyzeHandler', () => {
     expect(body.dimensions).toHaveLength(17);
     expect(analyze).toHaveBeenCalledWith(
       expect.stringMatching(/^data:image\/png;base64,/)
+    );
+  });
+
+  it('passes the detected MIME type when the uploaded declaration is wrong', async () => {
+    const analyze = vi.fn().mockResolvedValue({ issues: [], dimensions: [] });
+    const handler = createAnalyzeHandler({ analyze });
+    const response = await handler(
+      imageRequest(
+        new File(
+          [Uint8Array.from([0xff, 0xd8, 0xff, 0xe0])],
+          'screenshot.png',
+          { type: 'image/png' }
+        )
+      )
+    );
+
+    expect(response.status).toBe(200);
+    expect(analyze).toHaveBeenCalledWith(
+      expect.stringMatching(/^data:image\/jpeg;base64,/)
     );
   });
 

@@ -18,6 +18,38 @@ describe('analyzeRealImage', () => {
     expect((init.body as FormData).get('image')).toBe(file);
   });
 
+  it.each(['success', 'no_issue'] as const)(
+    'accepts a completed %s response so the UI can leave loading',
+    async (status) => {
+      const result = getMockAnalysisResponse(
+        status === 'no_issue' ? 'no_issue' : 'success'
+      );
+      const fetcher = vi.fn().mockResolvedValue(Response.json(result));
+
+      await expect(
+        analyzeRealImage(
+          new File(['image'], 'character.png', { type: 'image/png' }),
+          fetcher
+        )
+      ).resolves.toMatchObject({ status, issues: expect.any(Array) });
+    }
+  );
+
+  it('rejects a malformed 200 response instead of leaving the workflow ambiguous', async () => {
+    const fetcher = vi
+      .fn()
+      .mockResolvedValue(
+        Response.json({ status: 'success', issues: 'not-an-array' })
+      );
+
+    await expect(
+      analyzeRealImage(
+        new File(['image'], 'character.png', { type: 'image/png' }),
+        fetcher
+      )
+    ).rejects.toMatchObject({ message: 'analysis_failed' });
+  });
+
   it.each([
     [415, 'unsupported'],
     [504, 'analysis_timeout'],

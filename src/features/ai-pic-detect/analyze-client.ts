@@ -5,6 +5,15 @@ type Fetcher = (
   init?: RequestInit
 ) => Promise<Response>;
 
+function isReviewResponse(value: unknown): value is ReviewResponse {
+  if (value === null || typeof value !== 'object') return false;
+  const response = value as { status?: unknown; issues?: unknown };
+  return (
+    (response.status === 'success' || response.status === 'no_issue') &&
+    Array.isArray(response.issues)
+  );
+}
+
 export async function analyzeRealImage(
   file: File,
   fetcher: Fetcher = fetch
@@ -33,7 +42,11 @@ export async function analyzeRealImage(
   }
 
   try {
-    return (await response.json()) as ReviewResponse;
+    const payload: unknown = await response.json();
+    if (!isReviewResponse(payload)) {
+      throw new Error('invalid_analysis_response');
+    }
+    return payload;
   } catch {
     throw new Error('analysis_failed');
   }

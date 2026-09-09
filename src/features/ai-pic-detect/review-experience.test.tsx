@@ -76,6 +76,12 @@ describe('ReviewExperience', () => {
     expect(
       screen.getByRole('heading', { name: '找出你自己漏看的地方' })
     ).toBeVisible();
+    expect(screen.getAllByTestId('story-step-image')).toHaveLength(3);
+    expect(screen.getByTestId('story-step-image-find')).toHaveTextContent('1');
+    expect(screen.getByTestId('story-step-image-understand')).toHaveTextContent(
+      '2'
+    );
+    expect(screen.getByTestId('story-step-image-fix')).toHaveTextContent('3');
     expect(
       screen.getByRole('heading', { name: '看见完整的检查过程' })
     ).toBeVisible();
@@ -274,6 +280,33 @@ describe('ReviewExperience', () => {
     expect(
       screen.getByRole('heading', { name: '上传一张人物图' })
     ).toBeVisible();
+  });
+
+  it('leaves analysing state after a completed empty issue response', async () => {
+    render(
+      <ReviewExperience
+        initialView="upload"
+        analyzeImage={vi.fn().mockResolvedValue({
+          status: 'no_issue',
+          summary: { issue_count: 0, high_priority_count: 0 },
+          issues: [],
+          dimensions: getMockAnalysisResponse('no_issue').dimensions,
+        })}
+      />
+    );
+
+    fireEvent.change(screen.getByLabelText('选择要检查的图片'), {
+      target: {
+        files: [new File(['image'], 'character.png', { type: 'image/png' })],
+      },
+    });
+    await waitFor(() =>
+      expect(screen.getByRole('button', { name: '开始分析' })).toBeEnabled()
+    );
+    fireEvent.click(screen.getByRole('button', { name: '开始分析' }));
+
+    expect(await screen.findByText('暂未发现高修改优先级问题')).toBeVisible();
+    expect(screen.queryByText('正在扫描局部细节')).not.toBeInTheDocument();
   });
 
   it('offers a retry after a controlled analysis failure', async () => {
