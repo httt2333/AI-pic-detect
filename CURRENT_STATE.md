@@ -58,24 +58,27 @@ tab, and that page provides a clear return path. While purchases are disabled,
 the pricing page skips account/subscription database reads so the frontend shell
 does not surface an unrelated schema failure.
 
-Historical P0-focused Vitest and Playwright journeys have passed in a normal
-runner, but the current restricted environment has not completed a fresh runtime
-acceptance. This session confirmed a clean working tree and passed
-`tsc --noEmit` directly. Dependency restoration could not complete because the
-offline cache is incomplete and the registry connection was refused. Vitest,
-Playwright, `next build`, and `next dev` were then blocked before application
-checks by the environment's child-process `spawn EPERM` policy. Do not retry
-installation, build, or process-permission remediation in this environment.
-
-The repository-wide `pnpm verify` baseline also remains blocked by pre-existing
-formatting and ESLint debt outside this feature. Final runtime acceptance must
-run in a normal local terminal, in order: `pnpm install --frozen-lockfile`,
-`pnpm verify`, `pnpm test:e2e`, and `pnpm dev`.
+The current Landing change passed all 64 Vitest tests with coverage, all four
+Playwright journeys (including a narrow mobile viewport), TypeScript, and
+targeted ESLint with no errors. The local development server was also inspected
+in a real browser with no runtime console errors. Repository-wide `pnpm verify`
+remains blocked by pre-existing formatting and ESLint debt outside this feature:
+18 unrelated files fail the formatting check and the inherited template reports
+401 lint errors. These baseline files were not changed as part of the Landing
+scope.
 
 The main product is paused at its mock/fallback boundary while the Harness
 performs reproducible Provider validation. Do not add a visual Provider,
 `/api/analyze` implementation, R2/S3, or another object-storage dependency
 until the Harness has supplied a mature Provider Adapter recommendation.
+
+The public Landing Page now follows an editorial, image-first presentation for
+creator and portfolio review. It leads with the approved product hook, shows a
+normal-looking image with restrained local annotations, explains the creator
+pain, then walks through Find, Understand, and Fix before presenting a compact
+read-only workspace preview and final upload CTA. Both upload CTAs still enter
+the existing guest upload flow; analysis, result handling, routing, and backend
+boundaries are unchanged.
 
 The historical migration corpus now has a typed A/B/C dimension map and a
 local-only, Git-ignored sanitized-index command. A v10 index was generated

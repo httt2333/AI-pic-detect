@@ -23,14 +23,17 @@
       image-and-current-issue row so the image panel is not stretched.
 - [x] Keep credit entry points on the Chinese route, add a same-tab return path,
       and avoid account/database reads while checkout is disabled.
+- [x] Rebuild the public Landing Page as an image-first editorial narrative:
+      Hero, creator pain, brand value, Find/Understand/Fix, read-only workspace
+      preview, product boundary, and final CTA. Preserve the existing guest
+      upload callback and all analysis/result behavior.
 
 ## Pending, requiring in-scope backend or environment work
 
-- [ ] In a normal local terminal, complete final runtime acceptance in order:
-      `pnpm install --frozen-lockfile`, `pnpm verify`, `pnpm test:e2e`, and
-      `pnpm dev`. The restricted Agent environment passed TypeScript but cannot
-      restore dependencies or spawn the child processes required for the other
-      checks; do not retry those operations there.
+- [ ] Address the inherited repository formatting and ESLint baseline in a
+      separate, explicitly scoped cleanup. The current Landing files pass
+      targeted lint, TypeScript, Vitest coverage, and Playwright; do not mix the
+      template-wide cleanup into product work.
 - [ ] Replace the mock executor with a real, privacy-reviewed analysis API.
 - [ ] Agree the versioned API shape for validated dimension states and `dim_id`
       links before replacing the mock executor. The browser must never consume

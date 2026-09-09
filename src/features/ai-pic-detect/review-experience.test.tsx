@@ -47,11 +47,39 @@ describe('ReviewExperience', () => {
 
     expect(
       screen.getByRole('heading', {
-        name: '发布前，先把局部问题看清楚。',
+        name: '你看不出来的 AI 痕迹，先替你找出来。',
+      })
+    ).toBeVisible();
+    expect(screen.getByText('AI IMAGE REVIEW FOR CREATORS')).toBeVisible();
+    expect(screen.getByRole('link', { name: '查看示例' })).toHaveAttribute(
+      'href',
+      '#review-story'
+    );
+    expect(
+      screen.getByRole('heading', {
+        name: '图已经很好了。问题往往只藏在最后那几个细节里。',
+      })
+    ).toBeVisible();
+    expect(
+      screen.getByRole('heading', {
+        name: '保留你喜欢的画面，只修那些容易露馅的细节。',
+      })
+    ).toBeVisible();
+    expect(
+      screen.getByRole('heading', { name: '找出你自己漏看的地方' })
+    ).toBeVisible();
+    expect(
+      screen.getByRole('heading', { name: '看见完整的检查过程' })
+    ).toBeVisible();
+    expect(
+      screen.getByRole('heading', {
+        name: '发出去之前，再让另一双眼睛看一遍。',
       })
     ).toBeVisible();
 
-    fireEvent.click(screen.getByRole('button', { name: '上传图片开始检查' }));
+    fireEvent.click(
+      screen.getAllByRole('button', { name: '上传图片开始检查' })[0]
+    );
 
     expect(
       screen.getByRole('heading', { name: '上传一张人物图' })
@@ -68,12 +96,14 @@ describe('ReviewExperience', () => {
     fireEvent.click(screen.getByRole('link', { name: '使用流程' }));
 
     expect(
-      screen.getByRole('heading', { name: '从图片到可执行的修改建议' })
+      screen.getByRole('heading', { name: '找出你自己漏看的地方' })
     ).toBeVisible();
 
     fireEvent.click(screen.getByRole('link', { name: '产品边界' }));
     expect(
-      screen.getByRole('heading', { name: '帮助你判断“哪里值得再看”' })
+      screen.getByRole('heading', {
+        name: 'AI 负责提出候选问题，最终判断由你完成。',
+      })
     ).toBeVisible();
   });
 
@@ -170,7 +200,7 @@ describe('ReviewExperience', () => {
     fireEvent.click(screen.getByRole('button', { name: 'AI-PIC-DETECT' }));
     expect(
       screen.getByRole('heading', {
-        name: '发布前，先把局部问题看清楚。',
+        name: '你看不出来的 AI 痕迹，先替你找出来。',
       })
     ).toBeVisible();
   });

@@ -33,6 +33,12 @@ Updated: 2026-09-09
 - `public/images/ai-pic-detect/hero-review-sample.png` is an original local
   illustrative sample. It is a product demo asset only, not an uploaded user
   image or model validation evidence.
+- The Landing Page has been separated into
+  `src/features/ai-pic-detect/landing-page.tsx`. It is a presentation-only,
+  image-first editorial surface. Its upload CTAs call the existing `openUpload`
+  handler, and its workspace preview reads the centralized mock response
+  without changing review state. `DESIGN.md` records the durable visual and
+  product-copy constraints for future landing work.
 
 ## Tests and checks
 
@@ -41,18 +47,14 @@ Updated: 2026-09-09
   quota-exhausted guidance, history empty states, and analysis-failure retry.
   `src/features/analyze/contract.test.ts` covers the server-side safe contract
   filtering of invalid dimension links.
-- `e2e/smoke.spec.ts` covers the public upload entry plus upload-to-workspace,
-  issue selection, next-item review in Chromium, and the disabled CNY credit
-  pack page. The new commercial Vitest/E2E cases need a normal runner pass;
-  this session hit Windows `spawn EPERM` and could not use an elevated retry.
-- Current environment check: the working tree was clean and `tsc --noEmit`
-  passed. Dependency restoration was blocked by an incomplete offline cache and
-  a refused registry connection. Vitest, Playwright, `next build`, and
-  `next dev` each stopped before application checks because this restricted
-  environment prohibits their required child processes (`spawn EPERM`). Do not
-  retry these operations here. In a normal local terminal, run
-  `pnpm install --frozen-lockfile`, `pnpm verify`, `pnpm test:e2e`, then
-  `pnpm dev` for final acceptance.
+- `e2e/smoke.spec.ts` covers the public upload entry, a narrow mobile Landing
+  viewport without horizontal overflow, upload-to-workspace, issue selection,
+  next-item review, and the disabled CNY credit pack page.
+- Current checks: all 64 Vitest tests passed with coverage; all four Playwright
+  journeys passed; TypeScript passed; targeted ESLint reported no errors. The
+  development build was inspected in Chromium without runtime console errors.
+  Repository-wide `pnpm verify` still stops on 18 unrelated formatting files
+  and inherited template lint debt (401 errors); keep that cleanup separate.
 
 ## Next agent
 

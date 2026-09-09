@@ -29,6 +29,7 @@ import {
 } from '@tabler/icons-react';
 
 import { getContainedImageFrame } from './bbox';
+import { LandingPage } from './landing-page';
 import { analyzeMockImage } from './mock';
 import type {
   IssueDecision,
@@ -134,38 +135,6 @@ function ReferenceImage({ alt }: { alt: string }) {
       sizes="(min-width: 1024px) 42vw, 100vw"
       className="object-cover"
     />
-  );
-}
-
-function HeroReviewExample() {
-  return (
-    <figure className="space-y-3">
-      <figcaption className="flex items-center justify-between gap-3 text-sm">
-        <span className="font-semibold text-violet-950">初看完整</span>
-        <span className="text-violet-950/60">扫描后定位 2 个局部</span>
-      </figcaption>
-      <div className="relative aspect-[4/5] overflow-hidden rounded-2xl border border-violet-200 bg-violet-50">
-        <ReferenceImage alt="示例二次元人物图，扫描后标记两个建议复核的局部" />
-        <div className="absolute inset-y-0 right-0 w-[48%] border-l border-dashed border-white/80 bg-violet-950/8" />
-        {[
-          { number: 1, className: 'top-[44%] left-[58%] h-[18%] w-[23%]' },
-          { number: 2, className: 'top-[18%] left-[28%] h-[16%] w-[38%]' },
-        ].map((marker) => (
-          <div
-            key={marker.number}
-            className={`absolute border-2 border-amber-400 bg-amber-200/10 ${marker.className}`}
-          >
-            <span className="absolute -top-3 -left-3 grid size-6 place-items-center rounded-full bg-amber-400 text-xs font-bold text-violet-950">
-              {marker.number}
-            </span>
-          </div>
-        ))}
-        <div className="absolute right-4 bottom-4 inline-flex items-center gap-2 rounded-full bg-violet-950 px-3 py-2 text-xs font-semibold text-white shadow-lg shadow-violet-950/20">
-          <IconFocus2 size={15} stroke={1.8} />
-          值得复核
-        </div>
-      </div>
-    </figure>
   );
 }
 
@@ -1094,112 +1063,7 @@ export function ReviewExperience({
       </div>
     </main>
   ) : (
-    <main className="overflow-hidden bg-[#fdfcff] text-violet-950">
-      <section className="mx-auto grid max-w-[1280px] gap-12 px-5 pt-16 pb-20 sm:px-8 lg:grid-cols-[minmax(0,1fr)_minmax(360px,0.72fr)] lg:items-center lg:pt-24 lg:pb-28">
-        <div>
-          <h1 className="max-w-3xl text-5xl font-semibold tracking-[-0.04em] text-violet-950 sm:text-6xl lg:text-7xl">
-            发布前，先把局部问题看清楚。
-          </h1>
-          <p className="mt-7 max-w-xl text-lg leading-8 text-violet-950/70">
-            上传一张人物图。扫描会定位值得复核的局部，说明检查原因，并给出可执行的修改建议。
-          </p>
-          <p className="mt-3 text-sm leading-6 text-violet-950/55">
-            游客可直接体验 1 次检查；登录后可管理检查额度与保存记录。
-          </p>
-          <div className="mt-9 flex flex-wrap items-center gap-4">
-            <button
-              type="button"
-              onClick={openUpload}
-              className="inline-flex items-center gap-2 bg-violet-800 px-5 py-3.5 text-sm font-semibold text-white transition hover:bg-violet-950"
-            >
-              <IconUpload size={18} stroke={1.8} />
-              上传图片开始检查
-            </button>
-            <a
-              href="#how-it-works"
-              className="inline-flex items-center gap-2 px-2 py-3 text-sm font-semibold text-violet-800 hover:text-violet-950"
-            >
-              了解流程
-              <IconArrowRight size={17} stroke={1.8} />
-            </a>
-          </div>
-          <div className="mt-10 flex flex-wrap gap-x-6 gap-y-3 text-sm text-violet-950/65">
-            <span className="inline-flex items-center gap-2">
-              <IconFocus2 size={17} stroke={1.7} />
-              局部定位
-            </span>
-            <span className="inline-flex items-center gap-2">
-              <IconCircleCheck size={17} stroke={1.7} />
-              人工复核
-            </span>
-          </div>
-        </div>
-        <div className="mx-auto w-full max-w-[430px] lg:justify-self-end">
-          <HeroReviewExample />
-        </div>
-      </section>
-      <section
-        id="how-it-works"
-        className="border-y border-violet-200 bg-violet-50/70"
-      >
-        <div className="mx-auto max-w-[1400px] px-5 py-18 sm:px-8">
-          <div className="max-w-2xl">
-            <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">
-              从图片到可执行的修改建议
-            </h2>
-          </div>
-          <ol className="mt-10 grid gap-0 border-t border-violet-200 md:grid-cols-3">
-            {[
-              [
-                '01',
-                '上传一张人物图',
-                '选择 PNG、JPG 或 WebP，先完成基础校验。',
-              ],
-              [
-                '02',
-                '定位值得检查的区域',
-                '只呈现通过内部置信度过滤的候选问题。',
-              ],
-              [
-                '03',
-                '查看建议并决定下一步',
-                '逐项查看原因与建议，继续下一项或忽略。',
-              ],
-            ].map(([number, title, description]) => (
-              <li
-                key={number}
-                className="border-b border-violet-200 py-6 md:border-r md:px-6 md:first:pl-0 md:last:border-r-0"
-              >
-                <span className="text-sm font-semibold text-violet-700">
-                  {number}
-                </span>
-                <h3 className="mt-6 text-lg font-semibold">{title}</h3>
-                <p className="mt-2 max-w-sm text-sm leading-6 text-violet-950/65">
-                  {description}
-                </p>
-              </li>
-            ))}
-          </ol>
-        </div>
-      </section>
-      <section
-        id="boundaries"
-        className="mx-auto max-w-[1400px] px-5 py-20 sm:px-8"
-      >
-        <div className="grid gap-8 rounded-2xl border border-violet-200 bg-white p-6 shadow-xl shadow-violet-950/5 sm:p-8 md:grid-cols-[0.8fr_1.2fr]">
-          <div>
-            <h2 className="text-3xl font-semibold tracking-tight">
-              帮助你判断“哪里值得再看”
-            </h2>
-          </div>
-          <div className="text-sm leading-7 text-violet-950/70">
-            <p>
-              扫描只给出局部复核提示，不替你自动修改图片。最终修改由创作者决定。
-            </p>
-          </div>
-        </div>
-      </section>
-    </main>
+    <LandingPage onUpload={openUpload} />
   );
 
   return (
