@@ -2,6 +2,7 @@
   "name": "shipany-template-two",
   "version": "1.8.2",
   "private": true,
+  "packageManager": "pnpm@12.3.4",
   "author": "ShipAny.ai",
   "homepage": "https://shipany.ai",
   "repository": {
