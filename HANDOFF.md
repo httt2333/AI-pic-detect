@@ -51,11 +51,13 @@ Updated: 2026-09-09
 - `e2e/smoke.spec.ts` covers the public upload entry, a narrow mobile Landing
   viewport without horizontal overflow, upload-to-workspace, issue selection,
   next-item review, and the disabled CNY credit pack page.
-- Current checks: all 64 Vitest tests passed with coverage; all four Playwright
-  journeys passed; TypeScript passed; targeted ESLint reported no errors. The
-  development build was inspected in Chromium without runtime console errors.
-  Repository-wide `pnpm verify` still stops on 18 unrelated formatting files
-  and inherited template lint debt (401 errors); keep that cleanup separate.
+- Current checks: all 84 Vitest tests passed; the three new integration modules
+  meet the affected-module coverage target; all four Playwright journeys
+  passed; TypeScript passed; targeted ESLint reported no errors. The production
+  build compiled and generated pages, then Windows blocked the final standalone
+  symlink with `EPERM`. Repository-wide `pnpm verify` still stops on unrelated
+  formatting files and inherited template lint debt; keep that cleanup
+  separate.
 
 ## Next agent
 
