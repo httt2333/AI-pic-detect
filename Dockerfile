@@ -7,7 +7,7 @@ RUN apk add --no-cache libc6-compat && yarn global add pnpm@12.3.4
 WORKDIR /app
 
 # Install dependencies based on the preferred package manager
-COPY package.json pnpm-lock.yaml* source.config.ts next.config.mjs ./
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml source.config.ts next.config.mjs ./
 RUN pnpm i --frozen-lockfile
 
 # Rebuild the source code only when needed
