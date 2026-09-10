@@ -133,3 +133,24 @@ classification. They remain historical failure evidence and are not the
 protocol used by the current multi-issue server adapter. A previously exposed
 provider key must be rotated before live use; no real provider call was made
 from this repository during integration.
+
+## Flowchart acceptance gaps
+
+The following items from the local development flowchart are not yet confirmed
+as complete:
+
+- Database: `DATABASE_URL` and the Neon target are configured, but a fresh
+  runtime read/write check and table verification still need to be performed.
+- Email login: Better Auth, the email form, database adapter, and `AUTH_SECRET`
+  are present, but a real register, login, refresh, and logout flow has not yet
+  been completed in the current environment.
+- Google login: provider code exists, but the database feature flags, OAuth
+  callback configuration, and a successful Google sign-in record are unverified.
+- Payment: the pricing and purchase UI is present, but real checkout, webhook,
+  payment recording, and credit delivery are not verified; purchase controls
+  remain disabled.
+- Credits: the data model and display surfaces exist, but server-side free-use
+  enforcement and debit/refund behavior are not complete.
+- Deployment: local development is available, but the production Vercel
+  environment variables, database migration, OAuth callback URLs, and live
+  smoke test remain outstanding.

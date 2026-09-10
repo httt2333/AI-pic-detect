@@ -287,7 +287,7 @@ function ProductHeader({
 }: {
   openUpload: () => void;
   showLanding: () => void;
-  navigateToSection: (sectionId: 'how-it-works' | 'boundaries') => void;
+  navigateToSection: (sectionId: 'how-it-works' | 'why-this' | 'boundaries') => void;
 }) {
   return (
     <header className="fixed inset-x-0 top-0 z-50 border-b border-violet-100 bg-[#fdfcff]/95 backdrop-blur">
@@ -308,7 +308,7 @@ function ProductHeader({
             }}
             className="hidden hover:text-violet-950 sm:block"
           >
-            使用流程
+            怎么检查
           </a>
           <a
             href="#boundaries"
@@ -320,11 +320,21 @@ function ProductHeader({
           >
             产品边界
           </a>
+          <a
+            href="#why-this"
+            onClick={(event) => {
+              event.preventDefault();
+              navigateToSection('why-this');
+            }}
+            className="hidden hover:text-violet-950 lg:block"
+          >
+            为什么这样做
+          </a>
           <Link
             href="/zh/pricing"
             className="hidden hover:text-violet-950 lg:block"
           >
-            购买额度
+            额度与价格
           </Link>
           <Link
             href="/reviews"
@@ -720,7 +730,7 @@ export function ReviewExperience({
   const [decisions, setDecisions] = useState<Record<string, IssueDecision>>({});
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [pendingSection, setPendingSection] = useState<
-    'how-it-works' | 'boundaries' | null
+    'how-it-works' | 'why-this' | 'boundaries' | null
   >(null);
   const canStartAnalysis = selectedFile !== null && status === 'idle';
   const workspaceResponse = useMemo(
@@ -755,7 +765,7 @@ export function ReviewExperience({
     setSelectedIssueId(null);
     setErrorMessage(null);
   }
-  function navigateToSection(sectionId: 'how-it-works' | 'boundaries') {
+  function navigateToSection(sectionId: 'how-it-works' | 'why-this' | 'boundaries') {
     showLanding();
     setPendingSection(sectionId);
   }

@@ -63,54 +63,58 @@ describe('ReviewExperience', () => {
 
     expect(
       screen.getByRole('heading', {
-        name: '你看不出来的 AI 痕迹，先替你找出来。',
+        name: '让 AI 图更经得住细看。',
       })
     ).toBeVisible();
-    expect(screen.getByText('AI IMAGE REVIEW FOR CREATORS')).toBeVisible();
+    expect(
+      screen.getByText('AI IMAGE REVIEW FOR ANIME CREATORS')
+    ).toBeVisible();
+    expect(
+      screen.getByText(
+        '帮您找出二次元 AI 图里容易被观众注意到的生成痕迹：哪里不自然，为什么，怎么改。'
+      )
+    ).toBeVisible();
     const heroScanner = screen.getByRole('slider', {
       name: '拖动扫描示例图',
     });
     expect(heroScanner).toHaveValue('100');
-    expect(
-      screen.getByText('第一眼，你看得出哪里不对吗？')
-    ).toBeVisible();
-    expect(screen.getByText('拖动扫描线查看 →')).toBeVisible();
-    expect(
-      screen.getByText('找到 2 处建议人工复核的细节。')
-    ).toHaveAttribute('aria-hidden', 'true');
+    expect(screen.getByText('第一眼，您看得出来吗？')).toBeVisible();
+    expect(screen.getByText('拖动查看 →')).toBeVisible();
+    expect(screen.getByText('发现 2 处需要注意的细节')).toHaveAttribute(
+      'aria-hidden',
+      'true'
+    );
     expect(screen.getAllByTestId('hero-location-box')).toHaveLength(2);
     fireEvent.change(heroScanner, { target: { value: '60' } });
     expect(screen.getByTestId('hero-scan-reveal')).toHaveStyle({
       clipPath: 'inset(0 0 0 60%)',
     });
-    expect(
-      screen.getByText('找到 2 处建议人工复核的细节。')
-    ).toBeVisible();
+    expect(screen.getByText('发现 2 处需要注意的细节')).toBeVisible();
     expect(screen.getAllByText('FIND')).not.toHaveLength(0);
     expect(screen.getAllByText('UNDERSTAND')).not.toHaveLength(0);
     expect(screen.getAllByText('FIX')).not.toHaveLength(0);
-    expect(screen.getByRole('link', { name: '查看示例' })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: '查看示例 →' })).toHaveAttribute(
       'href',
       '#review-story'
     );
     expect(
-      screen.getByRole('heading', {
+      screen.queryByRole('heading', {
         name: '图已经很好了。问题往往只藏在最后那几个细节里。',
       })
-    ).toBeVisible();
+    ).not.toBeInTheDocument();
     expect(
       screen.getByRole('heading', {
-        name: '保留你喜欢的画面，只修那些容易露馅的细节。',
+        name: '我们和您一起精益求精',
       })
     ).toBeVisible();
     expect(
-      screen.getByRole('heading', { name: '找出你自己漏看的地方' })
+      screen.getByRole('heading', { name: '先看哪里值得改。' })
     ).toBeVisible();
     expect(screen.getAllByTestId('story-step-number')).toHaveLength(3);
     expect(screen.getByTestId('story-step-number-find')).toHaveTextContent('1');
-    expect(screen.getByTestId('story-step-number-understand')).toHaveTextContent(
-      '2'
-    );
+    expect(
+      screen.getByTestId('story-step-number-understand')
+    ).toHaveTextContent('2');
     expect(screen.getByTestId('story-step-number-fix')).toHaveTextContent('3');
     for (const stepNumber of screen.getAllByTestId('story-step-number')) {
       expect(within(stepNumber).queryByRole('img')).not.toBeInTheDocument();
@@ -127,6 +131,34 @@ describe('ReviewExperience', () => {
       'lg:sticky',
       'lg:top-24'
     );
+    const problemSection = screen.getByTestId('keep-image-section');
+    const problemVisual = screen.getByTestId('keep-image-crops');
+    expect(problemVisual).toHaveClass('lg:order-first');
+    expect(problemSection).toBeInTheDocument();
+    expect(screen.getByTestId('keep-image-section')).toHaveClass(
+      'lg:grid-cols-2'
+    );
+    expect(screen.getByTestId('keep-image-crops')).toHaveAttribute(
+      'data-crop-count',
+      '3'
+    );
+    expect(screen.getByTestId('final-cta')).not.toHaveClass('rounded-2xl');
+    expect(screen.getByTestId('real-reactions')).toHaveAttribute(
+      'data-reaction-count',
+      '20'
+    );
+    expect(
+      screen.getByRole('heading', {
+        name: '比起直接给您一个结果，我们更在乎观众到底看到了什么。',
+      })
+    ).toBeVisible();
+    expect(screen.getByText('66,457 条公开评论')).toBeVisible();
+    expect(screen.getByText('1,149 条高价值反馈')).toBeVisible();
+    expect(screen.getByText('50 次样本测试 · 28 轮调试')).toBeVisible();
+    expect(screen.getAllByTestId(/reaction-row-/)).toHaveLength(3);
+    expect(screen.getByTestId('real-reactions')).toHaveTextContent(
+      '用了ai也不检查一下手指，说好的匠人精神呢'
+    );
     fireEvent.click(screen.getByRole('button', { name: /UNDERSTAND/ }));
     expect(screen.getByTestId('story-stage-image')).toHaveAttribute(
       'data-active-step',
@@ -138,11 +170,11 @@ describe('ReviewExperience', () => {
       'fix'
     );
     expect(
-      screen.getByRole('heading', { name: '看见完整的检查过程' })
+      screen.getByRole('heading', { name: '问题在哪，为什么，怎么改。' })
     ).toBeVisible();
     expect(
       screen.getByRole('heading', {
-        name: '发出去之前，再让另一双眼睛看一遍。',
+        name: '每次发布前，我们先帮您把明显的问题找出来。',
       })
     ).toBeVisible();
 
@@ -184,12 +216,10 @@ describe('ReviewExperience', () => {
 
     act(() => vi.advanceTimersByTime(3_500));
 
-    expect(
-      screen.getByRole('slider', { name: '拖动扫描示例图' })
-    ).toHaveValue('0');
-    expect(
-      screen.getByText('找到 2 处建议人工复核的细节。')
-    ).toBeVisible();
+    expect(screen.getByRole('slider', { name: '拖动扫描示例图' })).toHaveValue(
+      '0'
+    );
+    expect(screen.getByText('发现 2 处需要注意的细节')).toBeVisible();
 
     vi.useRealTimers();
   });
@@ -197,16 +227,16 @@ describe('ReviewExperience', () => {
   it('returns from upload to the requested landing section through the header navigation', () => {
     render(<ReviewExperience initialView="upload" />);
 
-    fireEvent.click(screen.getByRole('link', { name: '使用流程' }));
+    fireEvent.click(screen.getByRole('link', { name: '怎么检查' }));
 
     expect(
-      screen.getByRole('heading', { name: '找出你自己漏看的地方' })
+      screen.getByRole('heading', { name: '先看哪里值得改。' })
     ).toBeVisible();
 
     fireEvent.click(screen.getByRole('link', { name: '产品边界' }));
     expect(
       screen.getByRole('heading', {
-        name: 'AI 负责提出候选问题，最终判断由你完成。',
+        name: '我们是您的助手，负责提出有依据的判断。',
       })
     ).toBeVisible();
   });
@@ -327,7 +357,7 @@ describe('ReviewExperience', () => {
     fireEvent.click(screen.getByRole('button', { name: 'AI-PIC-DETECT' }));
     expect(
       screen.getByRole('heading', {
-        name: '你看不出来的 AI 痕迹，先替你找出来。',
+        name: '让 AI 图更经得住细看。',
       })
     ).toBeVisible();
   });
@@ -486,7 +516,7 @@ describe('ReviewExperience', () => {
   it('opens the Chinese credit page from the product header', () => {
     render(<ReviewExperience />);
 
-    expect(screen.getByRole('link', { name: '购买额度' })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: '额度与价格' })).toHaveAttribute(
       'href',
       '/zh/pricing'
     );

@@ -1,5 +1,7 @@
 import Link from 'next/link';
 
+import { ProductHeader } from './product-header';
+
 export function ReviewHistory({
   isAuthenticated,
 }: {
@@ -7,7 +9,9 @@ export function ReviewHistory({
 }) {
   if (!isAuthenticated) {
     return (
-      <main className="mx-auto max-w-3xl px-5 py-20 sm:px-8">
+      <div className="min-h-dvh bg-[#f8f7f4] pt-16 text-neutral-950">
+        <ProductHeader />
+        <main className="mx-auto max-w-3xl px-5 py-20 sm:px-8">
         <section className="rounded-2xl border border-violet-200 bg-white p-8 shadow-xl shadow-violet-950/5 sm:p-12">
           <p className="text-sm font-semibold tracking-wide text-violet-700">
             AI-PIC-DETECT
@@ -33,12 +37,15 @@ export function ReviewHistory({
             </Link>
           </div>
         </section>
-      </main>
+        </main>
+      </div>
     );
   }
 
   return (
-    <main className="mx-auto max-w-3xl px-5 py-20 sm:px-8">
+    <div className="min-h-dvh bg-[#f8f7f4] pt-16 text-neutral-950">
+      <ProductHeader />
+      <main className="mx-auto max-w-3xl px-5 py-20 sm:px-8">
       <section className="rounded-2xl border border-violet-200 bg-white p-8 shadow-xl shadow-violet-950/5 sm:p-12">
         <p className="text-sm font-semibold tracking-wide text-violet-700">
           AI-PIC-DETECT
@@ -59,6 +66,7 @@ export function ReviewHistory({
           开始一次检查
         </Link>
       </section>
-    </main>
+      </main>
+    </div>
   );
 }

@@ -86,3 +86,15 @@ the remaining live-provider cases are reproducible.
 
 - [ ] Subscriptions, automatic retouching, bulk upload, team collaboration,
       and AI-truth verdicts.
+
+## Flowchart acceptance gaps
+
+- [ ] Verify Neon runtime read/write access and confirm required tables exist.
+- [ ] Complete a real email register, login, refresh, and logout smoke test.
+- [ ] Configure and verify Google OAuth flags, callback URL, and user/session
+      record creation.
+- [ ] Configure and verify Vercel environment variables, database migration,
+      OAuth callbacks, and a production smoke test.
+- [ ] Implement server-side free-use and credit debit/refund rules.
+- [ ] Connect and verify real payment checkout, webhook, order recording, and
+      credit delivery.

@@ -10,19 +10,19 @@ test('a creator can begin a single-image review from the public landing page', a
   expect(response?.ok()).toBe(true);
   await expect(
     page.getByRole('heading', {
-      name: '你看不出来的 AI 痕迹，先替你找出来。',
+      name: '让 AI 图更经得住细看。',
     })
   ).toBeVisible();
 
-  await expect(page.getByText('AI IMAGE REVIEW FOR CREATORS')).toBeVisible();
+  await expect(page.getByText('AI IMAGE REVIEW FOR ANIME CREATORS')).toBeVisible();
   const heroScanner = page.getByRole('slider', { name: '拖动扫描示例图' });
   await expect(heroScanner).toHaveValue('100');
   await expect(
-    page.getByText('找到 2 处建议人工复核的细节。')
+    page.getByText('发现 2 处需要注意的细节')
   ).toBeHidden();
   await heroScanner.fill('60');
   await expect(
-    page.getByText('找到 2 处建议人工复核的细节。')
+    page.getByText('发现 2 处需要注意的细节')
   ).toBeVisible();
   await expect(page.getByRole('link', { name: '查看示例' })).toHaveAttribute(
     'href',
@@ -32,9 +32,9 @@ test('a creator can begin a single-image review from the public landing page', a
   await page.getByRole('button', { name: '上传图片开始检查' }).first().click();
   await expect(page.getByLabel('选择要检查的图片')).toBeVisible();
 
-  await page.getByRole('link', { name: '使用流程' }).click();
+  await page.getByRole('link', { name: '怎么检查' }).click();
   await expect(
-    page.getByRole('heading', { name: '找出你自己漏看的地方' })
+    page.getByRole('heading', { name: '先看哪里值得改。' })
   ).toBeVisible();
 });
 
@@ -46,7 +46,7 @@ test('the landing story remains usable on a narrow mobile viewport', async ({
 
   await expect(
     page.getByRole('heading', {
-      name: '你看不出来的 AI 痕迹，先替你找出来。',
+      name: '让 AI 图更经得住细看。',
     })
   ).toBeVisible();
   await expect(
@@ -67,7 +67,7 @@ test('the hero scan automatically reaches its result state', async ({ page }) =>
     page.getByRole('slider', { name: '拖动扫描示例图' })
   ).toHaveValue('0', { timeout: 5_000 });
   await expect(
-    page.getByText('找到 2 处建议人工复核的细节。')
+    page.getByText('发现 2 处需要注意的细节')
   ).toBeVisible();
 });
 
@@ -134,7 +134,7 @@ test('a creator can view configured credit packs without starting an unavailable
   await page.goto('/zh/pricing');
 
   await expect(page.getByRole('banner')).toHaveClass(/fixed/);
-  await expect(page.getByRole('link', { name: '使用流程' })).toHaveAttribute(
+  await expect(page.getByRole('link', { name: '怎么检查' })).toHaveAttribute(
     'href',
     '/#how-it-works'
   );

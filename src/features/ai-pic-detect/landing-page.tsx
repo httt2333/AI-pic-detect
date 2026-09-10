@@ -4,7 +4,6 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { IconArrowRight, IconEye, IconUpload } from '@tabler/icons-react';
 
-import { getMockAnalysisResponse } from './mock';
 
 type LandingPageProps = {
   onUpload: () => void;
@@ -14,26 +13,181 @@ const storySteps = [
   {
     key: 'find',
     label: 'FIND',
-    title: '找出你自己漏看的地方',
-    description: '第一眼没发现的问题，放大后可能就是最容易暴露生成感的细节。',
+    title: '先看哪里值得改。',
+    description: '定位观众最容易注意到的局部。',
   },
   {
     key: 'understand',
     label: 'UNDERSTAND',
-    title: '知道它到底怪在哪里',
-    description:
-      '不只标出位置，还说明它和结构、边界、遮挡或局部细节有什么关系。',
+    title: '再看为什么不自然。',
+    description: '把结构、边界、遮挡、光影这些问题说清楚，再决定怎么改。',
   },
   {
     key: 'fix',
     label: 'FIX',
-    title: '把“怪怪的”变成具体修改动作',
-    description:
-      '告诉你应该检查什么、调整什么，以及哪些已经满意的部分应该保持不动。',
+    title: '最后只改必要的地方。',
+    description: '只针对问题区域给出修改方向，其他地方尽量不动。',
   },
 ] as const;
 
 type StoryStep = (typeof storySteps)[number]['key'];
+
+const realReactionRows = [
+  [
+    { text: '用了ai也不检查一下手指，说好的匠人精神呢', tag: '手指' },
+    { text: '放大看腿部线条有笔触', tag: '线条' },
+    { text: '瞳孔反射光影不连贯，眼神空洞像假人。', tag: '眼睛' },
+    { text: '这个到底是不是ai啊头发真的巨怪', tag: '头发' },
+    { text: '看远景就能看出来了，小细节是扭曲的', tag: '结构' },
+    { text: '头饰部分，和后面的建筑物糊在一起了', tag: '边界' },
+  ],
+  [
+    { text: '最好的方法还是看物体重叠部分', tag: '遮挡' },
+    { text: '头发和皮肤、眉毛糊在一起，交界处黏黏糊糊', tag: '边界' },
+    { text: '这应该不是吧？从那个帽子的阴影能看出来', tag: '光影' },
+    { text: '衣服褶皱没有一点逻辑', tag: '褶皱' },
+    { text: '感觉头颈肩的透视有问题', tag: '透视' },
+    { text: '左边头发，右边耳环跟耳朵糊一起了', tag: '饰品' },
+  ],
+  [
+    { text: '比如高光太多太亮，边缘太模糊等等', tag: '光影' },
+    { text: '眼睛和头发都不是一个画风的', tag: '眼睛' },
+    { text: '那个一圈白边都糊了', tag: '边界' },
+    { text: '这个肩膀结构不对', tag: '结构' },
+    { text: '发丝糊了，衣服褶皱处理也是该糊糊该错错', tag: '褶皱' },
+    { text: '看一下角色的眼睛，太宽了', tag: '眼睛' },
+    { text: 'ai跟实拍光影上面好容易看出来', tag: '光影' },
+    { text: '清宵的线稿都是糊的', tag: '线稿' },
+  ],
+] as const;
+
+function RealReactions() {
+  return (
+    <section
+      data-testid="real-reactions"
+      data-reaction-count="20"
+      className="border-y border-neutral-200 bg-[#f3f1ed] py-24 sm:py-28 lg:py-32"
+    >
+      <div className="mx-auto max-w-[1320px] px-5 sm:px-8">
+        <div className="max-w-3xl">
+          <p className="text-xs font-semibold tracking-[0.18em] text-violet-700">
+            REAL REACTIONS
+          </p>
+          <h2 className="mt-5 max-w-2xl text-4xl leading-[1.08] font-semibold tracking-[-0.04em] text-balance sm:text-5xl">
+            这些，都是观众真的会看的地方。
+          </h2>
+          <p className="mt-6 max-w-2xl text-base leading-7 text-neutral-600 sm:text-lg sm:leading-8">
+            手、眼睛、边界、透视、光影……很多 AI 感，最后都落在这些细节上。
+          </p>
+        </div>
+      </div>
+      <div
+        className="mt-16 space-y-4 overflow-hidden sm:mt-20"
+        aria-label="真实评论流"
+      >
+        {realReactionRows.map((row, rowIndex) => (
+          <div
+            key={rowIndex}
+            data-testid={`reaction-row-${rowIndex + 1}`}
+            className={`reaction-marquee flex w-max gap-4 px-5 sm:gap-6 sm:px-8 ${rowIndex === 1 ? 'reaction-marquee-reverse' : ''}`}
+          >
+            {[...row, ...row].map((reaction, index) => (
+              <blockquote
+                key={`${rowIndex}-${index}`}
+                className="reaction-quote flex max-w-[19rem] shrink-0 items-baseline gap-3 border-b border-neutral-300 pb-3 text-base leading-7 text-neutral-800 sm:max-w-[24rem] sm:text-lg"
+              >
+                <span className="text-xs font-semibold tracking-[0.14em] text-neutral-400">
+                  {String(rowIndex + 1).padStart(2, '0')}
+                </span>
+                <span>{reaction.text}</span>
+                <span className="shrink-0 text-xs font-medium text-violet-700/80">
+                  {reaction.tag}
+                </span>
+              </blockquote>
+            ))}
+          </div>
+        ))}
+      </div>
+      <div className="mx-auto mt-12 flex max-w-[1320px] flex-col gap-8 px-5 sm:px-8 lg:mt-16">
+        <p className="text-xs text-neutral-500">
+          节选自公开社区真实讨论，已匿名与节选。
+          <span className="ml-2 text-neutral-400">
+            Selected from real public discussions · anonymized &amp; shortened
+          </span>
+        </p>
+      </div>
+      <style>{`
+        .reaction-marquee {
+          animation: reaction-scroll 48s linear infinite;
+        }
+        .reaction-marquee-reverse {
+          animation-name: reaction-scroll-reverse;
+          animation-duration: 56s;
+        }
+        .reaction-marquee:hover,
+        .reaction-marquee:focus-within {
+          animation-play-state: paused;
+        }
+        @keyframes reaction-scroll {
+          from { transform: translateX(0); }
+          to { transform: translateX(-50%); }
+        }
+        @keyframes reaction-scroll-reverse {
+          from { transform: translateX(-50%); }
+          to { transform: translateX(0); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .reaction-marquee,
+          .reaction-marquee-reverse {
+            animation: none;
+            transform: translateX(0);
+            flex-wrap: wrap;
+            width: auto;
+          }
+          .reaction-marquee > :nth-child(n + 7) {
+            display: none;
+          }
+        }
+      `}</style>
+    </section>
+  );
+}
+
+function WhyThisApproach() {
+  return (
+    <section
+      id="why-this"
+      data-testid="why-this"
+      className="mx-auto max-w-[1320px] px-5 py-20 sm:px-8 lg:py-24"
+    >
+      <div className="max-w-3xl">
+        <p className="text-xs font-semibold tracking-[0.18em] text-violet-700">
+          WHY THIS APPROACH
+        </p>
+        <h2 className="mt-5 text-4xl leading-tight font-semibold tracking-[-0.035em] text-balance sm:text-5xl">
+          比起直接给您一个结果，我们更在乎观众到底看到了什么。
+        </h2>
+        <p className="mt-6 max-w-2xl text-base leading-7 text-neutral-600 sm:text-lg sm:leading-8">
+          生成模型一直在变，但观众指出的问题很具体。我们把这些真实反馈整理成检查方法，再交给多模态模型逐项看。
+        </p>
+      </div>
+      <div className="mt-12 grid gap-8 border-t border-neutral-200 pt-8 sm:grid-cols-3 sm:gap-6">
+        <p className="text-lg font-medium text-neutral-900">
+          66,457 条公开评论
+        </p>
+        <p className="text-lg font-medium text-neutral-900">
+          1,149 条高价值反馈
+        </p>
+        <p className="text-lg font-medium text-neutral-900">
+          50 次样本测试 · 28 轮调试
+        </p>
+      </div>
+      <p className="mt-8 max-w-2xl text-sm leading-6 text-neutral-500">
+        不是追着模型版本跑，而是持续整理观众真正会在意的问题。
+      </p>
+    </section>
+  );
+}
 
 function ReviewImage({
   alt,
@@ -137,10 +291,7 @@ function HeroVisual() {
       window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     if (reduceMotion) {
-      startTimerRef.current = window.setTimeout(
-        () => applyScanPosition(0),
-        0
-      );
+      startTimerRef.current = window.setTimeout(() => applyScanPosition(0), 0);
       return () => {
         if (startTimerRef.current !== null) {
           window.clearTimeout(startTimerRef.current);
@@ -183,24 +334,24 @@ function HeroVisual() {
         onPointerDown={stopAutomaticScan}
         onTouchStart={stopAutomaticScan}
         onClick={stopAutomaticScan}
-        className="group relative aspect-[5/6] overflow-hidden rounded-2xl bg-neutral-200 shadow-[0_30px_80px_rgba(35,28,55,0.14)] contain-paint focus-within:ring-2 focus-within:ring-violet-300 focus-within:ring-offset-4 focus-within:outline-none"
+        className="group relative aspect-[4/5] overflow-hidden rounded-lg bg-neutral-200 shadow-[0_18px_45px_rgba(35,28,55,0.1)] contain-paint focus-within:ring-2 focus-within:ring-violet-300 focus-within:ring-offset-4 focus-within:outline-none sm:aspect-[5/6]"
       >
         <ReviewImage alt="示例人物图，带有两处发布前复核批注" />
         <div className="pointer-events-none absolute inset-0 bg-linear-to-b from-neutral-950/45 via-transparent to-neutral-950/20" />
 
         <div className="pointer-events-none absolute top-5 right-5 left-5 z-30 text-white [text-shadow:0_2px_16px_rgba(0,0,0,0.55)] sm:top-7 sm:right-7 sm:left-7">
           <p className="text-base font-medium sm:text-lg">
-            第一眼，你看得出哪里不对吗？
+            第一眼，您看得出来吗？
           </p>
           <p className="mt-1.5 text-xs font-medium text-white/75 sm:text-sm">
-            拖动扫描线查看 →
+            拖动查看 →
           </p>
           <p
             ref={resultRef}
             aria-hidden="true"
             className="invisible mt-2 text-lg font-bold opacity-0 transition-opacity duration-200 sm:text-xl"
           >
-            找到 2 处建议人工复核的细节。
+            发现 2 处需要注意的细节
           </p>
         </div>
 
@@ -213,22 +364,22 @@ function HeroVisual() {
         >
           <div
             data-testid="hero-location-box"
-            className="absolute top-[48%] left-[63%] h-[19%] w-[22%] border border-violet-200 bg-violet-500/10 shadow-[0_0_0_5px_rgba(109,76,167,0.12)]"
+            className="absolute top-[48%] left-[63%] h-[19%] w-[22%] border border-white/75 bg-transparent"
           />
           <div
             data-testid="hero-location-box"
-            className="absolute top-[20%] left-[32%] h-[12%] w-[34%] border border-violet-200 bg-violet-500/10 shadow-[0_0_0_5px_rgba(109,76,167,0.12)]"
+            className="absolute top-[20%] left-[32%] h-[12%] w-[34%] border border-white/75 bg-transparent"
           />
           <EditorialAnnotation
             number={1}
-            label="手指与掌部衔接值得复核"
+            label="01　手部结构异常"
             className="top-[51%] left-[66%]"
             lineClassName="top-3.5 right-5 w-20 -rotate-12"
             delayClassName="delay-300"
           />
           <EditorialAnnotation
             number={2}
-            label="双眼朝向需要对照"
+            label="02　双眼高光方向不一致"
             className="top-[24%] left-[38%]"
             lineClassName="top-3.5 left-5 w-16 rotate-12"
             delayClassName="delay-500"
@@ -279,7 +430,7 @@ function StoryVisual({ activeStep }: { activeStep: StoryStep }) {
     <div
       data-testid="story-stage-image"
       data-active-step={activeStep}
-      className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-neutral-200 shadow-[0_28px_70px_rgba(35,28,55,0.12)]"
+      className="relative aspect-[4/5] overflow-hidden rounded-lg bg-neutral-200 shadow-[0_18px_45px_rgba(35,28,55,0.1)]"
     >
       <ReviewImage
         alt="Find、Understand、Fix 连续审查示例"
@@ -287,34 +438,34 @@ function StoryVisual({ activeStep }: { activeStep: StoryStep }) {
       />
       <div className="absolute inset-0 bg-linear-to-t from-neutral-950/45 via-transparent to-transparent" />
       <div
-        className={`absolute rounded-xl border border-violet-300/90 bg-violet-500/8 shadow-[0_0_0_8px_rgba(109,76,167,0.08)] transition-all duration-500 motion-reduce:transition-none ${activeStep === 'find' ? 'top-[49%] left-[64%] size-24 sm:size-28' : 'top-[53%] left-[57%] h-[21%] w-[27%]'}`}
+        className={`absolute border border-white/80 bg-transparent transition-all duration-500 motion-reduce:transition-none ${activeStep === 'find' ? 'top-[49%] left-[64%] size-24 sm:size-28' : 'top-[53%] left-[57%] h-[21%] w-[27%]'}`}
       />
-      <span className="absolute top-[48%] left-[62%] grid size-7 place-items-center rounded-full bg-violet-700 text-xs font-bold text-white">
+      <span className="absolute top-[48%] left-[62%] grid size-7 place-items-center rounded-full border border-white bg-neutral-950/75 text-xs font-bold text-white">
         {activeStep === 'find' ? '1' : activeStep === 'understand' ? '2' : '3'}
       </span>
       <div className="absolute right-4 bottom-4 left-4 rounded-xl bg-[#f8f7f4]/95 p-4 text-neutral-900 shadow-lg backdrop-blur-sm sm:right-6 sm:bottom-6 sm:left-auto sm:w-[310px]">
         {activeStep === 'find' ? (
           <>
-            <p className="text-xs font-semibold text-violet-700">FIND</p>
-            <p className="mt-2 text-sm font-semibold">手部结构需要检查</p>
+            <p className="text-xs font-semibold text-violet-700">示例</p>
+            <p className="mt-2 text-sm font-semibold">手部结构异常</p>
             <p className="mt-1 text-xs leading-5 text-neutral-600">
-              已定位到值得放大确认的局部。
+              手腕与手掌连接不自然。
             </p>
           </>
         ) : activeStep === 'understand' ? (
           <>
-            <p className="text-xs font-semibold text-violet-700">UNDERSTAND</p>
-            <p className="mt-2 text-sm font-semibold">为什么值得检查</p>
+            <p className="text-xs font-semibold text-violet-700">示例</p>
+            <p className="mt-2 text-sm font-semibold">结构连接异常</p>
             <p className="mt-1 text-xs leading-5 text-neutral-600">
-              食指与掌部的连接关系可能不够自然。
+              手腕与手掌之间缺少自然过渡。
             </p>
           </>
         ) : (
           <>
-            <p className="text-xs font-semibold text-violet-700">FIX</p>
-            <p className="mt-2 text-sm font-semibold">建议怎么调整</p>
+            <p className="text-xs font-semibold text-violet-700">示例</p>
+            <p className="mt-2 text-sm font-semibold">修改建议</p>
             <p className="mt-1 text-xs leading-5 text-neutral-600">
-              检查食指根部与掌部衔接，保持当前手势和画面风格。
+              调整手腕与手掌的连接和轮廓，保留原来的手势与其他区域。
             </p>
           </>
         )}
@@ -335,12 +486,12 @@ function StoryStepNumber({
   return (
     <div
       data-testid="story-step-number"
-      className={`relative grid size-24 shrink-0 place-items-center overflow-hidden rounded-xl border transition-[border-color,background-color,color,box-shadow,transform] duration-300 motion-reduce:transition-none ${active ? 'scale-[1.02] border-violet-700 bg-violet-700 text-white shadow-[0_12px_30px_rgba(109,76,167,0.18)]' : 'border-neutral-300 bg-neutral-100 text-neutral-400'}`}
+      className={`relative shrink-0 border-b transition-[border-color,color] duration-300 motion-reduce:transition-none ${active ? 'border-violet-700 text-violet-800' : 'border-neutral-300 text-neutral-400'}`}
       data-story-step-number={step}
     >
       <span
         aria-hidden="true"
-        className="text-4xl font-semibold tracking-[-0.04em] tabular-nums"
+        className="text-xs font-semibold tracking-[0.16em] tabular-nums"
       >
         {index + 1}
       </span>
@@ -352,15 +503,12 @@ function StoryStepNumber({
 }
 
 function WorkspacePreview() {
-  const response = getMockAnalysisResponse();
-  const currentIssue = response.issues[0];
-
   return (
-    <div className="grid overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-[0_28px_80px_rgba(35,28,55,0.1)] lg:grid-cols-[minmax(0,1.25fr)_minmax(340px,0.75fr)]">
+    <div className="motion-safe:animate-in motion-safe:fade-in motion-safe:zoom-in-95 grid overflow-hidden border border-neutral-200 bg-white shadow-[0_18px_50px_rgba(35,28,55,0.08)] motion-safe:duration-700 lg:grid-cols-[minmax(0,1.35fr)_minmax(340px,0.65fr)]">
       <div className="border-b border-neutral-200 p-3 sm:p-5 lg:border-r lg:border-b-0">
         <div className="mb-3 flex items-center justify-between text-xs text-neutral-500">
-          <span className="font-medium text-neutral-800">图片定位</span>
-          <span>示例检查报告</span>
+          <span className="font-medium text-neutral-800">检查结果</span>
+          <span>发现 3 处需要注意的局部</span>
         </div>
         <div className="relative aspect-[4/5] overflow-hidden bg-neutral-100">
           <ReviewImage alt="完整检查工作台中的示例人物图" />
@@ -373,39 +521,39 @@ function WorkspacePreview() {
       </div>
       <div className="flex flex-col">
         <div className="border-b border-neutral-200 p-5 sm:p-6">
-          <p className="text-sm font-semibold text-neutral-950">整体摘要</p>
-          <p className="mt-2 text-sm leading-6 text-neutral-600">
-            发现 {response.summary.issue_count} 个建议人工复核的局部。
+          <p className="text-sm font-semibold text-neutral-950">
+            问题在哪，为什么，怎么改。
           </p>
+          <p className="mt-2 text-sm leading-6 text-neutral-600">一目了然。</p>
         </div>
         <div className="border-b border-neutral-200 px-5 py-4 sm:px-6">
           <p className="text-xs font-semibold text-violet-700">当前问题</p>
           <h3 className="mt-2 text-xl font-semibold text-neutral-950">
-            {currentIssue.title}
+            手部结构异常
           </h3>
           <p className="mt-2 text-xs font-medium text-neutral-500">
-            高修改优先级
+            建议先处理
           </p>
         </div>
         <div className="grid flex-1 gap-5 p-5 text-sm sm:p-6">
           <div>
-            <p className="font-semibold text-neutral-950">检查原因</p>
+            <p className="font-semibold text-neutral-950">为什么</p>
             <p className="mt-2 leading-6 text-neutral-600">
-              {currentIssue.reason}
+              手腕与手掌连接缺少自然过渡。
             </p>
           </div>
           <div>
-            <p className="font-semibold text-neutral-950">修改建议</p>
+            <p className="font-semibold text-neutral-950">怎么改</p>
             <p className="mt-2 leading-6 text-neutral-600">
-              {currentIssue.suggestion}
+              调整连接和轮廓，其他地方不动。
             </p>
           </div>
           <div className="mt-auto grid grid-cols-2 gap-3">
             <span className="grid min-h-11 place-items-center rounded-lg bg-violet-700 px-3 text-sm font-semibold text-white">
-              下一项
+              看下一处
             </span>
             <span className="grid min-h-11 place-items-center rounded-lg border border-neutral-300 px-3 text-sm font-semibold text-neutral-700">
-              忽略此项
+              这处不用改
             </span>
           </div>
         </div>
@@ -447,14 +595,14 @@ export function LandingPage({ onUpload }: LandingPageProps) {
       <section className="mx-auto grid min-h-[calc(100dvh-4rem)] max-w-[1440px] items-center gap-10 px-5 py-10 sm:px-8 lg:grid-cols-[minmax(0,0.78fr)_minmax(0,1.22fr)] lg:gap-14 lg:py-14">
         <div className="motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-3 max-w-xl motion-safe:duration-700">
           <p className="text-xs font-semibold tracking-[0.18em] text-violet-700">
-            AI IMAGE REVIEW FOR CREATORS
+            AI IMAGE REVIEW FOR ANIME CREATORS
           </p>
           <h1 className="mt-5 text-5xl leading-[1.06] font-semibold tracking-[-0.04em] text-balance sm:text-6xl lg:text-[4.5rem]">
-            你看不出来的 AI 痕迹，先替你找出来。
+            让 AI 图更经得住细看。
           </h1>
           <p className="mt-6 max-w-lg text-base leading-7 text-neutral-600 sm:text-lg sm:leading-8">
-            有些 AI
-            图第一眼没有问题，细节却经不起放大。上传图片，找出值得复核的位置，看懂哪里不自然，以及下一步该怎么改。
+            帮您找出二次元 AI
+            图里容易被观众注意到的生成痕迹：哪里不自然，为什么，怎么改。
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-4">
             <button
@@ -469,11 +617,11 @@ export function LandingPage({ onUpload }: LandingPageProps) {
               href="#review-story"
               className="inline-flex min-h-12 items-center gap-2 px-2 text-sm font-semibold whitespace-nowrap text-neutral-800 underline decoration-neutral-300 underline-offset-6 transition hover:text-violet-700 hover:decoration-violet-500 focus-visible:ring-2 focus-visible:ring-violet-600 focus-visible:outline-none"
             >
-              查看示例
+              查看示例 →
               <IconArrowRight size={17} stroke={1.8} />
             </a>
             <p className="w-full text-xs leading-5 text-neutral-500">
-              无需登录即可体验，一次检查一张图片
+              无需登录 · 一次检查一张图片
             </p>
           </div>
         </div>
@@ -482,46 +630,59 @@ export function LandingPage({ onUpload }: LandingPageProps) {
         </div>
       </section>
 
-      <section className="mx-auto max-w-[1320px] px-5 py-24 sm:px-8 lg:py-32">
-        <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)] lg:gap-20">
+      <RealReactions />
+
+      <WhyThisApproach />
+
+      <section className="border-y border-neutral-200 bg-[#f3f1ed]">
+        <div
+          data-testid="keep-image-section"
+          className="mx-auto grid max-w-[1320px] gap-12 px-5 py-24 sm:px-8 lg:grid-cols-2 lg:items-center lg:gap-20 lg:py-32"
+        >
           <div>
-            <h2 className="max-w-3xl text-4xl leading-tight font-semibold tracking-[-0.035em] text-balance sm:text-5xl">
-              图已经很好了。问题往往只藏在最后那几个细节里。
+            <p className="text-xs font-semibold tracking-[0.18em] text-violet-700">
+              KEEP WHAT ALREADY WORKS
+            </p>
+            <h2 className="max-w-5xl text-5xl leading-[1.08] font-semibold tracking-[-0.04em] text-balance sm:text-6xl lg:text-7xl">
+              我们和您一起精益求精
             </h2>
-            <div className="mt-10 space-y-6 text-lg leading-8 text-neutral-700">
-              <p>“我自己看了半天都没发现。”</p>
-              <p>“就坏了一只手，我不想整张重抽。”</p>
-              <p>“我知道这里怪，但不知道到底该怎么改。”</p>
-            </div>
+            <p className="mt-8 max-w-xl text-lg leading-8 text-neutral-600">
+              只改有问题的局部，保留已经满意的部分。
+            </p>
           </div>
-          <div className="grid grid-cols-[1fr_0.58fr] items-end gap-4 sm:gap-6">
-            <div className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-neutral-200">
-              <ReviewImage alt="第一眼看起来完整的示例人物图" />
-            </div>
-            <div className="relative mb-8 aspect-square overflow-hidden rounded-2xl bg-neutral-200 shadow-[0_20px_55px_rgba(35,28,55,0.14)]">
+          <div
+            data-testid="keep-image-crops"
+            data-crop-count="3"
+            className="grid grid-cols-[1.15fr_0.72fr] items-end gap-4 sm:order-first sm:gap-6 lg:order-first"
+          >
+            <div className="motion-safe:animate-in motion-safe:fade-in relative aspect-[4/5] overflow-hidden bg-neutral-200 motion-safe:duration-700">
               <ReviewImage
-                alt="放大后的手部局部细节"
+                alt="保留完整画面的示例人物图"
+                className="object-[50%_45%]"
+              />
+              <span className="absolute right-3 bottom-3 border border-white/70 bg-neutral-950/65 px-2 py-1 text-xs font-medium text-white">
+                完整画面
+              </span>
+            </div>
+            <div className="motion-safe:animate-in motion-safe:fade-in relative mb-10 aspect-[0.9/1] overflow-hidden bg-neutral-200 motion-safe:delay-150 motion-safe:duration-700">
+              <ReviewImage
+                alt="手部局部细节"
                 className="scale-[2.8] object-[73%_62%]"
               />
-              <span className="absolute right-3 bottom-3 rounded-full bg-violet-700 px-3 py-1.5 text-xs font-semibold text-white">
-                放大复核
+              <span className="absolute right-3 bottom-3 border border-white/70 bg-neutral-950/65 px-2 py-1 text-xs font-medium text-white">
+                手部
+              </span>
+            </div>
+            <div className="motion-safe:animate-in motion-safe:fade-in relative col-span-2 -mt-2 ml-[18%] aspect-[1.7/1] max-w-[68%] overflow-hidden bg-neutral-200 motion-safe:delay-300 motion-safe:duration-700 sm:-mt-10">
+              <ReviewImage
+                alt="饰品与边界局部细节"
+                className="scale-[3.7] object-[67%_57%]"
+              />
+              <span className="absolute right-3 bottom-3 border border-white/70 bg-neutral-950/65 px-2 py-1 text-xs font-medium text-white">
+                饰品 / 边界
               </span>
             </div>
           </div>
-        </div>
-      </section>
-
-      <section className="border-y border-neutral-200 bg-[#f3f1ed]">
-        <div className="mx-auto max-w-[1320px] px-5 py-24 sm:px-8 lg:py-32">
-          <p className="text-sm font-semibold text-violet-700">
-            Keep the image. Fix what gives it away.
-          </p>
-          <h2 className="mt-6 max-w-5xl text-5xl leading-[1.08] font-semibold tracking-[-0.04em] text-balance sm:text-6xl lg:text-7xl">
-            保留你喜欢的画面，只修那些容易露馅的细节。
-          </h2>
-          <p className="mt-8 max-w-2xl text-lg leading-8 text-neutral-600">
-            一张图已经八九成满意，不应该因为一只手、一处边界或一个局部细节重新生成整张。先找到真正需要处理的位置，再决定怎么改。
-          </p>
         </div>
       </section>
 
@@ -544,7 +705,7 @@ export function LandingPage({ onUpload }: LandingPageProps) {
                   stepRefs.current[index] = element;
                 }}
                 data-story-step={step.key}
-                className="flex min-h-[52dvh] items-center py-14 first:pt-0 last:pb-0 lg:min-h-[70dvh]"
+                className="flex min-h-[52dvh] items-center py-14 first:pt-0 last:pb-0 lg:min-h-[65dvh]"
               >
                 <button
                   type="button"
@@ -552,7 +713,7 @@ export function LandingPage({ onUpload }: LandingPageProps) {
                   onClick={() => setActiveStep(step.key)}
                   className="group w-full text-left focus-visible:ring-2 focus-visible:ring-violet-600 focus-visible:ring-offset-4 focus-visible:outline-none"
                 >
-                  <div className="grid gap-6 sm:grid-cols-[96px_minmax(0,1fr)] sm:items-start sm:gap-7">
+                  <div className="grid gap-6 sm:grid-cols-[48px_minmax(0,1fr)] sm:items-start sm:gap-7">
                     <StoryStepNumber
                       step={step.key}
                       index={index}
@@ -583,10 +744,10 @@ export function LandingPage({ onUpload }: LandingPageProps) {
         <div className="mx-auto max-w-[1320px]">
           <div className="max-w-3xl">
             <h2 className="text-4xl leading-tight font-semibold tracking-[-0.035em] text-balance sm:text-5xl">
-              看见完整的检查过程
+              问题在哪，为什么，怎么改。
             </h2>
             <p className="mt-5 max-w-2xl text-lg leading-8 text-neutral-600">
-              从图片定位到原因解释和修改建议，真正需要复核的内容都集中在同一个工作台里。
+              一目了然。
             </p>
           </div>
           <div className="mt-12">
@@ -602,25 +763,27 @@ export function LandingPage({ onUpload }: LandingPageProps) {
         <div className="border-t border-neutral-300 pt-10">
           <IconEye size={28} stroke={1.6} className="text-violet-700" />
           <h2 className="mt-5 max-w-3xl text-3xl leading-tight font-semibold tracking-[-0.03em] sm:text-4xl">
-            AI 负责提出候选问题，最终判断由你完成。
+            我们是您的助手，负责提出有依据的判断。
           </h2>
           <p className="mt-4 max-w-2xl text-base leading-7 text-neutral-600">
-            它不会裁定图片是不是
-            AI，也不会替你自动修改。每一处建议都需要创作者亲自确认。
+            我们是您的助手，负责提出有依据的判断。有把握才提醒，最后改不改由您决定。
           </p>
         </div>
       </section>
 
-      <section className="mx-auto max-w-[1320px] px-5 py-24 sm:px-8 lg:py-36">
-        <div className="relative overflow-hidden rounded-2xl bg-neutral-950 px-6 py-14 text-[#f8f7f4] sm:px-10 sm:py-18 lg:px-16 lg:py-20">
+      <section
+        data-testid="final-cta"
+        className="bg-neutral-950 px-5 py-24 text-[#f8f7f4] sm:px-8 lg:py-36"
+      >
+        <div className="mx-auto max-w-[1320px] px-0 sm:px-2 lg:px-8">
           <p className="text-xs font-semibold tracking-[0.18em] text-violet-300">
             ONE LAST REVIEW
           </p>
           <h2 className="mt-7 max-w-4xl text-4xl leading-tight font-semibold tracking-[-0.035em] text-balance sm:text-5xl lg:text-6xl">
-            发出去之前，再让另一双眼睛看一遍。
+            每次发布前，我们先帮您把明显的问题找出来。
           </h2>
           <p className="mt-6 max-w-xl text-base leading-7 text-neutral-300 sm:text-lg">
-            找出你可能漏看的细节，再决定哪些值得改。
+            少一点返工，也少一点风险。
           </p>
           <div className="mt-9 flex flex-wrap items-center gap-4">
             <button
@@ -631,7 +794,9 @@ export function LandingPage({ onUpload }: LandingPageProps) {
               <IconUpload size={18} stroke={1.8} />
               上传图片开始检查
             </button>
-            <span className="text-sm text-neutral-400">无需登录即可体验</span>
+            <span className="text-sm text-neutral-400">
+              无需登录 · 一次检查一张图片
+            </span>
           </div>
         </div>
       </section>

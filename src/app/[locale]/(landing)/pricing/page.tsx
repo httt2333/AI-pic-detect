@@ -68,7 +68,7 @@ export default async function PricingPage({
               href="/#how-it-works"
               className="hidden transition hover:text-violet-950 sm:block"
             >
-              使用流程
+              怎么检查
             </Link>
             <Link
               href="/#boundaries"
@@ -81,7 +81,7 @@ export default async function PricingPage({
               aria-current="page"
               className="hidden font-semibold text-violet-950 lg:block"
             >
-              购买额度
+              额度与价格
             </Link>
             <Link
               href="/reviews"

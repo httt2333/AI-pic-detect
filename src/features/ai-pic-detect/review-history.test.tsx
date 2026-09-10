@@ -7,6 +7,15 @@ describe('ReviewHistory', () => {
   it('asks a visitor to sign in before viewing saved reviews', () => {
     render(<ReviewHistory isAuthenticated={false} />);
 
+    expect(screen.getByRole('banner')).toHaveClass('fixed');
+    expect(screen.getByRole('link', { name: '怎么检查' })).toHaveAttribute(
+      'href',
+      '/zh#how-it-works'
+    );
+    expect(screen.getByRole('link', { name: '开始检查' })).toHaveAttribute(
+      'href',
+      '/zh'
+    );
     expect(
       screen.getByRole('heading', { name: '登录后查看检查记录' })
     ).toBeVisible();
