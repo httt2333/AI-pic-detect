@@ -1,11 +1,12 @@
 import {
+  act,
   fireEvent,
   render,
   screen,
   waitFor,
   within,
 } from '@testing-library/react';
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { getMockAnalysisResponse } from './mock';
 import {
@@ -15,6 +16,7 @@ import {
 } from './review-experience';
 
 describe('ReviewExperience', () => {
+  afterEach(() => vi.useRealTimers());
   it('allows enough time for the validated vision provider to respond', () => {
     expect(ANALYSIS_TIMEOUT_MS).toBeGreaterThanOrEqual(120_000);
   });
@@ -53,12 +55,40 @@ describe('ReviewExperience', () => {
   it('guides a first-time visitor from the landing page into a single-image upload', () => {
     render(<ReviewExperience />);
 
+    expect(screen.getByRole('banner')).toHaveClass('fixed');
+    expect(screen.getByRole('link', { name: '登录' })).toHaveAttribute(
+      'href',
+      '/zh/sign-in?callbackUrl=/reviews'
+    );
+
     expect(
       screen.getByRole('heading', {
         name: '你看不出来的 AI 痕迹，先替你找出来。',
       })
     ).toBeVisible();
     expect(screen.getByText('AI IMAGE REVIEW FOR CREATORS')).toBeVisible();
+    const heroScanner = screen.getByRole('slider', {
+      name: '拖动扫描示例图',
+    });
+    expect(heroScanner).toHaveValue('100');
+    expect(
+      screen.getByText('第一眼，你看得出哪里不对吗？')
+    ).toBeVisible();
+    expect(screen.getByText('拖动扫描线查看 →')).toBeVisible();
+    expect(
+      screen.getByText('找到 2 处建议人工复核的细节。')
+    ).toHaveAttribute('aria-hidden', 'true');
+    expect(screen.getAllByTestId('hero-location-box')).toHaveLength(2);
+    fireEvent.change(heroScanner, { target: { value: '60' } });
+    expect(screen.getByTestId('hero-scan-reveal')).toHaveStyle({
+      clipPath: 'inset(0 0 0 60%)',
+    });
+    expect(
+      screen.getByText('找到 2 处建议人工复核的细节。')
+    ).toBeVisible();
+    expect(screen.getAllByText('FIND')).not.toHaveLength(0);
+    expect(screen.getAllByText('UNDERSTAND')).not.toHaveLength(0);
+    expect(screen.getAllByText('FIX')).not.toHaveLength(0);
     expect(screen.getByRole('link', { name: '查看示例' })).toHaveAttribute(
       'href',
       '#review-story'
@@ -76,12 +106,37 @@ describe('ReviewExperience', () => {
     expect(
       screen.getByRole('heading', { name: '找出你自己漏看的地方' })
     ).toBeVisible();
-    expect(screen.getAllByTestId('story-step-image')).toHaveLength(3);
-    expect(screen.getByTestId('story-step-image-find')).toHaveTextContent('1');
-    expect(screen.getByTestId('story-step-image-understand')).toHaveTextContent(
+    expect(screen.getAllByTestId('story-step-number')).toHaveLength(3);
+    expect(screen.getByTestId('story-step-number-find')).toHaveTextContent('1');
+    expect(screen.getByTestId('story-step-number-understand')).toHaveTextContent(
       '2'
     );
-    expect(screen.getByTestId('story-step-image-fix')).toHaveTextContent('3');
+    expect(screen.getByTestId('story-step-number-fix')).toHaveTextContent('3');
+    for (const stepNumber of screen.getAllByTestId('story-step-number')) {
+      expect(within(stepNumber).queryByRole('img')).not.toBeInTheDocument();
+    }
+    expect(screen.getByTestId('story-stage-image')).toHaveAttribute(
+      'data-active-step',
+      'find'
+    );
+    expect(screen.getByTestId('landing-page')).toHaveClass('overflow-x-clip');
+    expect(screen.getByTestId('landing-page')).not.toHaveClass(
+      'overflow-hidden'
+    );
+    expect(screen.getByTestId('story-sticky-visual')).toHaveClass(
+      'lg:sticky',
+      'lg:top-24'
+    );
+    fireEvent.click(screen.getByRole('button', { name: /UNDERSTAND/ }));
+    expect(screen.getByTestId('story-stage-image')).toHaveAttribute(
+      'data-active-step',
+      'understand'
+    );
+    fireEvent.click(screen.getByRole('button', { name: /FIX/ }));
+    expect(screen.getByTestId('story-stage-image')).toHaveAttribute(
+      'data-active-step',
+      'fix'
+    );
     expect(
       screen.getByRole('heading', { name: '看见完整的检查过程' })
     ).toBeVisible();
@@ -102,6 +157,41 @@ describe('ReviewExperience', () => {
       'accept',
       'image/png,image/jpeg,image/webp'
     );
+  });
+
+  it('automatically demonstrates the hero scan once and lets hover take control', () => {
+    vi.useFakeTimers();
+    render(<ReviewExperience />);
+
+    const heroScanner = screen.getByRole('slider', {
+      name: '拖动扫描示例图',
+    });
+    act(() => vi.advanceTimersByTime(900));
+    const interruptedValue = Number((heroScanner as HTMLInputElement).value);
+    expect(interruptedValue).toBeLessThan(100);
+    expect(interruptedValue).toBeGreaterThan(0);
+
+    fireEvent.mouseEnter(screen.getByTestId('hero-scan-surface'));
+    act(() => vi.advanceTimersByTime(4_000));
+    expect(heroScanner).toHaveValue(String(interruptedValue));
+
+    vi.useRealTimers();
+  });
+
+  it('finishes the automatic hero scan in the visible result state', () => {
+    vi.useFakeTimers();
+    render(<ReviewExperience />);
+
+    act(() => vi.advanceTimersByTime(3_500));
+
+    expect(
+      screen.getByRole('slider', { name: '拖动扫描示例图' })
+    ).toHaveValue('0');
+    expect(
+      screen.getByText('找到 2 处建议人工复核的细节。')
+    ).toBeVisible();
+
+    vi.useRealTimers();
   });
 
   it('returns from upload to the requested landing section through the header navigation', () => {

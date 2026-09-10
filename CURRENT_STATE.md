@@ -59,7 +59,8 @@ The review workspace now uses a two-level result layout: the image and detected
 candidate detail share the top row, while the 17-dimension state summary sits
 below them as a full-width “详细检查报告”. This prevents the report from stretching
 the image panel. Credit entry points open the Chinese pricing route in the same
-tab, and that page provides a clear return path. While purchases are disabled,
+tab, and that page reuses the full fixed product navigation so users can always
+return to the workflow, product boundary, records, or image check. While purchases are disabled,
 the pricing page skips account/subscription database reads so the frontend shell
 does not surface an unrelated schema failure.
 
@@ -88,10 +89,29 @@ read-only workspace preview and final upload CTA. Both upload CTAs still enter
 the existing guest upload flow; analysis, result handling, routing, and backend
 boundaries are unchanged.
 
-The Find / Understand / Fix narrative now includes three compact local image
-placeholders with numbered markers (1, 2, 3). Each tile uses a different crop of
-the existing local sample and highlights the active step, so the explanatory
-copy never sits beside an unexplained blank area.
+The hero sample now automatically demonstrates one right-to-left scan and stops
+in the result state, so the core value does not depend on interaction discovery.
+It starts with the white first-look question and a weak drag hint, progressively
+reveals two illustrative candidate annotations, and then shows the white result
+summary. Hover, click, pointer, touch, or keyboard input immediately interrupts
+the demo and hands control to the native range input. Reduced-motion users are
+taken directly to the result state.
+
+The Find / Understand / Fix narrative uses compact `1 / 2 / 3` step markers
+beside the copy. The earlier thumbnail images were removed to make the sequence
+cleaner; the large story visual remains the single image source for each step.
+On desktop, that large visual stays sticky throughout the three-step story and
+releases when the story section ends; horizontal clipping no longer disables
+the browser's sticky positioning.
+
+The large story visual now follows the same active step: FIND keeps the full
+sample image, while UNDERSTAND and FIX zoom into the hand area and move the
+violet location frame and marker to that local detail.
+
+The public product header is now fixed across landing, upload, analysing, and
+result states. Account entry points target the Chinese sign-in route. The auth
+layout uses the same AI-PIC-DETECT wordmark and violet visual language, keeps a
+fixed header, and provides an explicit return to the image check flow.
 
 The historical migration corpus now has a typed A/B/C dimension map and a
 local-only, Git-ignored sanitized-index command. A v10 index was generated

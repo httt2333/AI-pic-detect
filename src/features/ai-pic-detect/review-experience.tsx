@@ -290,7 +290,7 @@ function ProductHeader({
   navigateToSection: (sectionId: 'how-it-works' | 'boundaries') => void;
 }) {
   return (
-    <header className="sticky top-0 z-30 border-b border-violet-100 bg-[#fdfcff]/90 backdrop-blur">
+    <header className="fixed inset-x-0 top-0 z-50 border-b border-violet-100 bg-[#fdfcff]/95 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-[1400px] items-center justify-between px-5 sm:px-8">
         <button
           type="button"
@@ -333,7 +333,7 @@ function ProductHeader({
             检查记录
           </Link>
           <Link
-            href="/sign-in?callbackUrl=/reviews"
+            href="/zh/sign-in?callbackUrl=/reviews"
             className="hidden hover:text-violet-950 sm:block"
           >
             登录
@@ -1090,8 +1090,10 @@ export function ReviewExperience({
         showLanding={showLanding}
         navigateToSection={navigateToSection}
       />
-      {page}
-      <ProductFooter />
+      <div className="min-h-screen pt-16">
+        {page}
+        <ProductFooter />
+      </div>
     </>
   );
 }

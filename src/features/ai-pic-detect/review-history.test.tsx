@@ -12,7 +12,7 @@ describe('ReviewHistory', () => {
     ).toBeVisible();
     expect(screen.getByRole('link', { name: '登录或注册' })).toHaveAttribute(
       'href',
-      '/sign-in?callbackUrl=/reviews'
+      '/zh/sign-in?callbackUrl=/reviews'
     );
   });
 

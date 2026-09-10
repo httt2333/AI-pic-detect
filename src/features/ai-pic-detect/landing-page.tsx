@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { IconArrowRight, IconEye, IconUpload } from '@tabler/icons-react';
 
@@ -34,12 +34,6 @@ const storySteps = [
 ] as const;
 
 type StoryStep = (typeof storySteps)[number]['key'];
-
-const storyCropClasses = [
-  'object-[68%_58%]',
-  'object-[51%_34%]',
-  'object-[74%_64%]',
-] as const;
 
 function ReviewImage({
   alt,
@@ -92,44 +86,211 @@ function EditorialAnnotation({
 }
 
 function HeroVisual() {
+  const startTimerRef = useRef<number | null>(null);
+  const animationFrameRef = useRef<number | null>(null);
+  const userControlledRef = useRef(false);
+  const currentPositionRef = useRef(100);
+  const revealRef = useRef<HTMLDivElement>(null);
+  const scanLineRef = useRef<HTMLDivElement>(null);
+  const sliderRef = useRef<HTMLInputElement>(null);
+  const resultRef = useRef<HTMLParagraphElement>(null);
+
+  const applyScanPosition = useCallback((rawPosition: number) => {
+    const position = Math.min(100, Math.max(0, rawPosition));
+    currentPositionRef.current = position;
+    if (revealRef.current) {
+      revealRef.current.style.clipPath = `inset(0 0 0 ${position}%)`;
+    }
+    if (scanLineRef.current) {
+      scanLineRef.current.style.left = `calc(${position}% - 1px)`;
+    }
+    if (sliderRef.current) {
+      sliderRef.current.value = String(Math.round(position));
+      sliderRef.current.setAttribute(
+        'aria-valuetext',
+        `已扫描 ${Math.round(100 - position)}%`
+      );
+    }
+    if (resultRef.current) {
+      const isVisible = position < 98;
+      resultRef.current.style.opacity = isVisible ? '1' : '0';
+      resultRef.current.style.visibility = isVisible ? 'visible' : 'hidden';
+      resultRef.current.setAttribute('aria-hidden', String(!isVisible));
+    }
+  }, []);
+
+  function stopAutomaticScan() {
+    userControlledRef.current = true;
+    if (startTimerRef.current !== null) {
+      window.clearTimeout(startTimerRef.current);
+      startTimerRef.current = null;
+    }
+    if (animationFrameRef.current !== null) {
+      window.cancelAnimationFrame(animationFrameRef.current);
+      animationFrameRef.current = null;
+    }
+  }
+
+  useEffect(() => {
+    const reduceMotion =
+      typeof window.matchMedia === 'function' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (reduceMotion) {
+      startTimerRef.current = window.setTimeout(
+        () => applyScanPosition(0),
+        0
+      );
+      return () => {
+        if (startTimerRef.current !== null) {
+          window.clearTimeout(startTimerRef.current);
+        }
+      };
+    }
+
+    startTimerRef.current = window.setTimeout(() => {
+      const duration = 1_900;
+      const startedAt = window.performance.now();
+      const animate = (now: number) => {
+        if (userControlledRef.current) return;
+        const progress = Math.min((now - startedAt) / duration, 1);
+        applyScanPosition(100 * (1 - progress));
+
+        if (progress < 1) {
+          animationFrameRef.current = window.requestAnimationFrame(animate);
+        } else {
+          animationFrameRef.current = null;
+        }
+      };
+      animationFrameRef.current = window.requestAnimationFrame(animate);
+    }, 600);
+
+    return () => {
+      if (startTimerRef.current !== null) {
+        window.clearTimeout(startTimerRef.current);
+      }
+      if (animationFrameRef.current !== null) {
+        window.cancelAnimationFrame(animationFrameRef.current);
+      }
+    };
+  }, [applyScanPosition]);
+
   return (
     <figure id="example" className="relative w-full">
-      <div className="relative aspect-[5/6] overflow-hidden rounded-2xl bg-neutral-200 shadow-[0_30px_80px_rgba(35,28,55,0.14)]">
+      <div
+        data-testid="hero-scan-surface"
+        onMouseEnter={stopAutomaticScan}
+        onPointerDown={stopAutomaticScan}
+        onTouchStart={stopAutomaticScan}
+        onClick={stopAutomaticScan}
+        className="group relative aspect-[5/6] overflow-hidden rounded-2xl bg-neutral-200 shadow-[0_30px_80px_rgba(35,28,55,0.14)] contain-paint focus-within:ring-2 focus-within:ring-violet-300 focus-within:ring-offset-4 focus-within:outline-none"
+      >
         <ReviewImage alt="示例人物图，带有两处发布前复核批注" />
-        <div className="absolute inset-0 bg-linear-to-t from-neutral-950/18 via-transparent to-transparent" />
-        <EditorialAnnotation
-          number={1}
-          label="手指与掌部衔接值得复核"
-          className="top-[51%] left-[66%]"
-          lineClassName="top-3.5 right-5 w-20 -rotate-12"
-          delayClassName="delay-300"
-        />
-        <EditorialAnnotation
-          number={2}
-          label="双眼朝向需要对照"
-          className="top-[24%] left-[38%]"
-          lineClassName="top-3.5 left-5 w-16 rotate-12"
-          delayClassName="delay-500"
+        <div className="pointer-events-none absolute inset-0 bg-linear-to-b from-neutral-950/45 via-transparent to-neutral-950/20" />
+
+        <div className="pointer-events-none absolute top-5 right-5 left-5 z-30 text-white [text-shadow:0_2px_16px_rgba(0,0,0,0.55)] sm:top-7 sm:right-7 sm:left-7">
+          <p className="text-base font-medium sm:text-lg">
+            第一眼，你看得出哪里不对吗？
+          </p>
+          <p className="mt-1.5 text-xs font-medium text-white/75 sm:text-sm">
+            拖动扫描线查看 →
+          </p>
+          <p
+            ref={resultRef}
+            aria-hidden="true"
+            className="invisible mt-2 text-lg font-bold opacity-0 transition-opacity duration-200 sm:text-xl"
+          >
+            找到 2 处建议人工复核的细节。
+          </p>
+        </div>
+
+        <div
+          data-testid="hero-scan-reveal"
+          ref={revealRef}
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 z-10 bg-violet-500/6 will-change-[clip-path]"
+          style={{ clipPath: 'inset(0 0 0 100%)' }}
+        >
+          <div
+            data-testid="hero-location-box"
+            className="absolute top-[48%] left-[63%] h-[19%] w-[22%] border border-violet-200 bg-violet-500/10 shadow-[0_0_0_5px_rgba(109,76,167,0.12)]"
+          />
+          <div
+            data-testid="hero-location-box"
+            className="absolute top-[20%] left-[32%] h-[12%] w-[34%] border border-violet-200 bg-violet-500/10 shadow-[0_0_0_5px_rgba(109,76,167,0.12)]"
+          />
+          <EditorialAnnotation
+            number={1}
+            label="手指与掌部衔接值得复核"
+            className="top-[51%] left-[66%]"
+            lineClassName="top-3.5 right-5 w-20 -rotate-12"
+            delayClassName="delay-300"
+          />
+          <EditorialAnnotation
+            number={2}
+            label="双眼朝向需要对照"
+            className="top-[24%] left-[38%]"
+            lineClassName="top-3.5 left-5 w-16 rotate-12"
+            delayClassName="delay-500"
+          />
+        </div>
+
+        <div
+          aria-hidden="true"
+          ref={scanLineRef}
+          className="pointer-events-none absolute inset-y-0 z-20 w-px bg-white shadow-[0_0_18px_4px_rgba(255,255,255,0.75)]"
+          style={{ left: 'calc(100% - 1px)' }}
+        >
+          <span className="absolute top-1/2 left-1/2 h-12 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/80 bg-violet-700 shadow-[0_6px_20px_rgba(35,28,55,0.35)]" />
+        </div>
+
+        <input
+          aria-label="拖动扫描示例图"
+          aria-valuetext="已扫描 0%"
+          ref={sliderRef}
+          type="range"
+          min="0"
+          max="100"
+          defaultValue="100"
+          onPointerDown={stopAutomaticScan}
+          onTouchStart={stopAutomaticScan}
+          onClick={stopAutomaticScan}
+          onKeyDown={stopAutomaticScan}
+          onChange={(event) => {
+            stopAutomaticScan();
+            applyScanPosition(Number(event.target.value));
+          }}
+          className="absolute inset-0 z-40 h-full w-full cursor-ew-resize opacity-0"
         />
       </div>
-      <figcaption className="mt-4 grid gap-2 text-sm text-neutral-600 sm:grid-cols-2 sm:gap-6">
-        <span>第一眼，你看得出哪里不对吗？</span>
-        <span className="font-medium text-neutral-900 sm:text-right">
-          找到 2 处建议人工复核的细节。
-        </span>
-      </figcaption>
     </figure>
   );
 }
 
 function StoryVisual({ activeStep }: { activeStep: StoryStep }) {
+  const stageImageClass =
+    activeStep === 'find'
+      ? 'object-cover'
+      : activeStep === 'understand'
+        ? 'scale-[2.25] object-[72%_61%]'
+        : 'scale-[3.1] object-[73%_63%]';
+
   return (
-    <div className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-neutral-200 shadow-[0_28px_70px_rgba(35,28,55,0.12)]">
-      <ReviewImage alt="Find、Understand、Fix 连续审查示例" />
+    <div
+      data-testid="story-stage-image"
+      data-active-step={activeStep}
+      className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-neutral-200 shadow-[0_28px_70px_rgba(35,28,55,0.12)]"
+    >
+      <ReviewImage
+        alt="Find、Understand、Fix 连续审查示例"
+        className={`transition-transform duration-500 motion-reduce:transition-none ${stageImageClass}`}
+      />
       <div className="absolute inset-0 bg-linear-to-t from-neutral-950/45 via-transparent to-transparent" />
-      <div className="absolute top-[49%] left-[64%] size-24 rounded-full border border-violet-300/90 bg-violet-500/8 shadow-[0_0_0_8px_rgba(109,76,167,0.08)] transition-transform duration-500 motion-reduce:transition-none sm:size-28" />
+      <div
+        className={`absolute rounded-xl border border-violet-300/90 bg-violet-500/8 shadow-[0_0_0_8px_rgba(109,76,167,0.08)] transition-all duration-500 motion-reduce:transition-none ${activeStep === 'find' ? 'top-[49%] left-[64%] size-24 sm:size-28' : 'top-[53%] left-[57%] h-[21%] w-[27%]'}`}
+      />
       <span className="absolute top-[48%] left-[62%] grid size-7 place-items-center rounded-full bg-violet-700 text-xs font-bold text-white">
-        1
+        {activeStep === 'find' ? '1' : activeStep === 'understand' ? '2' : '3'}
       </span>
       <div className="absolute right-4 bottom-4 left-4 rounded-xl bg-[#f8f7f4]/95 p-4 text-neutral-900 shadow-lg backdrop-blur-sm sm:right-6 sm:bottom-6 sm:left-auto sm:w-[310px]">
         {activeStep === 'find' ? (
@@ -162,7 +323,7 @@ function StoryVisual({ activeStep }: { activeStep: StoryStep }) {
   );
 }
 
-function StoryStepImage({
+function StoryStepNumber({
   step,
   index,
   active,
@@ -173,23 +334,18 @@ function StoryStepImage({
 }) {
   return (
     <div
-      data-testid="story-step-image"
-      className={`relative aspect-square overflow-hidden rounded-xl border bg-neutral-200 transition-[border-color,box-shadow,transform] duration-300 motion-reduce:transition-none sm:w-24 ${active ? 'scale-[1.02] border-violet-700 shadow-[0_12px_30px_rgba(109,76,167,0.18)]' : 'border-neutral-300 shadow-sm'}`}
-      data-story-image={step}
+      data-testid="story-step-number"
+      className={`relative grid size-24 shrink-0 place-items-center overflow-hidden rounded-xl border transition-[border-color,background-color,color,box-shadow,transform] duration-300 motion-reduce:transition-none ${active ? 'scale-[1.02] border-violet-700 bg-violet-700 text-white shadow-[0_12px_30px_rgba(109,76,167,0.18)]' : 'border-neutral-300 bg-neutral-100 text-neutral-400'}`}
+      data-story-step-number={step}
     >
-      <ReviewImage
-        alt={`${index + 1} ${step} 局部示意图`}
-        className={storyCropClasses[index]}
-      />
-      <div className="absolute inset-0 bg-linear-to-t from-neutral-950/45 via-transparent to-transparent" />
-      <span className="absolute top-2 left-2 grid size-7 place-items-center rounded-full bg-[#f8f7f4] text-xs font-bold text-violet-900 shadow-sm">
+      <span
+        aria-hidden="true"
+        className="text-4xl font-semibold tracking-[-0.04em] tabular-nums"
+      >
         {index + 1}
       </span>
-      <span data-testid={`story-step-image-${step}`} className="sr-only">
+      <span data-testid={`story-step-number-${step}`} className="sr-only">
         {index + 1}
-      </span>
-      <span className="absolute right-2 bottom-2 text-[10px] font-semibold tracking-[0.12em] text-white">
-        局部示意
       </span>
     </div>
   );
@@ -284,7 +440,10 @@ export function LandingPage({ onUpload }: LandingPageProps) {
   }, []);
 
   return (
-    <main className="overflow-hidden bg-[#f8f7f4] text-neutral-950 selection:bg-violet-200 selection:text-violet-950">
+    <main
+      data-testid="landing-page"
+      className="overflow-x-clip bg-[#f8f7f4] text-neutral-950 selection:bg-violet-200 selection:text-violet-950"
+    >
       <section className="mx-auto grid min-h-[calc(100dvh-4rem)] max-w-[1440px] items-center gap-10 px-5 py-10 sm:px-8 lg:grid-cols-[minmax(0,0.78fr)_minmax(0,1.22fr)] lg:gap-14 lg:py-14">
         <div className="motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-3 max-w-xl motion-safe:duration-700">
           <p className="text-xs font-semibold tracking-[0.18em] text-violet-700">
@@ -371,7 +530,10 @@ export function LandingPage({ onUpload }: LandingPageProps) {
         className="mx-auto max-w-[1320px] px-5 py-24 sm:px-8 lg:py-32"
       >
         <div id="review-story" className="grid gap-12 lg:grid-cols-2 lg:gap-20">
-          <div className="lg:sticky lg:top-24 lg:self-start">
+          <div
+            data-testid="story-sticky-visual"
+            className="lg:sticky lg:top-24 lg:self-start"
+          >
             <StoryVisual activeStep={activeStep} />
           </div>
           <div className="divide-y divide-neutral-200">
@@ -391,7 +553,7 @@ export function LandingPage({ onUpload }: LandingPageProps) {
                   className="group w-full text-left focus-visible:ring-2 focus-visible:ring-violet-600 focus-visible:ring-offset-4 focus-visible:outline-none"
                 >
                   <div className="grid gap-6 sm:grid-cols-[96px_minmax(0,1fr)] sm:items-start sm:gap-7">
-                    <StoryStepImage
+                    <StoryStepNumber
                       step={step.key}
                       index={index}
                       active={activeStep === step.key}

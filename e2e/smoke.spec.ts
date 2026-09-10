@@ -15,6 +15,15 @@ test('a creator can begin a single-image review from the public landing page', a
   ).toBeVisible();
 
   await expect(page.getByText('AI IMAGE REVIEW FOR CREATORS')).toBeVisible();
+  const heroScanner = page.getByRole('slider', { name: '拖动扫描示例图' });
+  await expect(heroScanner).toHaveValue('100');
+  await expect(
+    page.getByText('找到 2 处建议人工复核的细节。')
+  ).toBeHidden();
+  await heroScanner.fill('60');
+  await expect(
+    page.getByText('找到 2 处建议人工复核的细节。')
+  ).toBeVisible();
   await expect(page.getByRole('link', { name: '查看示例' })).toHaveAttribute(
     'href',
     '#review-story'
@@ -49,6 +58,41 @@ test('the landing story remains usable on a narrow mobile viewport', async ({
     () => document.documentElement.scrollWidth > window.innerWidth
   );
   expect(hasHorizontalOverflow).toBe(false);
+});
+
+test('the hero scan automatically reaches its result state', async ({ page }) => {
+  await page.goto('/');
+
+  await expect(
+    page.getByRole('slider', { name: '拖动扫描示例图' })
+  ).toHaveValue('0', { timeout: 5_000 });
+  await expect(
+    page.getByText('找到 2 处建议人工复核的细节。')
+  ).toBeVisible();
+});
+
+test('the large story visual stays visible while the desktop story advances', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1280, height: 720 });
+  await page.goto('/');
+
+  const story = page.locator('#review-story');
+  const visual = page.getByTestId('story-sticky-visual');
+  await story.evaluate((element) => {
+    window.scrollTo({
+      top: element.getBoundingClientRect().top + window.scrollY,
+      behavior: 'auto',
+    });
+  });
+
+  const initialTop = (await visual.boundingBox())?.y;
+  await page.evaluate(() => window.scrollBy({ top: 500, behavior: 'auto' }));
+  const advancedTop = (await visual.boundingBox())?.y;
+
+  expect(initialTop).toBeDefined();
+  expect(advancedTop).toBeDefined();
+  expect(Math.abs((advancedTop ?? 0) - (initialTop ?? 0))).toBeLessThan(3);
 });
 
 test('a creator can review a marked local issue in the result workspace', async ({
@@ -89,6 +133,16 @@ test('a creator can view configured credit packs without starting an unavailable
 }) => {
   await page.goto('/zh/pricing');
 
+  await expect(page.getByRole('banner')).toHaveClass(/fixed/);
+  await expect(page.getByRole('link', { name: '使用流程' })).toHaveAttribute(
+    'href',
+    '/#how-it-works'
+  );
+  await expect(page.getByRole('link', { name: '产品边界' })).toHaveAttribute(
+    'href',
+    '/#boundaries'
+  );
+
   await expect(
     page.getByRole('heading', { name: '购买检查额度', level: 2 })
   ).toBeVisible();
@@ -98,7 +152,8 @@ test('a creator can view configured credit packs without starting an unavailable
   await expect(
     page.getByRole('button', { name: '支付接入准备中' }).first()
   ).toBeDisabled();
-  await expect(
-    page.getByRole('link', { name: '返回图片检查' })
-  ).toHaveAttribute('href', '/');
+  await expect(page.getByRole('link', { name: '开始检查' })).toHaveAttribute(
+    'href',
+    '/'
+  );
 });

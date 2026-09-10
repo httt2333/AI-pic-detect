@@ -20,7 +20,7 @@ export function ReviewHistory({
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
-              href="/sign-in?callbackUrl=/reviews"
+              href="/zh/sign-in?callbackUrl=/reviews"
               className="bg-violet-800 px-5 py-3 text-sm font-semibold text-white transition hover:bg-violet-950"
             >
               登录或注册

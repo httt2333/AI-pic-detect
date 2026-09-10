@@ -29,20 +29,34 @@ Updated: 2026-09-09
 - The image and selected-candidate detail now form the top result row. The A/B/C
   state panel is renamed “详细检查报告” and spans the full row beneath them, so it
   no longer controls the image panel height. Credit links use `/zh/pricing` in
-  the same tab; the pricing shell has a return link and skips account/database
+  the same tab; the pricing shell reuses the full fixed product navigation and skips account/database
   loading while purchases remain disabled.
 - `public/images/ai-pic-detect/hero-review-sample.png` is an original local
   illustrative sample. It is a product demo asset only, not an uploaded user
   image or model validation evidence.
+- The hero sample automatically runs one right-to-left scan and stops on the
+  result. Its native range control remains draggable, and hover, click, pointer,
+  touch, or keyboard intent interrupts autoplay immediately. Autoplay updates
+  the scan surface through `requestAnimationFrame` and element refs, avoiding a
+  full React render on every animation frame. Reduced-motion environments skip
+  spatial playback and show the completed result.
 - The Landing Page has been separated into
   `src/features/ai-pic-detect/landing-page.tsx`. It is a presentation-only,
   image-first editorial surface. Its upload CTAs call the existing `openUpload`
   handler, and its workspace preview reads the centralized mock response
   without changing review state. `DESIGN.md` records the durable visual and
   product-copy constraints for future landing work.
-- The Find / Understand / Fix story now renders three numbered crop tiles beside
-  the corresponding copy. They are visual placeholders backed by the existing
-  local sample asset, not additional analysis results or API data.
+- The Find / Understand / Fix story uses three same-sized `1 / 2 / 3` markers
+  beside the corresponding copy. The small crop tiles were removed; the large
+  state-aware visual remains the only image in this sequence.
+- Its sticky large visual is also state-aware: FIND shows the full sample,
+  UNDERSTAND and FIX use a hand-detail crop with matching marker numbers.
+- The landing root uses `overflow-x-clip` rather than `overflow-hidden`, so the
+  desktop story visual remains sticky through the full three-step section and
+  releases at the section boundary.
+- The product and auth headers are fixed. Public login/history links enter
+  `/zh/sign-in`, and the auth layout now matches the violet AI-PIC-DETECT
+  surface with a visible return-to-check action.
 
 ## Tests and checks
 

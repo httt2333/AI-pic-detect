@@ -27,8 +27,14 @@
       Hero, creator pain, brand value, Find/Understand/Fix, read-only workspace
       preview, product boundary, and final CTA. Preserve the existing guest
       upload callback and all analysis/result behavior.
-- [x] Add numbered local image placeholders for the three Find/Understand/Fix
+- [x] Add same-sized `1 / 2 / 3` markers for the three Find/Understand/Fix
       steps, with active-step emphasis and a mobile-safe stacked layout.
+- [x] Turn the hero sample into an accessible right-to-left scan reveal with
+      progressive candidate annotations and conditional result copy.
+- [x] Add a single automatic hero scan with immediate user takeover and a
+      reduced-motion result-state fallback.
+- [x] Fix the product navigation across all P0 views and align the Chinese auth
+      entry with the AI-PIC-DETECT visual system and a clear return path.
 
 ## Pending, requiring in-scope backend or environment work
 

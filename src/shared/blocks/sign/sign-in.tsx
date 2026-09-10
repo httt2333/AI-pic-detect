@@ -37,7 +37,6 @@ export function SignIn({
   const [email, setEmail] = useState(defaultEmail || '');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const [rememberMe, setRememberMe] = useState(false);
 
   const isGoogleAuthEnabled = configs.google_auth_enabled === 'true';
   const isGithubAuthEnabled = configs.github_auth_enabled === 'true';
@@ -71,7 +70,7 @@ export function SignIn({
     }
 
     if (!email || !password) {
-      toast.error('email and password are required');
+      toast.error('请输入邮箱和密码');
       return;
     }
 
@@ -86,16 +85,16 @@ export function SignIn({
           callbackURL: callbackUrl,
         },
         {
-          onRequest: (ctx) => {
+          onRequest: () => {
             // loading is already set above; keep as no-op for safety
           },
-          onResponse: (ctx) => {
+          onResponse: () => {
             // Do NOT reset loading here; navigation may not have completed yet.
           },
-          onSuccess: (ctx) => {
+          onSuccess: () => {
             // Keep loading=true until navigation completes.
           },
-          onError: (e: any) => {
+          onError: (e) => {
             const status = e?.error?.status;
             if (status === 403) {
               const normalizedCallbackUrl = stripLocalePrefix(callbackUrl);
@@ -118,28 +117,32 @@ export function SignIn({
               return;
             }
 
-            toast.error(e?.error?.message || 'sign in failed');
+            toast.error(e?.error?.message || '登录失败，请稍后重试');
             setLoading(false);
           },
         }
       );
-    } catch (e: any) {
-      toast.error(e?.message || 'sign in failed');
+    } catch (error: unknown) {
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : '登录失败，请稍后重试'
+      );
       setLoading(false);
     }
   };
 
   return (
-    <Card className="mx-auto w-full md:max-w-md">
-      <CardHeader>
-        <CardTitle className="text-lg md:text-xl">
+    <Card className="mx-auto w-full rounded-2xl border-violet-100 bg-white shadow-xl shadow-violet-950/5 md:max-w-md">
+      <CardHeader className="space-y-3 px-6 pt-7 sm:px-8 sm:pt-8">
+        <CardTitle className="text-2xl font-semibold tracking-[-0.03em] text-violet-950 md:text-3xl">
           <h1>{t('sign_in_title')}</h1>
         </CardTitle>
-        <CardDescription className="text-xs md:text-sm">
+        <CardDescription className="text-sm leading-6 text-violet-950/60">
           <h2>{t('sign_in_description')}</h2>
         </CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="px-6 sm:px-8">
         <div className="grid gap-4">
           {isEmailAuthEnabled && (
             <form
@@ -194,7 +197,11 @@ export function SignIn({
             <Label htmlFor="remember">Remember me</Label>
           </div> */}
 
-              <Button type="submit" className="w-full" disabled={loading}>
+              <Button
+                type="submit"
+                className="h-11 w-full bg-violet-800 font-semibold text-white hover:bg-violet-950"
+                disabled={loading}
+              >
                 {loading ? (
                   <Loader2 size={16} className="animate-spin" />
                 ) : (
@@ -213,12 +220,12 @@ export function SignIn({
         </div>
       </CardContent>
       {isEmailAuthEnabled && (
-        <CardFooter>
-          <div className="flex w-full justify-center border-t py-4">
-            <p className="text-center text-xs text-neutral-500">
+        <CardFooter className="px-6 pb-3 sm:px-8">
+          <div className="flex w-full justify-center border-t border-violet-100 py-5">
+            <p className="text-center text-sm text-violet-950/60">
               {t('no_account')}
-              <Link href="/sign-up" className="underline">
-                <span className="cursor-pointer dark:text-white/70">
+              <Link href="/sign-up" className="ml-1 font-semibold text-violet-800 underline underline-offset-4">
+                <span className="cursor-pointer">
                   {t('sign_up_title')}
                 </span>
               </Link>
