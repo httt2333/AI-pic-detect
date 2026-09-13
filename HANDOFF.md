@@ -2,6 +2,15 @@
 
 Updated: 2026-09-13
 
+## UX report follow-up
+
+Baseline backup is d14af2f. Report implementation changes Landing wording and
+demo alignment, quota recovery, list selection visibility, and decision feedback.
+Hero scanning and sticky review remain. No backend or API files were changed.
+The user stopped further tests: an earlier run had 103 passing tests and one
+stale link-label assertion, now updated. Final edits have not been rerun; browser
+and type verification remain pending. No new Git commit was requested.
+
 ## Latest UX handoff
 
 Follow `docs/ux-writing-content-design-review-v2.md` for UX acceptance; the

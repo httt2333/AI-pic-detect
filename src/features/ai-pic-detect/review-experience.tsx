@@ -566,6 +566,22 @@ function ResultWorkspace({
   const allDecided =
     orderedIssues.length > 0 &&
     orderedIssues.every((issue) => decisions[issue.id]);
+  const issueListRef = useRef<HTMLOListElement>(null);
+  const activeIssueRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    const list = issueListRef.current;
+    const active = activeIssueRef.current;
+    if (!list || !active) return;
+    const listBounds = list.getBoundingClientRect();
+    const activeBounds = active.getBoundingClientRect();
+    if (activeBounds.top < listBounds.top) {
+      list.scrollTop -= listBounds.top - activeBounds.top;
+    } else if (activeBounds.bottom > listBounds.bottom) {
+      list.scrollTop += activeBounds.bottom - listBounds.bottom;
+    }
+  }, [selectedIssue?.id]);
+
   if (response.status === 'no_issue' || !selectedIssue) {
     return (
       <main className="mx-auto max-w-[1400px] px-5 py-10 sm:px-8">
@@ -718,7 +734,10 @@ function ResultWorkspace({
                 {selectedIssueIndex + 1} / {orderedIssues.length}
               </span>
             </div>
-            <ol className="max-h-56 divide-y divide-violet-100 overflow-y-auto overscroll-contain">
+            <ol
+              ref={issueListRef}
+              className="max-h-56 divide-y divide-violet-100 overflow-y-auto overscroll-contain"
+            >
               {orderedIssues.map((issue, index) => {
                 const isSelected = issue.id === selectedIssue.id;
                 const decision = decisions[issue.id];
@@ -728,8 +747,9 @@ function ResultWorkspace({
                       type="button"
                       aria-label={`疑点 ${index + 1}：${issue.title}`}
                       aria-pressed={isSelected}
+                      ref={isSelected ? activeIssueRef : null}
                       onClick={() => onSelectIssue(issue.id)}
-                      className={`flex w-full items-center gap-3 px-5 py-4 text-left transition focus-visible:ring-2 focus-visible:ring-violet-600 focus-visible:outline-none ${isSelected ? 'bg-violet-50' : 'hover:bg-violet-50/60'}`}
+                      className={`flex w-full items-center gap-3 border-l-2 px-5 py-4 text-left transition-colors duration-150 focus-visible:ring-2 focus-visible:ring-violet-600 focus-visible:outline-none motion-reduce:transition-none ${isSelected ? 'border-violet-700 bg-violet-50' : 'border-transparent hover:bg-violet-50/60'}`}
                     >
                       <span className="grid size-7 shrink-0 place-items-center rounded-full bg-violet-800 text-xs font-bold text-white">
                         {index + 1}
@@ -820,6 +840,16 @@ function ResultWorkspace({
                   {selectedDecision === 'excluded' ? '已排除疑点' : '排除疑点'}
                 </button>
               </div>
+              <p
+                role="status"
+                className="mt-3 min-h-5 text-xs leading-5 text-neutral-600"
+              >
+                {selectedDecision === 'confirmed'
+                  ? '已确认这一处疑点。'
+                  : selectedDecision === 'excluded'
+                    ? '已排除这一处疑点。'
+                    : '看下一处只切换浏览，不会确认或排除疑点。'}
+              </p>
             </section>
           </section>
         </aside>
@@ -1015,7 +1045,7 @@ export function ReviewExperience({
       );
       setErrorMessage(
         quotaExhausted
-          ? '游客体验次数或账户检查额度已用完。购买入口开放后可继续检查。'
+          ? '当前没有可用检查额度，换图也不会恢复额度。额度购买暂未开放，可以先查看额度包或返回首页。'
           : timedOut
             ? '等待时间过长，这次检查已停止。可以再试一次，或者换一张图片。'
             : '刚才没有拿到完整结果，可以再试一次，或者换一张图片。'
@@ -1102,10 +1132,10 @@ export function ReviewExperience({
             </Link>
             <button
               type="button"
-              onClick={startAnotherReview}
+              onClick={showLanding}
               className="inline-flex items-center gap-2 border border-violet-300 px-5 py-3 text-sm font-semibold text-violet-900 transition hover:bg-white"
             >
-              换一张图片
+              返回首页
             </button>
           </div>
         </div>
@@ -1156,7 +1186,7 @@ export function ReviewExperience({
           className="mb-8 inline-flex items-center gap-2 text-sm font-medium text-violet-800 hover:text-neutral-950"
         >
           <IconArrowLeft size={17} stroke={1.8} />
-          返回说明
+          返回首页
         </button>
         <h1 className="text-4xl font-semibold tracking-tight text-neutral-950 sm:text-5xl">
           上传一张 AI 图

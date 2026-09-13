@@ -2,6 +2,23 @@
 
 Updated: 2026-09-13
 
+## UX report implementation — 2026-09-13
+
+- Landing result examples now use 疑点; removed wording implying AI probability
+  or in-app automatic editing. The story follows one wrist/palm example with a
+  stable issue number and zoom origin. Hero/story/workspace markers target that
+  same region. Reduced repeated explanation and the duplicate example arrow.
+- Quota exhaustion offers credit information or a return home; changing images
+  is no longer presented as a way to restore quota.
+- The selected issue remains visible within the scrollable list without moving
+  the whole page. Selection has a border as well as color; decisions announce a
+  short status independently of next-item browsing.
+- User explicitly requested no further tests during implementation. The earlier
+  run was 103/104 passing with one outdated example-link label; that assertion
+  was updated, but final changes have not been rerun or browser-validated.
+- Baseline backup: d14af2f. These report changes are uncommitted. Backend,
+  commercial enforcement, and live provider acceptance remain unchanged.
+
 ## Current UX closeout (supersedes historical wording below)
 
 - The task UI uses 检查 / 疑点 / 为什么值得注意 / 可以怎么改 consistently.

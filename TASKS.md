@@ -1,5 +1,13 @@
 # Tasks
 
+## UX report follow-up — 2026-09-13
+
+- [x] Align Landing example terminology, body region, numbering, and copy scope.
+- [x] Replace ineffective quota change-image recovery with return-home action.
+- [x] Keep the selected list item visible and clarify independent decisions.
+- [ ] Final regression and browser review deferred at the user's explicit request
+      to stop testing; do not treat the final edits as verified.
+
 ## 2026-09-13 UX closeout
 
 - [x] Real waiting timer, stable preview lifetime, and stale-response protection.

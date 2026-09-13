@@ -70,9 +70,7 @@ describe('ReviewExperience', () => {
       screen.getByText('AI IMAGE REVIEW FOR ANIME CREATORS')
     ).toBeVisible();
     expect(
-      screen.getByText(
-        '发布前，找出图片中常见的AI漏洞，弄清为什么不自然、可以怎么改。'
-      )
+      screen.getByText('发布前，找出不自然的局部，看看为什么、可以怎么改。')
     ).toBeVisible();
     const heroScanner = screen.getByRole('slider', {
       name: '拖动查看示例图',
@@ -80,7 +78,7 @@ describe('ReviewExperience', () => {
     expect(heroScanner).toHaveValue('100');
     expect(screen.getByText('试一试，你能发现有问题的地方吗？')).toBeVisible();
     expect(screen.getByText('拖动查看 →')).toBeVisible();
-    expect(screen.getByText('这里有 2 处问题，值得再看一眼。')).toHaveAttribute(
+    expect(screen.getByText('这里有 2 处疑点，值得再看一眼。')).toHaveAttribute(
       'aria-hidden',
       'true'
     );
@@ -89,11 +87,11 @@ describe('ReviewExperience', () => {
     expect(screen.getByTestId('hero-scan-reveal')).toHaveStyle({
       clipPath: 'inset(0 0 0 60%)',
     });
-    expect(screen.getByText('这里有 2 处问题，值得再看一眼。')).toBeVisible();
+    expect(screen.getByText('这里有 2 处疑点，值得再看一眼。')).toBeVisible();
     expect(screen.getAllByText('FIND')).not.toHaveLength(0);
     expect(screen.getAllByText('UNDERSTAND')).not.toHaveLength(0);
     expect(screen.getAllByText('FIX')).not.toHaveLength(0);
-    expect(screen.getByRole('link', { name: '查看示例 →' })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: '查看示例' })).toHaveAttribute(
       'href',
       '#review-story'
     );
@@ -174,7 +172,7 @@ describe('ReviewExperience', () => {
       'fix'
     );
     expect(
-      screen.getByRole('heading', { name: '最后呈现一个完整的修改流程。' })
+      screen.getByRole('heading', { name: '位置、原因、修改方向，一起看清。' })
     ).toBeVisible();
     expect(
       screen.getByRole('heading', {
@@ -223,7 +221,7 @@ describe('ReviewExperience', () => {
     expect(screen.getByRole('slider', { name: '拖动查看示例图' })).toHaveValue(
       '0'
     );
-    expect(screen.getByText('这里有 2 处问题，值得再看一眼。')).toBeVisible();
+    expect(screen.getByText('这里有 2 处疑点，值得再看一眼。')).toBeVisible();
 
     vi.useRealTimers();
   });
@@ -520,6 +518,12 @@ describe('ReviewExperience', () => {
       'href',
       '/zh/pricing'
     );
+    expect(
+      screen.queryByRole('button', { name: '换一张图片' })
+    ).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: '返回首页' }));
+    expect(screen.getByTestId('landing-page')).toBeVisible();
+    expect(analyzeImage).toHaveBeenCalledTimes(1);
   });
 
   it('opens the Chinese credit page from the product header', () => {
