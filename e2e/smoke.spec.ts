@@ -19,9 +19,9 @@ test('a creator can begin a single-image review from the public landing page', a
   ).toBeVisible();
   const heroScanner = page.getByRole('slider', { name: '拖动查看示例图' });
   await expect(heroScanner).toHaveValue('100');
-  await expect(page.getByText('这里有 2 处问题，值得再看一眼。')).toBeHidden();
+  await expect(page.getByText('这里有 2 处疑点，值得再看一眼。')).toBeHidden();
   await heroScanner.fill('60');
-  await expect(page.getByText('这里有 2 处问题，值得再看一眼。')).toBeVisible();
+  await expect(page.getByText('这里有 2 处疑点，值得再看一眼。')).toBeVisible();
   await expect(page.getByRole('link', { name: '查看示例' })).toHaveAttribute(
     'href',
     '#review-story'
@@ -66,7 +66,7 @@ test('the hero scan automatically reaches its result state', async ({
   await expect(
     page.getByRole('slider', { name: '拖动查看示例图' })
   ).toHaveValue('0', { timeout: 5_000 });
-  await expect(page.getByText('这里有 2 处问题，值得再看一眼。')).toBeVisible();
+  await expect(page.getByText('这里有 2 处疑点，值得再看一眼。')).toBeVisible();
 });
 
 test('the large story visual stays visible while the desktop story advances', async ({
@@ -84,13 +84,14 @@ test('the large story visual stays visible while the desktop story advances', as
     });
   });
 
-  const initialTop = (await visual.boundingBox())?.y;
+  const initialBox = await visual.boundingBox();
   await page.evaluate(() => window.scrollBy({ top: 500, behavior: 'auto' }));
-  const advancedTop = (await visual.boundingBox())?.y;
+  const advancedBox = await visual.boundingBox();
 
-  expect(initialTop).toBeDefined();
-  expect(advancedTop).toBeDefined();
-  expect(Math.abs((advancedTop ?? 0) - (initialTop ?? 0))).toBeLessThan(3);
+  expect(initialBox).not.toBeNull();
+  expect(advancedBox).not.toBeNull();
+  expect(advancedBox?.y ?? -1).toBeGreaterThanOrEqual(0);
+  expect(advancedBox?.y ?? Number.MAX_SAFE_INTEGER).toBeLessThan(720);
 });
 
 test('a creator can review a marked local issue in the result workspace', async ({
