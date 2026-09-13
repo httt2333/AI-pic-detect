@@ -1,6 +1,35 @@
 # Current State
 
-Updated: 2026-09-09
+Updated: 2026-09-13
+
+## Current UX closeout (supersedes historical wording below)
+
+- The task UI uses 检查 / 疑点 / 为什么值得注意 / 可以怎么改 consistently.
+- Waiting retains the uploaded image and counts real elapsed seconds; contextual
+  hints rotate every five seconds without claiming provider stages. Retry resets
+  the clock. Preview URLs are released only during cleanup; abandoned requests
+  cannot overwrite a new upload or return navigation.
+- Confirm, exclude, and next-item browsing are independent local-session actions.
+  Completion is explicit and preserves the result for reference. A new image
+  clears prior results and decisions.
+- Results retain every server-returned issue, sort by priority then confidence,
+  and show the backend issue count. The list scrolls independently. Numbered
+  boxes use the contained image frame, with the selected box above other boxes.
+- Dimension links require matching IDs and a conservative category match. A
+  conflicting or uncertain mapping displays 暂不判断, never a guessed conclusion.
+  Groups with reliable links open initially; other groups are expandable.
+- The browser rejects incomplete public response shapes into a retryable error;
+  it does not truncate, confidence-filter, or rewrite valid backend issues.
+- Hero and static workspace previews explicitly display 示例结果. Hero scanning
+  and sticky Find / Understand / Fix interactions remain intact.
+- Validation: 104 unit/integration tests and 9 Playwright journeys passed;
+  TypeScript passed. Browser tests use a public demo image and intercepted API
+  responses, not paid provider calls. No red Issue overlay or runtime exception
+  was reproduced; the normal Next.js development-tools launcher remains.
+- Whole-repository verify is blocked by existing formatting and lint debt
+  (399 lint errors outside this UX scope). No Git backup was requested or made.
+
+## Previous implementation notes
 
 The public landing route now renders the AI-PIC-DETECT P0 front end. It has a
 product header, value proposition, example bbox treatment, upload CTA,

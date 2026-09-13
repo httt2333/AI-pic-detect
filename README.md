@@ -53,7 +53,7 @@ the UI.
   up to 10MB, validating both declared MIME type and file signature.
 - `src/features/analyze/contract.ts` validates candidate issues, rejects invalid
   fields and out-of-bounds normalized boxes, removes low-confidence results, and
-  caps the response at five issues. It also produces a complete, safe A/B/C
+  retains validated issues without a fixed five-issue cap. It also produces a safe A/B/C
   dimension-status list; a dimension can link to a candidate only when that
   candidate survived validation and has the same `dim_id`.
 - The category set is provisional for the visual-model spike; it is not a final

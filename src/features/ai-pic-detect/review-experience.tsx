@@ -25,7 +25,6 @@ import {
   IconLoader2,
   IconRefresh,
   IconUpload,
-  IconX,
 } from '@tabler/icons-react';
 
 import { analyzeRealImage } from './analyze-client';
@@ -49,10 +48,24 @@ type ReviewExperienceProps = {
 type ExperienceView = 'landing' | 'upload' | 'workspace';
 
 const priorityCopy = {
-  high: '高修改优先级',
-  medium: '中修改优先级',
-  low: '低修改优先级',
+  high: '建议先看',
+  medium: '值得看看',
+  low: '可以留意',
 } as const;
+
+const priorityRank = { high: 0, medium: 1, low: 2 } as const;
+
+function sortIssues(issues: ReviewIssue[]): ReviewIssue[] {
+  return issues
+    .map((issue, index) => ({ issue, index }))
+    .sort(
+      (a, b) =>
+        priorityRank[a.issue.priority] - priorityRank[b.issue.priority] ||
+        b.issue.confidence - a.issue.confidence ||
+        a.index - b.index
+    )
+    .map(({ issue }) => issue);
+}
 
 const categoryCopy: Record<ReviewIssue['category'], string> = {
   hand_structure: '手部结构',
@@ -89,10 +102,31 @@ const dimensionLabelCopy: Record<AnalysisDimensionId, string> = {
 };
 
 const dimensionStateCopy = {
-  review_recommended: '建议检查',
-  no_high_confidence_issue: '当前未见高置信度问题',
-  not_assessable: '当前不可判断',
+  review_recommended: '值得注意',
+  no_high_confidence_issue: '暂未发现明确疑点',
+  not_assessable: '暂不判断',
 } as const;
+
+// Presentation guard only: never infer a dimension from free-form model text.
+const compatibleDimensions: Record<
+  ReviewIssue['category'],
+  readonly AnalysisDimensionId[]
+> = {
+  hand_structure: ['B1'],
+  eye_face: ['B2', 'B4'],
+  boundary_overlap: ['C1', 'C4', 'C5'],
+  accessory_detail: ['C3', 'C6'],
+  structure_pose: ['B5', 'B6', 'C5'],
+};
+
+const waitingHints = [
+  '先从容易忽略的局部开始。',
+  '正在整理值得注意的疑点。',
+  '有些细节第一眼没问题，放大后才容易发现。',
+  '正在把发现整理成更具体的说明。',
+  '再仔细看一遍，尽量少把正常细节当成疑点。',
+  '检查完成后，会告诉你为什么值得注意、可以怎么改。',
+];
 
 function withTimeout<T>(promise: Promise<T>, timeoutMs: number): Promise<T> {
   return new Promise((resolve, reject) => {
@@ -201,19 +235,19 @@ export function ImageStage({
     };
   }, [previewUrl, updateImageFrame]);
 
-  const markers = issues.map((issue, index) => {
+  const markers = sortIssues(issues).map((issue, index) => {
     const isSelected = issue.id === selectedIssueId;
     return (
       <button
         key={issue.id}
         type="button"
-        aria-label={`定位问题 ${index + 1}`}
+        aria-label={`定位疑点 ${index + 1}`}
         aria-pressed={isSelected}
         onClick={() => onSelectIssue(issue.id)}
         className={`absolute border-2 text-left transition focus-visible:ring-2 focus-visible:ring-violet-600 focus-visible:outline-none ${
           isSelected
-            ? 'z-10 border-amber-400 bg-amber-300/15'
-            : 'border-violet-500/80 bg-violet-400/10 hover:border-amber-400'
+            ? 'z-30 border-amber-400 bg-amber-300/15 shadow-[0_0_0_2px_rgba(251,191,36,0.35)]'
+            : 'z-10 border-violet-500/80 bg-violet-400/10 hover:border-amber-400'
         }`}
         style={{
           left: `${issue.bbox.x * 100}%`,
@@ -223,9 +257,9 @@ export function ImageStage({
         }}
       >
         <span
-          className={`absolute -top-3 -left-3 grid size-6 place-items-center rounded-full text-xs font-bold ${
+          className={`absolute top-0 left-0 z-40 grid min-h-6 min-w-6 place-items-center rounded-sm px-1 text-xs font-bold ${
             isSelected
-              ? 'bg-amber-400 text-violet-950'
+              ? 'bg-amber-400 text-neutral-950'
               : 'bg-violet-700 text-white'
           }`}
         >
@@ -239,7 +273,7 @@ export function ImageStage({
     <div
       ref={stageRef}
       data-testid="image-stage"
-      className="relative isolate aspect-[4/5] overflow-hidden border border-violet-200 bg-[#f6f3ff]"
+      className="relative isolate aspect-[4/5] max-h-[42dvh] w-full overflow-hidden border border-neutral-200 bg-neutral-100 md:max-h-[72dvh]"
     >
       {previewUrl ? (
         <div
@@ -260,7 +294,7 @@ export function ImageStage({
             src={previewUrl}
             alt="待检查的二次元人物图"
             onLoad={updateImageFrame}
-            className="size-full object-fill"
+            className="size-full object-contain"
           />
           {imageFrame ? markers : null}
         </div>
@@ -271,7 +305,7 @@ export function ImageStage({
         </>
       )}
       {withLegend ? (
-        <div className="absolute right-4 bottom-4 flex items-center gap-2 border border-violet-200 bg-white/90 px-3 py-2 text-xs font-medium text-violet-950 backdrop-blur">
+        <div className="absolute right-4 bottom-4 flex items-center gap-2 border border-violet-200 bg-white/90 px-3 py-2 text-xs font-medium text-neutral-950 backdrop-blur">
           <IconFocus2 size={15} stroke={1.8} />
           示例：局部定位
         </div>
@@ -287,7 +321,9 @@ function ProductHeader({
 }: {
   openUpload: () => void;
   showLanding: () => void;
-  navigateToSection: (sectionId: 'how-it-works' | 'why-this' | 'boundaries') => void;
+  navigateToSection: (
+    sectionId: 'how-it-works' | 'why-this' | 'boundaries'
+  ) => void;
 }) {
   return (
     <header className="fixed inset-x-0 top-0 z-50 border-b border-violet-100 bg-[#fdfcff]/95 backdrop-blur">
@@ -295,7 +331,7 @@ function ProductHeader({
         <button
           type="button"
           onClick={showLanding}
-          className="text-sm font-bold tracking-[-0.04em] text-violet-950"
+          className="text-sm font-bold tracking-[-0.04em] text-neutral-950"
         >
           AI-PIC-DETECT
         </button>
@@ -306,7 +342,7 @@ function ProductHeader({
               event.preventDefault();
               navigateToSection('how-it-works');
             }}
-            className="hidden hover:text-violet-950 sm:block"
+            className="hidden hover:text-neutral-950 sm:block"
           >
             怎么检查
           </a>
@@ -316,7 +352,7 @@ function ProductHeader({
               event.preventDefault();
               navigateToSection('boundaries');
             }}
-            className="hidden hover:text-violet-950 sm:block"
+            className="hidden hover:text-neutral-950 sm:block"
           >
             产品边界
           </a>
@@ -326,30 +362,31 @@ function ProductHeader({
               event.preventDefault();
               navigateToSection('why-this');
             }}
-            className="hidden hover:text-violet-950 lg:block"
+            className="hidden hover:text-neutral-950 lg:block"
           >
             为什么这样做
           </a>
           <Link
             href="/zh/pricing"
-            className="hidden hover:text-violet-950 lg:block"
+            className="hidden hover:text-neutral-950 lg:block"
           >
             额度与价格
           </Link>
           <Link
             href="/reviews"
-            className="hidden hover:text-violet-950 xl:block"
+            className="hidden hover:text-neutral-950 xl:block"
           >
             检查记录
           </Link>
           <Link
             href="/zh/sign-in?callbackUrl=/reviews"
-            className="hidden hover:text-violet-950 sm:block"
+            className="hidden hover:text-neutral-950 sm:block"
           >
             登录
           </Link>
           <button
             type="button"
+            aria-label="开始检查，选择图片"
             onClick={openUpload}
             className="bg-violet-800 px-3.5 py-2 text-xs font-semibold text-white transition hover:bg-violet-950"
           >
@@ -364,9 +401,9 @@ function ProductHeader({
 function ProductFooter() {
   return (
     <footer className="border-t border-violet-200 bg-white">
-      <div className="mx-auto flex max-w-[1400px] flex-wrap justify-between gap-4 px-5 py-7 text-sm text-violet-950/60 sm:px-8">
-        <span className="font-semibold text-violet-950">AI-PIC-DETECT</span>
-        <span>为创作复核提供局部提示。</span>
+      <div className="mx-auto flex max-w-[1400px] flex-wrap justify-between gap-4 px-5 py-7 text-sm text-neutral-600 sm:px-8">
+        <span className="font-semibold text-neutral-950">AI-PIC-DETECT</span>
+        <span>发布前再看一眼，改不改由你决定。</span>
       </div>
     </footer>
   );
@@ -384,12 +421,14 @@ function DetailedReport({
   return (
     <section
       data-testid="detailed-report"
-      className="mt-6 overflow-hidden rounded-2xl border border-violet-200 bg-white shadow-xl shadow-violet-950/5"
+      className="mt-6 overflow-hidden rounded-2xl border border-violet-200 bg-white shadow-sm"
     >
       <div className="border-b border-violet-100 px-5 py-5 sm:px-6">
-        <h2 className="text-lg font-semibold text-violet-950">详细检查报告</h2>
-        <p className="mt-1 text-xs leading-5 text-violet-950/60">
-          汇总画面、人物与局部细节的检查状态；仅检测到候选问题的项目可定位原图。
+        <h2 className="text-lg font-semibold text-neutral-950">
+          还检查了这些地方
+        </h2>
+        <p className="mt-1 text-xs leading-5 text-neutral-600">
+          展开查看检查状态；有定位标记的项目可以回到原图。
         </p>
       </div>
       <div className="grid divide-y divide-violet-100 lg:grid-cols-3 lg:divide-x lg:divide-y-0">
@@ -399,10 +438,26 @@ function DetailedReport({
           );
 
           return (
-            <details key={group} open className="group">
-              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-5 py-3.5 text-sm font-semibold text-violet-950 marker:content-none focus-visible:ring-2 focus-visible:ring-violet-600 focus-visible:outline-none">
+            <details
+              key={group}
+              open={dimensions.some(
+                (dimension) =>
+                  dimension.dim_id.startsWith(group) &&
+                  dimension.state === 'review_recommended' &&
+                  issues.some(
+                    (issue) =>
+                      issue.id === dimension.issue_id &&
+                      issue.dim_id === dimension.dim_id &&
+                      compatibleDimensions[issue.category].includes(
+                        dimension.dim_id
+                      )
+                  )
+              )}
+              className="group"
+            >
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-5 py-3.5 text-sm font-semibold text-neutral-950 marker:content-none focus-visible:ring-2 focus-visible:ring-violet-600 focus-visible:outline-none">
                 <span>{dimensionGroupCopy[group]}</span>
-                <span className="text-xs font-medium text-violet-950/55">
+                <span className="text-xs font-medium text-neutral-600">
                   {groupDimensions.length} 项
                 </span>
               </summary>
@@ -411,21 +466,40 @@ function DetailedReport({
                   const dimension = dimensions.find(
                     (item) => item.dim_id === definition.id
                   );
-                  const linkedIssue = dimension?.issue_id
-                    ? issues.find((issue) => issue.id === dimension.issue_id)
-                    : undefined;
+                  const linkedIssue =
+                    dimension?.state === 'review_recommended' &&
+                    dimension.issue_id
+                      ? issues.find(
+                          (issue) =>
+                            issue.id === dimension.issue_id &&
+                            issue.dim_id === definition.id &&
+                            compatibleDimensions[issue.category].includes(
+                              definition.id
+                            )
+                        )
+                      : undefined;
+                  const hasUnresolvedLink =
+                    Boolean(dimension?.issue_id) ||
+                    issues.some((issue) => issue.dim_id === definition.id);
+                  const state = linkedIssue
+                    ? 'review_recommended'
+                    : dimension?.state === 'no_high_confidence_issue' &&
+                        !hasUnresolvedLink
+                      ? 'no_high_confidence_issue'
+                      : 'not_assessable';
                   const row = (
                     <>
                       <span className="min-w-0">
-                        <span className="block text-xs font-semibold text-violet-950">
-                          {definition.id} {dimensionLabelCopy[definition.id]}
+                        <span className="block text-xs font-semibold text-neutral-950">
+                          <span className="mr-2 font-normal text-neutral-500">
+                            {definition.id}
+                          </span>
+                          <span data-dimension-label>
+                            {dimensionLabelCopy[definition.id]}
+                          </span>
                         </span>
-                        <span className="mt-1 block text-[11px] leading-4 text-violet-950/60">
-                          {
-                            dimensionStateCopy[
-                              dimension?.state ?? 'not_assessable'
-                            ]
-                          }
+                        <span className="mt-1 block text-[11px] leading-4 text-neutral-600">
+                          {dimensionStateCopy[state]}
                         </span>
                       </span>
                       {linkedIssue ? (
@@ -484,15 +558,19 @@ function ResultWorkspace({
   onDecide: (issueId: string, decision: IssueDecision) => void;
   onNewImage: () => void;
 }) {
+  const orderedIssues = sortIssues(response.issues);
   const selectedIssue =
-    response.issues.find((issue) => issue.id === selectedIssueId) ??
-    response.issues[0] ??
+    orderedIssues.find((issue) => issue.id === selectedIssueId) ??
+    orderedIssues[0] ??
     null;
+  const allDecided =
+    orderedIssues.length > 0 &&
+    orderedIssues.every((issue) => decisions[issue.id]);
   if (response.status === 'no_issue' || !selectedIssue) {
     return (
       <main className="mx-auto max-w-[1400px] px-5 py-10 sm:px-8">
         <div className="mb-7 flex flex-wrap items-end justify-between gap-4">
-          <h1 className="text-3xl font-semibold tracking-tight text-violet-950">
+          <h1 className="text-3xl font-semibold tracking-tight text-neutral-950">
             检查结果
           </h1>
           <button
@@ -510,11 +588,11 @@ function ResultWorkspace({
         >
           <section
             data-testid="image-panel"
-            className="self-start rounded-2xl border border-violet-200 bg-white p-3 shadow-xl shadow-violet-950/5 sm:p-5"
+            className="self-start rounded-2xl border border-violet-200 bg-white p-3 shadow-sm sm:p-5"
           >
             <div className="mb-4 flex items-center justify-between gap-3 px-1">
-              <p className="text-sm font-medium text-violet-950">原图</p>
-              <p className="text-xs text-violet-950/60">当前没有局部定位</p>
+              <p className="text-sm font-medium text-neutral-950">原图</p>
+              <p className="text-xs text-neutral-600">当前没有局部定位</p>
             </div>
             <ImageStage
               previewUrl={previewUrl}
@@ -523,48 +601,49 @@ function ResultWorkspace({
               onSelectIssue={onSelectIssue}
             />
           </section>
-          <aside data-testid="issue-panel" className="self-start">
-            <section className="rounded-2xl border border-violet-200 bg-white p-6 shadow-xl shadow-violet-950/5">
+          <aside
+            data-testid="issue-panel"
+            className="order-first self-start lg:order-last"
+          >
+            <section className="rounded-2xl border border-violet-200 bg-white p-6 shadow-sm">
               <IconCircleCheck
                 className="text-violet-700"
                 size={36}
                 stroke={1.5}
               />
-              <h2 className="mt-4 text-2xl font-semibold tracking-tight text-violet-950">
-                暂未发现高修改优先级问题
+              <h2 className="mt-4 text-2xl font-semibold tracking-tight text-balance text-neutral-950">
+                这次没有发现足够明确的疑点
               </h2>
-              <p className="mt-3 leading-7 text-violet-950/70">
-                本次扫描未给出需要优先修改的局部。
+              <p className="mt-3 leading-7 text-neutral-600">
+                没有找到值得单独标出来的局部。
               </p>
-              <p className="mt-3 text-sm leading-6 text-violet-950/55">
-                仍可按作品用途复核脸部、手部与边缘细节。
+              <p className="mt-3 text-sm leading-6 text-neutral-600">
+                这不代表图片一定没有问题。准备正式发布的话，也可以自己再看一眼手部、脸部和边缘细节。
               </p>
             </section>
           </aside>
         </div>
         <DetailedReport
           dimensions={response.dimensions}
-          issues={response.issues}
+          issues={orderedIssues}
           onSelectIssue={onSelectIssue}
         />
       </main>
     );
   }
 
-  const selectedIssueIndex = response.issues.findIndex(
+  const selectedIssueIndex = orderedIssues.findIndex(
     (issue) => issue.id === selectedIssue.id
   );
   const nextIssue =
-    response.issues[(selectedIssueIndex + 1) % response.issues.length];
-  const hasNextIssue = response.issues.length > 1;
-  const nextIssueLabel =
-    selectedIssueIndex === response.issues.length - 1 ? '回到第一项' : '下一项';
-
+    orderedIssues[(selectedIssueIndex + 1) % orderedIssues.length];
+  const hasNextIssue = orderedIssues.length > 1;
   const selectedDecision = decisions[selectedIssue.id];
+
   return (
     <main className="mx-auto max-w-[1400px] px-5 py-10 sm:px-8">
       <div className="mb-7 flex flex-wrap items-end justify-between gap-4">
-        <h1 className="text-3xl font-semibold tracking-tight text-violet-950">
+        <h1 className="text-3xl font-semibold tracking-tight text-neutral-950">
           检查结果
         </h1>
         <button
@@ -576,51 +655,78 @@ function ResultWorkspace({
           换一张图片
         </button>
       </div>
+      {allDecided ? (
+        <section
+          role="status"
+          className="mb-6 flex flex-wrap items-center justify-between gap-5 rounded-xl border border-violet-200 bg-white p-5"
+        >
+          <div>
+            <h2 className="text-xl font-semibold text-neutral-950">
+              这次检查完成了
+            </h2>
+            <p className="mt-2 text-sm text-neutral-700">
+              你已经看过全部疑点。
+            </p>
+            <p className="mt-1 text-sm leading-6 text-neutral-600">
+              接下来可以按自己的判断处理，或者换一张图片继续检查。
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={onNewImage}
+            className="min-h-11 rounded-lg bg-violet-800 px-4 py-3 text-sm font-semibold text-white hover:bg-violet-950"
+          >
+            检查另一张图片
+          </button>
+        </section>
+      ) : null}
       <div
         data-testid="result-overview"
         className="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_440px]"
       >
         <section
           data-testid="image-panel"
-          className="self-start rounded-2xl border border-violet-200 bg-white p-3 shadow-xl shadow-violet-950/5 sm:p-5"
+          className="self-start rounded-2xl border border-violet-200 bg-white p-3 shadow-sm sm:p-5"
         >
           <div className="mb-4 flex items-center justify-between gap-3 px-1">
-            <p className="text-sm font-medium text-violet-950">图片定位</p>
-            <p className="text-xs text-violet-950/60">
-              点击编号或框选区域切换问题
+            <p className="text-sm font-medium text-neutral-950">图片定位</p>
+            <p className="text-xs text-neutral-600">
+              点击编号或框选区域切换疑点
             </p>
           </div>
           <ImageStage
             previewUrl={previewUrl}
-            issues={response.issues}
+            issues={orderedIssues}
             selectedIssueId={selectedIssue.id}
             onSelectIssue={onSelectIssue}
           />
         </section>
         <aside data-testid="issue-panel" className="self-start">
-          <section className="overflow-hidden rounded-2xl border border-violet-200 bg-white shadow-xl shadow-violet-950/5">
+          <section className="overflow-hidden rounded-2xl border border-violet-200 bg-white shadow-sm">
             <div className="border-b border-violet-100 bg-violet-50 px-5 py-5">
-              <p className="text-sm font-semibold text-violet-950">整体摘要</p>
-              <p className="mt-2 text-sm leading-6 text-violet-950/70">
-                发现 {response.summary.issue_count} 个建议复核的局部，其中{' '}
-                {response.summary.high_priority_count} 个为高修改优先级。
+              <p className="text-sm text-neutral-600">先看这几处</p>
+              <p className="mt-2 text-xl leading-8 font-semibold text-neutral-950">
+                发现 {response.summary.issue_count} 处值得看的疑点
+              </p>
+              <p className="mt-2 text-sm leading-6 text-neutral-600">
+                逐个看看原因和修改方向，再决定是否确认。
               </p>
             </div>
             <div className="flex items-center justify-between border-b border-violet-100 px-5 py-4">
-              <h2 className="font-semibold text-violet-950">问题列表</h2>
-              <span className="text-xs text-violet-950/55">
-                {selectedIssueIndex + 1} / {response.issues.length}
+              <h2 className="font-semibold text-neutral-950">疑点列表</h2>
+              <span className="text-xs text-neutral-600">
+                {selectedIssueIndex + 1} / {orderedIssues.length}
               </span>
             </div>
-            <ol className="divide-y divide-violet-100">
-              {response.issues.map((issue, index) => {
+            <ol className="max-h-56 divide-y divide-violet-100 overflow-y-auto overscroll-contain">
+              {orderedIssues.map((issue, index) => {
                 const isSelected = issue.id === selectedIssue.id;
                 const decision = decisions[issue.id];
                 return (
                   <li key={issue.id}>
                     <button
                       type="button"
-                      aria-label={`问题 ${index + 1}：${issue.title}`}
+                      aria-label={`疑点 ${index + 1}：${issue.title}`}
                       aria-pressed={isSelected}
                       onClick={() => onSelectIssue(issue.id)}
                       className={`flex w-full items-center gap-3 px-5 py-4 text-left transition focus-visible:ring-2 focus-visible:ring-violet-600 focus-visible:outline-none ${isSelected ? 'bg-violet-50' : 'hover:bg-violet-50/60'}`}
@@ -629,12 +735,16 @@ function ResultWorkspace({
                         {index + 1}
                       </span>
                       <span className="min-w-0 flex-1">
-                        <span className="block truncate text-sm font-semibold text-violet-950">
+                        <span className="block text-sm font-semibold break-words text-neutral-950">
                           {issue.title}
                         </span>
-                        <span className="mt-1 block text-xs text-violet-950/60">
+                        <span className="mt-1 block text-xs text-neutral-600">
                           {priorityCopy[issue.priority]}
-                          {decision === 'ignored' ? ' · 已忽略' : ''}
+                          {decision === 'confirmed'
+                            ? ' · 已确认'
+                            : decision === 'excluded'
+                              ? ' · 已排除'
+                              : ''}
                         </span>
                       </span>
                       <IconChevronRight
@@ -651,20 +761,17 @@ function ResultWorkspace({
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div>
                   <p className="text-xs font-medium text-violet-700">
-                    当前问题 · {selectedIssueIndex + 1} /{' '}
-                    {response.issues.length}
+                    这一处疑点 · {selectedIssueIndex + 1} /{' '}
+                    {orderedIssues.length}
                   </p>
-                  <h2 className="mt-1 text-xl font-semibold tracking-tight text-violet-950">
+                  <h2 className="mt-1 text-xl font-semibold tracking-tight text-neutral-950">
                     {selectedIssue.title}
                   </h2>
-                  <p className="mt-1 text-sm text-violet-950/60">
+                  <p className="mt-1 text-sm text-neutral-600">
                     {categoryCopy[selectedIssue.category]}
                   </p>
                 </div>
                 <div className="rounded-lg bg-amber-50 px-3 py-2 text-right">
-                  <p className="text-[11px] font-medium text-amber-900/70">
-                    修改优先级
-                  </p>
                   <p className="mt-0.5 text-xs font-semibold text-amber-950">
                     {priorityCopy[selectedIssue.priority]}
                   </p>
@@ -672,36 +779,45 @@ function ResultWorkspace({
               </div>
               <div className="mt-5 grid gap-4 border-t border-violet-100 pt-5 text-sm">
                 <div>
-                  <p className="font-semibold text-violet-950">检查原因</p>
-                  <p className="mt-1.5 leading-6 text-violet-950/70">
+                  <p className="font-semibold text-neutral-950">
+                    为什么值得注意
+                  </p>
+                  <p className="mt-1.5 leading-6 text-neutral-600">
                     {selectedIssue.reason}
                   </p>
                 </div>
                 <div>
-                  <p className="font-semibold text-violet-950">修改建议</p>
-                  <p className="mt-1.5 leading-6 text-violet-950/70">
+                  <p className="font-semibold text-neutral-950">可以怎么改</p>
+                  <p className="mt-1.5 leading-6 text-neutral-600">
                     {selectedIssue.suggestion}
                   </p>
                 </div>
               </div>
-              <div className="mt-6 grid grid-cols-2 gap-3">
+              <div className="mt-6 flex flex-wrap gap-2">
                 <button
                   type="button"
                   onClick={() => nextIssue && onSelectIssue(nextIssue.id)}
                   disabled={!hasNextIssue}
-                  className="inline-flex items-center justify-center gap-2 rounded-lg bg-violet-800 px-3 py-3 text-sm font-semibold text-white transition hover:bg-violet-950 disabled:cursor-default disabled:bg-violet-300"
+                  className="order-3 inline-flex min-h-11 items-center justify-center gap-2 rounded-lg px-3 py-3 text-sm font-semibold text-violet-800 transition hover:bg-violet-50 disabled:text-neutral-500"
                 >
                   <IconArrowRight size={17} stroke={2} />
-                  {hasNextIssue ? nextIssueLabel : '暂无下一项'}
+                  看下一处
                 </button>
                 <button
                   type="button"
-                  onClick={() => onDecide(selectedIssue.id, 'ignored')}
-                  disabled={selectedDecision === 'ignored'}
-                  className="inline-flex items-center justify-center gap-2 rounded-lg border border-violet-300 px-3 py-3 text-sm font-semibold text-violet-900 transition hover:border-violet-700 hover:bg-violet-50 disabled:cursor-default disabled:border-violet-100 disabled:text-violet-300"
+                  aria-pressed={selectedDecision === 'confirmed'}
+                  onClick={() => onDecide(selectedIssue.id, 'confirmed')}
+                  className="inline-flex min-h-11 items-center justify-center rounded-lg border border-violet-300 px-3 py-3 text-sm font-semibold text-violet-900 transition hover:bg-violet-50 aria-pressed:bg-violet-100"
                 >
-                  <IconX size={17} stroke={2} />
-                  {selectedDecision === 'ignored' ? '已忽略' : '忽略此项'}
+                  {selectedDecision === 'confirmed' ? '已确认疑点' : '确认疑点'}
+                </button>
+                <button
+                  type="button"
+                  aria-pressed={selectedDecision === 'excluded'}
+                  onClick={() => onDecide(selectedIssue.id, 'excluded')}
+                  className="inline-flex min-h-11 items-center justify-center rounded-lg border border-violet-300 px-3 py-3 text-sm font-semibold text-violet-900 transition hover:bg-violet-50 aria-pressed:bg-violet-100"
+                >
+                  {selectedDecision === 'excluded' ? '已排除疑点' : '排除疑点'}
                 </button>
               </div>
             </section>
@@ -710,7 +826,7 @@ function ResultWorkspace({
       </div>
       <DetailedReport
         dimensions={response.dimensions}
-        issues={response.issues}
+        issues={orderedIssues}
         onSelectIssue={onSelectIssue}
       />
     </main>
@@ -726,9 +842,21 @@ export function ReviewExperience({
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [response, setResponse] = useState<ReviewResponse | null>(null);
-  const [selectedIssueId, setSelectedIssueId] = useState<string | null>(null);
   const [decisions, setDecisions] = useState<Record<string, IssueDecision>>({});
+  const [selectedIssueId, setSelectedIssueId] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [analysisStartedAt, setAnalysisStartedAt] = useState<number | null>(
+    null
+  );
+  const [analysisElapsed, setAnalysisElapsed] = useState(0);
+  const requestVersion = useRef(0);
+  const preparationTimer = useRef<number | null>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const analysisMessageIndex =
+    Math.floor(analysisElapsed / 5) % waitingHints.length;
+  const completed =
+    Boolean(response?.issues.length) &&
+    response?.issues.every((issue) => decisions[issue.id]);
   const [pendingSection, setPendingSection] = useState<
     'how-it-works' | 'why-this' | 'boundaries' | null
   >(null);
@@ -739,6 +867,26 @@ export function ReviewExperience({
   );
 
   useEffect(() => () => revokePreviewUrl(previewUrl), [previewUrl]);
+  useEffect(
+    () => () => {
+      requestVersion.current += 1;
+      if (preparationTimer.current !== null)
+        window.clearTimeout(preparationTimer.current);
+    },
+    []
+  );
+
+  useEffect(() => {
+    if (pendingSection) return;
+    const heading = contentRef.current?.querySelector('h1');
+    if (!heading) return;
+    heading.tabIndex = -1;
+    heading.focus({ preventScroll: true });
+    contentRef.current?.scrollIntoView?.({
+      block: 'start',
+      behavior: 'instant',
+    });
+  }, [view, status, completed, pendingSection]);
 
   useEffect(() => {
     if (view !== 'landing' || !pendingSection) return;
@@ -754,22 +902,29 @@ export function ReviewExperience({
   }, [pendingSection, view]);
 
   function openUpload() {
-    setView('upload');
-    setStatus('idle');
-    setErrorMessage(null);
+    startAnotherReview();
   }
   function showLanding() {
+    requestVersion.current += 1;
     setView('landing');
     setStatus('idle');
     setResponse(null);
     setSelectedIssueId(null);
+    setDecisions({});
     setErrorMessage(null);
   }
-  function navigateToSection(sectionId: 'how-it-works' | 'why-this' | 'boundaries') {
+  function navigateToSection(
+    sectionId: 'how-it-works' | 'why-this' | 'boundaries'
+  ) {
     showLanding();
     setPendingSection(sectionId);
   }
   function startAnotherReview() {
+    requestVersion.current += 1;
+    if (preparationTimer.current !== null)
+      window.clearTimeout(preparationTimer.current);
+    setPreviewUrl(null);
+    setPendingSection(null);
     setView('upload');
     setStatus('idle');
     setSelectedFile(null);
@@ -780,6 +935,13 @@ export function ReviewExperience({
   }
   function selectFile(file: File | undefined) {
     if (!file) return;
+    requestVersion.current += 1;
+    if (preparationTimer.current !== null)
+      window.clearTimeout(preparationTimer.current);
+    setResponse(null);
+    setDecisions({});
+    setSelectedIssueId(null);
+    setPreviewUrl(null);
     const validation = validateReviewImageFile(file);
     if (!validation.valid) {
       setStatus('unsupported');
@@ -791,24 +953,26 @@ export function ReviewExperience({
     setErrorMessage(null);
     setSelectedFile(file);
     setResponse(null);
-    setDecisions({});
     setSelectedIssueId(null);
-    setPreviewUrl((currentUrl) => {
-      revokePreviewUrl(currentUrl);
-      return createPreviewUrl(file);
-    });
-    window.setTimeout(() => setStatus('idle'), 120);
+    setPreviewUrl(createPreviewUrl(file));
+    preparationTimer.current = window.setTimeout(() => setStatus('idle'), 120);
   }
   function onInputChange(event: ChangeEvent<HTMLInputElement>) {
     selectFile(event.target.files?.[0]);
+    event.target.value = '';
   }
   function onDrop(event: DragEvent<HTMLDivElement>) {
     event.preventDefault();
     selectFile(event.dataTransfer.files?.[0]);
   }
   async function startAnalysis() {
-    if (!selectedFile) return;
+    if (!selectedFile || status === 'analysing') return;
+    const version = ++requestVersion.current;
     setStatus('analysing');
+    setAnalysisStartedAt(Date.now());
+    setAnalysisElapsed(0);
+    setDecisions({});
+    setResponse(null);
     setErrorMessage(null);
     setView('workspace');
     try {
@@ -816,10 +980,12 @@ export function ReviewExperience({
         analyzeImage(selectedFile),
         ANALYSIS_TIMEOUT_MS
       );
+      if (version !== requestVersion.current) return;
       setResponse(nextResponse);
-      setSelectedIssueId(nextResponse.issues[0]?.id ?? null);
+      setSelectedIssueId(sortIssues(nextResponse.issues)[0]?.id ?? null);
       setStatus(nextResponse.status);
     } catch (error) {
+      if (version !== requestVersion.current) return;
       const quotaExhausted =
         error instanceof Error && error.message === 'quota_exhausted';
       const timedOut =
@@ -833,11 +999,10 @@ export function ReviewExperience({
         setSelectedFile(null);
         setResponse(null);
         setSelectedIssueId(null);
-        setPreviewUrl((currentUrl) => {
-          revokePreviewUrl(currentUrl);
-          return null;
-        });
-        setErrorMessage('图片内容与声明的文件格式不一致，请重新选择。');
+        setPreviewUrl(null);
+        setErrorMessage(
+          '这张图片无法读取或不符合上传要求。请重新导出为 PNG、JPG 或 WebP 后再试。'
+        );
         return;
       }
 
@@ -852,12 +1017,20 @@ export function ReviewExperience({
         quotaExhausted
           ? '游客体验次数或账户检查额度已用完。购买入口开放后可继续检查。'
           : timedOut
-            ? '分析时间较长，暂未完成。请重试，或重新选择一张图片。'
-            : '分析暂时没有返回结果，请稍后重试。'
+            ? '等待时间过长，这次检查已停止。可以再试一次，或者换一张图片。'
+            : '刚才没有拿到完整结果，可以再试一次，或者换一张图片。'
       );
     }
   }
-  function decideIssue(issueId: string, decision: IssueDecision) {
+  useEffect(() => {
+    if (status !== 'analysing' || analysisStartedAt === null) return;
+    const timer = window.setInterval(() => {
+      setAnalysisElapsed(Math.floor((Date.now() - analysisStartedAt) / 1000));
+    }, 1000);
+    return () => window.clearInterval(timer);
+  }, [analysisStartedAt, status]);
+
+  function handleDecision(issueId: string, decision: IssueDecision) {
     setDecisions((current) => ({ ...current, [issueId]: decision }));
   }
 
@@ -868,12 +1041,12 @@ export function ReviewExperience({
       selectedIssueId={selectedIssueId}
       decisions={decisions}
       onSelectIssue={setSelectedIssueId}
-      onDecide={decideIssue}
+      onDecide={handleDecision}
       onNewImage={startAnotherReview}
     />
   ) : view === 'workspace' && status === 'analysing' ? (
     <main className="mx-auto max-w-6xl px-5 py-14 sm:px-8">
-      <div className="grid min-h-[65dvh] gap-8 rounded-2xl border border-violet-200 bg-white p-5 shadow-xl shadow-violet-950/5 md:grid-cols-[minmax(0,0.9fr)_minmax(260px,0.7fr)] md:p-8">
+      <div className="grid min-h-[65dvh] gap-8 rounded-2xl border border-violet-200 bg-white p-5 shadow-sm md:grid-cols-[minmax(0,0.9fr)_minmax(260px,0.7fr)] md:p-8">
         <ImageStage
           previewUrl={previewUrl}
           issues={[]}
@@ -882,18 +1055,26 @@ export function ReviewExperience({
         />
         <div className="flex flex-col justify-center">
           <IconLoader2
-            className="animate-spin text-violet-700"
+            className="animate-spin text-violet-700 motion-reduce:animate-none"
             size={34}
             stroke={1.7}
           />
-          <h1 className="mt-5 text-3xl font-semibold tracking-tight text-violet-950">
-            正在扫描局部细节
+          <h1 className="mt-5 text-3xl font-semibold tracking-tight text-neutral-950">
+            正在检查容易被忽略的细节
           </h1>
-          <p className="mt-4 max-w-md leading-7 text-violet-950/70">
-            正在筛选值得人工复核的区域，并整理修改建议。
+          <p className="mt-4 min-h-21 max-w-md leading-7 text-neutral-600">
+            {waitingHints[analysisMessageIndex]}
           </p>
-          <p className="mt-8 text-sm text-violet-950/55">
-            请保持此页面开启，完成后会显示结果。
+          <p
+            role="timer"
+            className="mt-6 text-sm font-medium text-neutral-700 tabular-nums"
+          >
+            {analysisElapsed < 60
+              ? `已等待 ${analysisElapsed} 秒`
+              : `已等待 ${Math.floor(analysisElapsed / 60)} 分 ${analysisElapsed % 60} 秒`}
+          </p>
+          <p className="mt-2 text-sm leading-6 text-neutral-600">
+            完成后会直接显示检查结果。
           </p>
         </div>
       </div>
@@ -907,10 +1088,10 @@ export function ReviewExperience({
             size={42}
             stroke={1.5}
           />
-          <h1 className="text-3xl font-semibold tracking-tight text-violet-950">
+          <h1 className="text-3xl font-semibold tracking-tight text-neutral-950">
             本次检查额度已用完
           </h1>
-          <p className="leading-7 text-violet-950/70">{errorMessage}</p>
+          <p className="leading-7 text-neutral-600">{errorMessage}</p>
           <div className="flex flex-wrap justify-center gap-3">
             <Link
               href="/zh/pricing"
@@ -924,7 +1105,7 @@ export function ReviewExperience({
               onClick={startAnotherReview}
               className="inline-flex items-center gap-2 border border-violet-300 px-5 py-3 text-sm font-semibold text-violet-900 transition hover:bg-white"
             >
-              重新选择图片
+              换一张图片
             </button>
           </div>
         </div>
@@ -940,14 +1121,12 @@ export function ReviewExperience({
             size={42}
             stroke={1.5}
           />
-          <h1 className="text-3xl font-semibold tracking-tight text-violet-950">
+          <h1 className="text-3xl font-semibold tracking-tight text-neutral-950">
             {status === 'timeout'
-              ? '分析时间较长，暂未完成'
-              : '这次分析没有完成'}
+              ? '等待时间较长，这次检查未完成'
+              : '这次检查没有完成'}
           </h1>
-          <p className="leading-7 text-violet-950/70">
-            {errorMessage ?? '请重试，或重新选择一张图片。'}
-          </p>
+          <p className="leading-7 text-neutral-600">{errorMessage}</p>
           <div className="flex flex-wrap justify-center gap-3">
             <button
               type="button"
@@ -955,14 +1134,14 @@ export function ReviewExperience({
               className="inline-flex items-center gap-2 bg-violet-800 px-5 py-3 text-sm font-semibold text-white transition hover:bg-violet-950"
             >
               <IconRefresh size={17} stroke={1.8} />
-              重试分析
+              再试一次
             </button>
             <button
               type="button"
               onClick={startAnotherReview}
               className="inline-flex items-center gap-2 border border-violet-300 px-5 py-3 text-sm font-semibold text-violet-900 transition hover:bg-white"
             >
-              重新选择图片
+              换一张图片
             </button>
           </div>
         </div>
@@ -973,17 +1152,17 @@ export function ReviewExperience({
       <div className="mx-auto max-w-3xl">
         <button
           type="button"
-          onClick={() => setView('landing')}
-          className="mb-8 inline-flex items-center gap-2 text-sm font-medium text-violet-800 hover:text-violet-950"
+          onClick={showLanding}
+          className="mb-8 inline-flex items-center gap-2 text-sm font-medium text-violet-800 hover:text-neutral-950"
         >
           <IconArrowLeft size={17} stroke={1.8} />
           返回说明
         </button>
-        <h1 className="text-4xl font-semibold tracking-tight text-violet-950 sm:text-5xl">
-          上传一张人物图
+        <h1 className="text-4xl font-semibold tracking-tight text-neutral-950 sm:text-5xl">
+          上传一张 AI 图
         </h1>
-        <p className="mt-4 max-w-2xl leading-7 text-violet-950/70">
-          支持 PNG、JPG 和 WebP，单张不超过 10MB。图片只用于本次检查流程。
+        <p className="mt-4 max-w-2xl leading-7 text-neutral-600">
+          支持 PNG、JPG 和 WebP，单张不超过 10MB。
         </p>
         <div
           role="button"
@@ -991,9 +1170,22 @@ export function ReviewExperience({
           aria-label="拖放要检查的图片"
           onDragOver={(event) => event.preventDefault()}
           onDrop={onDrop}
+          onClick={(event) => {
+            if (
+              !(event.target instanceof HTMLElement) ||
+              event.target.closest('label, input')
+            )
+              return;
+            document.getElementById('review-image-input')?.click();
+          }}
           onKeyDown={(event) => {
-            if (event.key === 'Enter' || event.key === ' ')
+            if (
+              event.target === event.currentTarget &&
+              (event.key === 'Enter' || event.key === ' ')
+            ) {
+              event.preventDefault();
               document.getElementById('review-image-input')?.click();
+            }
           }}
           className="mt-9 border-2 border-dashed border-violet-300 bg-violet-50/70 p-5 transition hover:border-violet-700 hover:bg-violet-50 sm:p-8"
         >
@@ -1005,12 +1197,12 @@ export function ReviewExperience({
                 className="aspect-square w-full border border-violet-200 bg-white object-contain sm:size-[180px]"
               />
               <div>
-                <p className="font-semibold text-violet-950">
+                <p className="font-semibold break-all text-neutral-950">
                   {selectedFile.name}
                 </p>
-                <p className="mt-1 text-sm text-violet-950/60">
+                <p className="mt-1 text-sm text-neutral-600">
                   {(selectedFile.size / 1024 / 1024).toFixed(2)} MB ·
-                  已准备好检查
+                  可以开始检查了
                 </p>
                 <label
                   htmlFor="review-image-input"
@@ -1026,10 +1218,10 @@ export function ReviewExperience({
               <span className="grid size-14 place-items-center rounded-full bg-white text-violet-800 shadow-sm">
                 <IconUpload size={25} stroke={1.6} />
               </span>
-              <p className="mt-4 font-semibold text-violet-950">
-                拖放图片到这里
+              <p className="mt-4 font-semibold text-neutral-950">
+                把图片拖到这里
               </p>
-              <p className="mt-1 text-sm text-violet-950/60">
+              <p className="mt-1 text-sm text-neutral-600">
                 或从设备中选择一张图片
               </p>
               <label
@@ -1082,10 +1274,12 @@ export function ReviewExperience({
             onClick={startAnalysis}
             className="inline-flex items-center gap-2 bg-violet-800 px-5 py-3 text-sm font-semibold text-white transition hover:bg-violet-950 disabled:cursor-not-allowed disabled:bg-violet-300"
           >
-            开始分析
+            开始检查
             <IconArrowRight size={17} stroke={1.8} />
           </button>
-          <p className="text-sm text-violet-950/55">本次只生成局部复核建议。</p>
+          <p className="text-sm text-neutral-600">
+            先找出疑点，改不改由你决定。
+          </p>
         </div>
       </div>
     </main>
@@ -1100,7 +1294,10 @@ export function ReviewExperience({
         showLanding={showLanding}
         navigateToSection={navigateToSection}
       />
-      <div className="min-h-screen pt-16">
+      <div
+        ref={contentRef}
+        className="min-h-screen scroll-mt-16 bg-[#faf9f6] pt-16"
+      >
         {page}
         <ProductFooter />
       </div>

@@ -4,7 +4,6 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { IconArrowRight, IconEye, IconUpload } from '@tabler/icons-react';
 
-
 type LandingPageProps = {
   onUpload: () => void;
 };
@@ -262,7 +261,7 @@ function HeroVisual() {
       sliderRef.current.value = String(Math.round(position));
       sliderRef.current.setAttribute(
         'aria-valuetext',
-        `已扫描 ${Math.round(100 - position)}%`
+        `示例已展开 ${Math.round(100 - position)}%`
       );
     }
     if (resultRef.current) {
@@ -336,12 +335,13 @@ function HeroVisual() {
         onClick={stopAutomaticScan}
         className="group relative aspect-[4/5] overflow-hidden rounded-lg bg-neutral-200 shadow-[0_18px_45px_rgba(35,28,55,0.1)] contain-paint focus-within:ring-2 focus-within:ring-violet-300 focus-within:ring-offset-4 focus-within:outline-none sm:aspect-[5/6]"
       >
-        <ReviewImage alt="示例人物图，带有两处发布前复核批注" />
+        <ReviewImage alt="示例人物图，带有两处发布前检查批注" />
         <div className="pointer-events-none absolute inset-0 bg-linear-to-b from-neutral-950/45 via-transparent to-neutral-950/20" />
 
         <div className="pointer-events-none absolute top-5 right-5 left-5 z-30 text-white [text-shadow:0_2px_16px_rgba(0,0,0,0.55)] sm:top-7 sm:right-7 sm:left-7">
+          <p className="mb-2 text-xs font-medium">示例结果</p>
           <p className="text-base font-medium sm:text-lg">
-            第一眼，您看得出来吗？
+            第一眼，你注意到这些细节了吗？
           </p>
           <p className="mt-1.5 text-xs font-medium text-white/75 sm:text-sm">
             拖动查看 →
@@ -351,7 +351,7 @@ function HeroVisual() {
             aria-hidden="true"
             className="invisible mt-2 text-lg font-bold opacity-0 transition-opacity duration-200 sm:text-xl"
           >
-            发现 2 处需要注意的细节
+            这里有 2 处，值得再看一眼。
           </p>
         </div>
 
@@ -372,7 +372,7 @@ function HeroVisual() {
           />
           <EditorialAnnotation
             number={1}
-            label="01　手部结构异常"
+            label="01　手指和掌部接得有点生硬"
             className="top-[51%] left-[66%]"
             lineClassName="top-3.5 right-5 w-20 -rotate-12"
             delayClassName="delay-300"
@@ -396,8 +396,8 @@ function HeroVisual() {
         </div>
 
         <input
-          aria-label="拖动扫描示例图"
-          aria-valuetext="已扫描 0%"
+          aria-label="拖动查看示例图"
+          aria-valuetext="示例已展开 0%"
           ref={sliderRef}
           type="range"
           min="0"
@@ -447,7 +447,7 @@ function StoryVisual({ activeStep }: { activeStep: StoryStep }) {
         {activeStep === 'find' ? (
           <>
             <p className="text-xs font-semibold text-violet-700">示例</p>
-            <p className="mt-2 text-sm font-semibold">手部结构异常</p>
+            <p className="mt-2 text-sm font-semibold">手指和掌部接得有点生硬</p>
             <p className="mt-1 text-xs leading-5 text-neutral-600">
               手腕与手掌连接不自然。
             </p>
@@ -455,7 +455,7 @@ function StoryVisual({ activeStep }: { activeStep: StoryStep }) {
         ) : activeStep === 'understand' ? (
           <>
             <p className="text-xs font-semibold text-violet-700">示例</p>
-            <p className="mt-2 text-sm font-semibold">结构连接异常</p>
+            <p className="mt-2 text-sm font-semibold">连接处缺少自然过渡</p>
             <p className="mt-1 text-xs leading-5 text-neutral-600">
               手腕与手掌之间缺少自然过渡。
             </p>
@@ -463,7 +463,7 @@ function StoryVisual({ activeStep }: { activeStep: StoryStep }) {
         ) : (
           <>
             <p className="text-xs font-semibold text-violet-700">示例</p>
-            <p className="mt-2 text-sm font-semibold">修改建议</p>
+            <p className="mt-2 text-sm font-semibold">可以怎么改</p>
             <p className="mt-1 text-xs leading-5 text-neutral-600">
               调整手腕与手掌的连接和轮廓，保留原来的手势与其他区域。
             </p>
@@ -507,8 +507,8 @@ function WorkspacePreview() {
     <div className="motion-safe:animate-in motion-safe:fade-in motion-safe:zoom-in-95 grid overflow-hidden border border-neutral-200 bg-white shadow-[0_18px_50px_rgba(35,28,55,0.08)] motion-safe:duration-700 lg:grid-cols-[minmax(0,1.35fr)_minmax(340px,0.65fr)]">
       <div className="border-b border-neutral-200 p-3 sm:p-5 lg:border-r lg:border-b-0">
         <div className="mb-3 flex items-center justify-between text-xs text-neutral-500">
-          <span className="font-medium text-neutral-800">检查结果</span>
-          <span>发现 3 处需要注意的局部</span>
+          <span className="font-medium text-neutral-800">示例结果</span>
+          <span>发现 3 处值得看的疑点</span>
         </div>
         <div className="relative aspect-[4/5] overflow-hidden bg-neutral-100">
           <ReviewImage alt="完整检查工作台中的示例人物图" />
@@ -522,28 +522,26 @@ function WorkspacePreview() {
       <div className="flex flex-col">
         <div className="border-b border-neutral-200 p-5 sm:p-6">
           <p className="text-sm font-semibold text-neutral-950">
-            问题在哪，为什么，怎么改。
+            疑点在哪，为什么，可以怎么改。
           </p>
           <p className="mt-2 text-sm leading-6 text-neutral-600">一目了然。</p>
         </div>
         <div className="border-b border-neutral-200 px-5 py-4 sm:px-6">
-          <p className="text-xs font-semibold text-violet-700">当前问题</p>
+          <p className="text-xs font-semibold text-violet-700">这一处疑点</p>
           <h3 className="mt-2 text-xl font-semibold text-neutral-950">
-            手部结构异常
+            手指和掌部接得有点生硬
           </h3>
-          <p className="mt-2 text-xs font-medium text-neutral-500">
-            建议先处理
-          </p>
+          <p className="mt-2 text-xs font-medium text-neutral-500">建议先看</p>
         </div>
         <div className="grid flex-1 gap-5 p-5 text-sm sm:p-6">
           <div>
-            <p className="font-semibold text-neutral-950">为什么</p>
+            <p className="font-semibold text-neutral-950">为什么值得注意</p>
             <p className="mt-2 leading-6 text-neutral-600">
               手腕与手掌连接缺少自然过渡。
             </p>
           </div>
           <div>
-            <p className="font-semibold text-neutral-950">怎么改</p>
+            <p className="font-semibold text-neutral-950">可以怎么改</p>
             <p className="mt-2 leading-6 text-neutral-600">
               调整连接和轮廓，其他地方不动。
             </p>
@@ -553,7 +551,7 @@ function WorkspacePreview() {
               看下一处
             </span>
             <span className="grid min-h-11 place-items-center rounded-lg border border-neutral-300 px-3 text-sm font-semibold text-neutral-700">
-              这处不用改
+              排除疑点
             </span>
           </div>
         </div>
@@ -598,11 +596,10 @@ export function LandingPage({ onUpload }: LandingPageProps) {
             AI IMAGE REVIEW FOR ANIME CREATORS
           </p>
           <h1 className="mt-5 text-5xl leading-[1.06] font-semibold tracking-[-0.04em] text-balance sm:text-6xl lg:text-[4.5rem]">
-            让 AI 图更经得住细看。
+            让你的 AI 图，经得住细看。
           </h1>
           <p className="mt-6 max-w-lg text-base leading-7 text-neutral-600 sm:text-lg sm:leading-8">
-            帮您找出二次元 AI
-            图里容易被观众注意到的生成痕迹：哪里不自然，为什么，怎么改。
+            发布前，再检查一遍容易忽略的局部细节。看看哪里值得注意、为什么看起来不自然，以及可以怎么改。
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-4">
             <button
@@ -744,7 +741,7 @@ export function LandingPage({ onUpload }: LandingPageProps) {
         <div className="mx-auto max-w-[1320px]">
           <div className="max-w-3xl">
             <h2 className="text-4xl leading-tight font-semibold tracking-[-0.035em] text-balance sm:text-5xl">
-              问题在哪，为什么，怎么改。
+              疑点在哪，为什么，可以怎么改。
             </h2>
             <p className="mt-5 max-w-2xl text-lg leading-8 text-neutral-600">
               一目了然。
@@ -766,7 +763,7 @@ export function LandingPage({ onUpload }: LandingPageProps) {
             我们是您的助手，负责提出有依据的判断。
           </h2>
           <p className="mt-4 max-w-2xl text-base leading-7 text-neutral-600">
-            我们是您的助手，负责提出有依据的判断。有把握才提醒，最后改不改由您决定。
+            有把握才提醒，最后改不改由您决定。
           </p>
         </div>
       </section>

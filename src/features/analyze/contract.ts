@@ -15,8 +15,6 @@ export const ANALYSIS_CANDIDATE_CATEGORIES = [
 ] as const;
 
 const MINIMUM_CONFIDENCE = 0.7;
-const MAXIMUM_ISSUES = 5;
-
 const boundingBoxSchema = z
   .object({
     x: z.number().min(0).max(1),
@@ -103,8 +101,7 @@ export function sanitizeAnalysisOutput(output: unknown): AnalysisResult {
       if (
         !issue.success ||
         issue.data.confidence < MINIMUM_CONFIDENCE ||
-        seenIds.has(issue.data.id) ||
-        validIssues.length === MAXIMUM_ISSUES
+        seenIds.has(issue.data.id)
       ) {
         return validIssues;
       }
@@ -143,15 +140,13 @@ export function sanitizeAnalysisOutput(output: unknown): AnalysisResult {
       continue;
     }
 
-    dimensionsById.set(
-      dimension.data.dim_id,
-      dimension.data.issue_id
-        ? dimension.data
-        : {
-            dim_id: dimension.data.dim_id,
-            state: dimension.data.state,
-          }
-    );
+    dimensionsById.set(dimension.data.dim_id, {
+      dim_id: dimension.data.dim_id,
+      state:
+        dimension.data.state === 'review_recommended'
+          ? 'not_assessable'
+          : dimension.data.state,
+    });
   }
 
   for (const issue of issues) {

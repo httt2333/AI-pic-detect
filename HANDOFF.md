@@ -1,6 +1,22 @@
 # AI-PIC-DETECT Front-end Handoff
 
-Updated: 2026-09-09
+Updated: 2026-09-13
+
+## Latest UX handoff
+
+Follow `docs/ux-writing-content-design-review-v2.md` for UX acceptance; the
+requested `AI-PIC-DETECT_UX_WRITING_SKILL_V2.md` filename was not present.
+The latest section of CURRENT_STATE.md supersedes older wording below.
+Do not reinstate a five-issue UI cap, fake waiting stages, or automatic decisions
+when browsing. Decisions remain local to this session. The client dimension
+compatibility table deliberately falls back to 暂不判断; backend taxonomy expansion
+requires a reviewed mapping, not string guessing. Backend/provider files already
+had uncommitted changes at the start and were not edited in this UX session.
+
+Validation: 104 tests, TypeScript, and 9 Playwright paths passed with deterministic
+API interception. No live paid provider call was made. Full verify still has
+repository-wide formatting/lint blockers. No commit or version-ledger entry was
+created because the user did not request a backup this round.
 
 ## What is implemented
 

@@ -55,7 +55,7 @@ describe('sanitizeAnalysisOutput', () => {
     });
   });
 
-  it('keeps only the configured maximum number of valid issues', () => {
+  it('keeps every valid issue above the confidence threshold', () => {
     const issues = Array.from({ length: 6 }, (_, index) => ({
       ...validIssue,
       id: `issue-${index}`,
@@ -63,8 +63,8 @@ describe('sanitizeAnalysisOutput', () => {
 
     expect(sanitizeAnalysisOutput({ issues })).toMatchObject({
       status: 'success',
-      summary: { issue_count: 5, high_priority_count: 5 },
-      issues: issues.slice(0, 5),
+      summary: { issue_count: 6, high_priority_count: 6 },
+      issues,
     });
   });
 
@@ -97,5 +97,20 @@ describe('sanitizeAnalysisOutput', () => {
     expect(
       result.dimensions.find((dimension) => dimension.dim_id === 'B1')
     ).not.toHaveProperty('issue_id');
+  });
+
+  it('does not mark an unlinked dimension as worth attention', () => {
+    const result = sanitizeAnalysisOutput({
+      issues: [validIssue],
+      dimensions: [
+        { dim_id: 'A1', state: 'review_recommended' },
+        { dim_id: 'B1', state: 'review_recommended', issue_id: 'hand-1' },
+      ],
+    });
+
+    expect(result.dimensions.find((dimension) => dimension.dim_id === 'A1')).toEqual({
+      dim_id: 'A1',
+      state: 'not_assessable',
+    });
   });
 });

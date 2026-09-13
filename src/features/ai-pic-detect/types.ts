@@ -14,7 +14,7 @@ export type ReviewStatus =
   | 'quota_exhausted'
   | 'analysis_failed';
 
-export type IssueDecision = 'ignored';
+export type IssueDecision = 'confirmed' | 'excluded';
 
 export type ReviewIssue = AnalysisIssue;
 export type ReviewResponse = AnalysisResult;

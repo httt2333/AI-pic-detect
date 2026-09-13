@@ -4,6 +4,21 @@ import { analyzeRealImage } from './analyze-client';
 import { getMockAnalysisResponse } from './mock';
 
 describe('analyzeRealImage', () => {
+  it.each([
+    { status: 'success', issues: [] },
+    { ...getMockAnalysisResponse(), issues: [{ id: 'broken' }] },
+    { ...getMockAnalysisResponse(), dimensions: null },
+  ])(
+    'rejects incomplete public data with a recoverable error',
+    async (payload) => {
+      await expect(
+        analyzeRealImage(
+          new File(['image'], 'test.png', { type: 'image/png' }),
+          vi.fn().mockResolvedValue(Response.json(payload))
+        )
+      ).rejects.toMatchObject({ message: 'analysis_failed' });
+    }
+  );
   it('posts one image and returns the validated public result', async () => {
     const result = getMockAnalysisResponse('no_issue');
     const fetcher = vi.fn().mockResolvedValue(Response.json(result));

@@ -85,7 +85,7 @@ const SYSTEM_PROMPT =
   '你是二次元人物图的发布前视觉复核助手。只提出客观、可见、可定位的候选问题，不判断图片是否由 AI 生成，不作版权、作者或身份结论。';
 
 const USER_PROMPT = `请检查图片并只返回一个 JSON 对象，不要 Markdown、解释或代码围栏。
-没有具体可见区域就不要输出 issue，不设置最低问题数量，不要为了凑数输出问题。只输出置信度 >= 0.7 的候选，最多 5 条。bbox 使用相对于原图的归一化对象 x/y/width/height，范围为 0 到 1。文本必须使用“疑似”“建议检查”“需人工确认”等谨慎表述。
+没有具体可见区域就不要输出 issue，不设置最低问题数量，不要为了凑数输出问题。只输出置信度 >= 0.7 的候选，不限制 issue 数量。bbox 使用相对于原图的归一化对象 x/y/width/height，范围为 0 到 1。文本必须使用“疑似”“建议检查”“需人工确认”等谨慎表述。
 
 17 个维度：${ANALYSIS_DIMENSION_IDS.join(', ')}。
 允许的 category：${ANALYSIS_CANDIDATE_CATEGORIES.join(', ')}。

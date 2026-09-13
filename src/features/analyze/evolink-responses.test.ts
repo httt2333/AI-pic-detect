@@ -94,7 +94,9 @@ describe('analyzeImageWithEvolink', () => {
         },
       },
     });
-    expect(payload.text.format.schema.properties.issues.maxItems).toBe(5);
+    expect(payload.text.format.schema.properties.issues).not.toHaveProperty(
+      'maxItems'
+    );
     expect(payload.text.format.schema.properties.issues).not.toHaveProperty(
       'minItems'
     );

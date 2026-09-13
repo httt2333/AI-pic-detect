@@ -11,19 +11,34 @@ export function ProductHeader() {
           AI-PIC-DETECT
         </Link>
         <nav className="flex items-center gap-5 text-sm font-medium text-violet-800">
-          <Link href="/zh#how-it-works" className="hidden hover:text-violet-950 sm:block">
+          <Link
+            href="/zh#how-it-works"
+            className="hidden hover:text-violet-950 sm:block"
+          >
             怎么检查
           </Link>
-          <Link href="/zh#why-this" className="hidden hover:text-violet-950 lg:block">
+          <Link
+            href="/zh#why-this"
+            className="hidden hover:text-violet-950 lg:block"
+          >
             为什么这样做
           </Link>
-          <Link href="/zh#boundaries" className="hidden hover:text-violet-950 sm:block">
+          <Link
+            href="/zh#boundaries"
+            className="hidden hover:text-violet-950 sm:block"
+          >
             产品边界
           </Link>
-          <Link href="/zh/pricing" className="hidden hover:text-violet-950 lg:block">
+          <Link
+            href="/zh/pricing"
+            className="hidden hover:text-violet-950 lg:block"
+          >
             额度与价格
           </Link>
-          <Link href="/reviews" className="hidden hover:text-violet-950 xl:block">
+          <Link
+            href="/reviews"
+            className="hidden hover:text-violet-950 xl:block"
+          >
             检查记录
           </Link>
           <Link

@@ -24,8 +24,9 @@
 - The front-end mock uses the same response shape as the analysis API. Mock
   data stays in `src/features/ai-pic-detect/mock.ts` and is injected only for
   tests or explicit demos; the default guest flow uses the server route.
-- The primary result action advances to the next candidate. “确认需要处理” is
-  intentionally not used; users can still explicitly ignore a candidate.
+- The result provides independent 确认疑点, 排除疑点, and 看下一处 actions.
+  Browsing never changes the user's judgment. Completion keeps the result
+  accessible for reference; a new image clears local judgments.
 - The result contract remains provider-independent: the browser consumes only
   the backend-validated `status`, `summary`, `issues[]`, and safe dimension
   states. Provider prompts, raw output, temporary URLs, and diagnostics never
@@ -34,7 +35,8 @@
   states, not a 17-error checklist, final taxonomy, or provider-capability
   claim. A dimension may navigate to an image region only when a retained
   candidate supplies a matching `dim_id` and legal normalized bbox. The
-  accepted response may contain zero through five candidate issues.
+  accepted response has no frontend issue-count cap. Display the backend count
+  and all accepted issues, sorted by priority and confidence.
 - `no_issue` is a normal successful result. `timeout` and `analysis_failed`
   are separate retryable presentation states; detailed provider failures stay
   on the server boundary.

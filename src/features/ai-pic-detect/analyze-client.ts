@@ -1,3 +1,7 @@
+import { ANALYSIS_CANDIDATE_CATEGORIES } from '@/features/analyze/contract';
+import { ANALYSIS_DIMENSION_IDS } from '@/features/analyze/dimension-map';
+import { z } from 'zod';
+
 import type { ReviewResponse } from './types';
 
 type Fetcher = (
@@ -5,14 +9,55 @@ type Fetcher = (
   init?: RequestInit
 ) => Promise<Response>;
 
-function isReviewResponse(value: unknown): value is ReviewResponse {
-  if (value === null || typeof value !== 'object') return false;
-  const response = value as { status?: unknown; issues?: unknown };
-  return (
-    (response.status === 'success' || response.status === 'no_issue') &&
-    Array.isArray(response.issues)
+// Validate the public boundary, not provider data. Never filter or truncate here.
+const publicResponseSchema = z
+  .object({
+    status: z.enum(['success', 'no_issue']),
+    summary: z.object({
+      issue_count: z.number().int().nonnegative(),
+      high_priority_count: z.number().int().nonnegative(),
+    }),
+    issues: z.array(
+      z.object({
+        id: z.string().min(1),
+        category: z.enum(ANALYSIS_CANDIDATE_CATEGORIES),
+        title: z.string().min(1),
+        reason: z.string().min(1),
+        suggestion: z.string().min(1),
+        priority: z.enum(['high', 'medium', 'low']),
+        confidence: z.number().min(0).max(1),
+        dim_id: z.enum(ANALYSIS_DIMENSION_IDS).optional(),
+        bbox: z
+          .object({
+            x: z.number().min(0).max(1),
+            y: z.number().min(0).max(1),
+            width: z.number().positive().max(1),
+            height: z.number().positive().max(1),
+          })
+          .refine((box) => box.x + box.width <= 1 && box.y + box.height <= 1),
+      })
+    ),
+    dimensions: z.array(
+      z.object({
+        dim_id: z.enum(ANALYSIS_DIMENSION_IDS),
+        state: z.enum([
+          'review_recommended',
+          'no_high_confidence_issue',
+          'not_assessable',
+        ]),
+        issue_id: z.string().optional(),
+      })
+    ),
+  })
+  .refine(
+    (result) =>
+      result.summary.issue_count === result.issues.length &&
+      new Set(result.issues.map((issue) => issue.id)).size ===
+        result.issues.length &&
+      (result.status === 'no_issue'
+        ? result.issues.length === 0
+        : result.issues.length > 0)
   );
-}
 
 export async function analyzeRealImage(
   file: File,
@@ -43,10 +88,7 @@ export async function analyzeRealImage(
 
   try {
     const payload: unknown = await response.json();
-    if (!isReviewResponse(payload)) {
-      throw new Error('invalid_analysis_response');
-    }
-    return payload;
+    return publicResponseSchema.parse(payload);
   } catch {
     throw new Error('analysis_failed');
   }

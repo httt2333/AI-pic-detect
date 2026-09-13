@@ -45,7 +45,7 @@ describe('ReviewExperience', () => {
     fireEvent.load(image);
 
     expect(
-      screen.getByRole('button', { name: '定位问题 1' }).parentElement
+      screen.getByRole('button', { name: '定位疑点 1' }).parentElement
     ).toHaveStyle({
       top: '137.5px',
       height: '225px',
@@ -63,7 +63,7 @@ describe('ReviewExperience', () => {
 
     expect(
       screen.getByRole('heading', {
-        name: '让 AI 图更经得住细看。',
+        name: '让你的 AI 图，经得住细看。',
       })
     ).toBeVisible();
     expect(
@@ -71,16 +71,16 @@ describe('ReviewExperience', () => {
     ).toBeVisible();
     expect(
       screen.getByText(
-        '帮您找出二次元 AI 图里容易被观众注意到的生成痕迹：哪里不自然，为什么，怎么改。'
+        '发布前，再检查一遍容易忽略的局部细节。看看哪里值得注意、为什么看起来不自然，以及可以怎么改。'
       )
     ).toBeVisible();
     const heroScanner = screen.getByRole('slider', {
-      name: '拖动扫描示例图',
+      name: '拖动查看示例图',
     });
     expect(heroScanner).toHaveValue('100');
-    expect(screen.getByText('第一眼，您看得出来吗？')).toBeVisible();
+    expect(screen.getByText('第一眼，你注意到这些细节了吗？')).toBeVisible();
     expect(screen.getByText('拖动查看 →')).toBeVisible();
-    expect(screen.getByText('发现 2 处需要注意的细节')).toHaveAttribute(
+    expect(screen.getByText('这里有 2 处，值得再看一眼。')).toHaveAttribute(
       'aria-hidden',
       'true'
     );
@@ -89,7 +89,7 @@ describe('ReviewExperience', () => {
     expect(screen.getByTestId('hero-scan-reveal')).toHaveStyle({
       clipPath: 'inset(0 0 0 60%)',
     });
-    expect(screen.getByText('发现 2 处需要注意的细节')).toBeVisible();
+    expect(screen.getByText('这里有 2 处，值得再看一眼。')).toBeVisible();
     expect(screen.getAllByText('FIND')).not.toHaveLength(0);
     expect(screen.getAllByText('UNDERSTAND')).not.toHaveLength(0);
     expect(screen.getAllByText('FIX')).not.toHaveLength(0);
@@ -170,7 +170,7 @@ describe('ReviewExperience', () => {
       'fix'
     );
     expect(
-      screen.getByRole('heading', { name: '问题在哪，为什么，怎么改。' })
+      screen.getByRole('heading', { name: '疑点在哪，为什么，可以怎么改。' })
     ).toBeVisible();
     expect(
       screen.getByRole('heading', {
@@ -183,7 +183,7 @@ describe('ReviewExperience', () => {
     );
 
     expect(
-      screen.getByRole('heading', { name: '上传一张人物图' })
+      screen.getByRole('heading', { name: '上传一张 AI 图' })
     ).toBeVisible();
     expect(screen.getByLabelText('选择要检查的图片')).toHaveAttribute(
       'accept',
@@ -196,7 +196,7 @@ describe('ReviewExperience', () => {
     render(<ReviewExperience />);
 
     const heroScanner = screen.getByRole('slider', {
-      name: '拖动扫描示例图',
+      name: '拖动查看示例图',
     });
     act(() => vi.advanceTimersByTime(900));
     const interruptedValue = Number((heroScanner as HTMLInputElement).value);
@@ -216,10 +216,10 @@ describe('ReviewExperience', () => {
 
     act(() => vi.advanceTimersByTime(3_500));
 
-    expect(screen.getByRole('slider', { name: '拖动扫描示例图' })).toHaveValue(
+    expect(screen.getByRole('slider', { name: '拖动查看示例图' })).toHaveValue(
       '0'
     );
-    expect(screen.getByText('发现 2 处需要注意的细节')).toBeVisible();
+    expect(screen.getByText('这里有 2 处，值得再看一眼。')).toBeVisible();
 
     vi.useRealTimers();
   });
@@ -254,7 +254,7 @@ describe('ReviewExperience', () => {
       screen.getByRole('heading', { name: '无法使用这张图片' })
     ).toBeVisible();
     expect(screen.getByText('仅支持 PNG、JPG 和 WebP 图片。')).toBeVisible();
-    expect(screen.getByRole('button', { name: '开始分析' })).toBeDisabled();
+    expect(screen.getByRole('button', { name: '开始检查' })).toBeDisabled();
   });
 
   it('returns to upload when server-side signature validation rejects the image', async () => {
@@ -270,14 +270,14 @@ describe('ReviewExperience', () => {
       },
     });
     await waitFor(() =>
-      expect(screen.getByRole('button', { name: '开始分析' })).toBeEnabled()
+      expect(screen.getByRole('button', { name: '开始检查' })).toBeEnabled()
     );
-    fireEvent.click(screen.getByRole('button', { name: '开始分析' }));
+    fireEvent.click(screen.getByRole('button', { name: '开始检查' }));
 
     expect(
       await screen.findByRole('heading', { name: '无法使用这张图片' })
     ).toBeVisible();
-    expect(screen.getByRole('button', { name: '开始分析' })).toBeDisabled();
+    expect(screen.getByRole('button', { name: '开始检查' })).toBeDisabled();
   });
 
   it('accepts a supported image through drag and drop', async () => {
@@ -290,7 +290,7 @@ describe('ReviewExperience', () => {
     });
 
     await waitFor(() => {
-      expect(screen.getByRole('button', { name: '开始分析' })).toBeEnabled();
+      expect(screen.getByRole('button', { name: '开始检查' })).toBeEnabled();
     });
   });
 
@@ -307,17 +307,19 @@ describe('ReviewExperience', () => {
     });
 
     await waitFor(() => {
-      expect(screen.getByRole('button', { name: '开始分析' })).toBeEnabled();
+      expect(screen.getByRole('button', { name: '开始检查' })).toBeEnabled();
     });
 
-    fireEvent.click(screen.getByRole('button', { name: '开始分析' }));
+    fireEvent.click(screen.getByRole('button', { name: '开始检查' }));
 
     await waitFor(() => {
       expect(screen.getByRole('heading', { name: '检查结果' })).toBeVisible();
     });
-    expect(screen.getByText('修改优先级')).toBeVisible();
-    expect(screen.getAllByText('高修改优先级')).not.toHaveLength(0);
-    expect(screen.getByText('详细检查报告')).toBeVisible();
+    expect(screen.getByText('先看这几处')).toBeVisible();
+    expect(screen.getAllByText('建议先看')).not.toHaveLength(0);
+    expect(screen.getByText('还检查了这些地方')).toBeVisible();
+    expect(screen.getByRole('button', { name: '确认疑点' })).toBeVisible();
+    expect(screen.getByRole('button', { name: '排除疑点' })).toBeVisible();
     const resultOverview = screen.getByTestId('result-overview');
     expect(within(resultOverview).getByTestId('image-panel')).toBeVisible();
     expect(within(resultOverview).getByTestId('issue-panel')).toBeVisible();
@@ -327,37 +329,38 @@ describe('ReviewExperience', () => {
     expect(screen.getByTestId('detailed-report')).toBeVisible();
 
     fireEvent.click(
-      screen.getByRole('button', { name: '问题 2：眼部比例建议检查' })
+      screen.getByRole('button', { name: '疑点 2：双眼高光方向不太一致' })
     );
     expect(
-      screen.getByRole('heading', { name: '眼部比例建议检查' })
+      screen.getByRole('heading', { name: '双眼高光方向不太一致' })
     ).toBeVisible();
 
-    fireEvent.click(screen.getByRole('button', { name: '定位问题 1' }));
+    fireEvent.click(screen.getByRole('button', { name: '定位疑点 1' }));
     expect(
-      screen.getByRole('heading', { name: '手部结构需要检查' })
+      screen.getByRole('heading', { name: '手指和掌部接得有点生硬' })
     ).toBeVisible();
 
     fireEvent.click(screen.getByRole('button', { name: '定位维度 B2 眼部' }));
     expect(
-      screen.getByRole('heading', { name: '眼部比例建议检查' })
+      screen.getByRole('heading', { name: '双眼高光方向不太一致' })
     ).toBeVisible();
 
     fireEvent.click(
       screen.getByRole('button', { name: '定位维度 B1 手部结构' })
     );
-    fireEvent.click(screen.getByRole('button', { name: '下一项' }));
+    fireEvent.click(screen.getByRole('button', { name: '看下一处' }));
     expect(
-      screen.getByRole('heading', { name: '眼部比例建议检查' })
+      screen.getByRole('heading', { name: '双眼高光方向不太一致' })
     ).toBeVisible();
 
-    fireEvent.click(screen.getByRole('button', { name: '忽略此项' }));
-    expect(screen.getAllByText('已忽略')).not.toHaveLength(0);
+    expect(
+      screen.queryByRole('button', { name: '忽略此项' })
+    ).not.toBeInTheDocument();
 
     fireEvent.click(screen.getByRole('button', { name: 'AI-PIC-DETECT' }));
     expect(
       screen.getByRole('heading', {
-        name: '让 AI 图更经得住细看。',
+        name: '让你的 AI 图，经得住细看。',
       })
     ).toBeVisible();
   });
@@ -381,15 +384,13 @@ describe('ReviewExperience', () => {
       },
     });
     await waitFor(() =>
-      expect(screen.getByRole('button', { name: '开始分析' })).toBeEnabled()
+      expect(screen.getByRole('button', { name: '开始检查' })).toBeEnabled()
     );
-    fireEvent.click(screen.getByRole('button', { name: '开始分析' }));
+    fireEvent.click(screen.getByRole('button', { name: '开始检查' }));
 
-    expect(await screen.findByText('暂未发现高修改优先级问题')).toBeVisible();
-    expect(
-      screen.getByText('本次扫描未给出需要优先修改的局部。')
-    ).toBeVisible();
-    expect(screen.getByText('详细检查报告')).toBeVisible();
+    expect(await screen.findByText('这次没有发现足够明确的疑点')).toBeVisible();
+    expect(screen.getByText('没有找到值得单独标出来的局部。')).toBeVisible();
+    expect(screen.getByText('还检查了这些地方')).toBeVisible();
     expect(
       within(screen.getByTestId('result-overview')).queryByTestId(
         'detailed-report'
@@ -398,7 +399,7 @@ describe('ReviewExperience', () => {
 
     fireEvent.click(screen.getByRole('button', { name: '检查另一张图片' }));
     expect(
-      screen.getByRole('heading', { name: '上传一张人物图' })
+      screen.getByRole('heading', { name: '上传一张 AI 图' })
     ).toBeVisible();
   });
 
@@ -421,11 +422,11 @@ describe('ReviewExperience', () => {
       },
     });
     await waitFor(() =>
-      expect(screen.getByRole('button', { name: '开始分析' })).toBeEnabled()
+      expect(screen.getByRole('button', { name: '开始检查' })).toBeEnabled()
     );
-    fireEvent.click(screen.getByRole('button', { name: '开始分析' }));
+    fireEvent.click(screen.getByRole('button', { name: '开始检查' }));
 
-    expect(await screen.findByText('暂未发现高修改优先级问题')).toBeVisible();
+    expect(await screen.findByText('这次没有发现足够明确的疑点')).toBeVisible();
     expect(screen.queryByText('正在扫描局部细节')).not.toBeInTheDocument();
   });
 
@@ -444,14 +445,14 @@ describe('ReviewExperience', () => {
       },
     });
     await waitFor(() =>
-      expect(screen.getByRole('button', { name: '开始分析' })).toBeEnabled()
+      expect(screen.getByRole('button', { name: '开始检查' })).toBeEnabled()
     );
-    fireEvent.click(screen.getByRole('button', { name: '开始分析' }));
+    fireEvent.click(screen.getByRole('button', { name: '开始检查' }));
 
     expect(
-      await screen.findByRole('heading', { name: '这次分析没有完成' })
+      await screen.findByRole('heading', { name: '这次检查没有完成' })
     ).toBeVisible();
-    fireEvent.click(screen.getByRole('button', { name: '重试分析' }));
+    fireEvent.click(screen.getByRole('button', { name: '再试一次' }));
     expect(
       await screen.findByRole('heading', { name: '检查结果' })
     ).toBeVisible();
@@ -473,14 +474,16 @@ describe('ReviewExperience', () => {
       },
     });
     await waitFor(() =>
-      expect(screen.getByRole('button', { name: '开始分析' })).toBeEnabled()
+      expect(screen.getByRole('button', { name: '开始检查' })).toBeEnabled()
     );
-    fireEvent.click(screen.getByRole('button', { name: '开始分析' }));
+    fireEvent.click(screen.getByRole('button', { name: '开始检查' }));
 
     expect(
-      await screen.findByRole('heading', { name: '分析时间较长，暂未完成' })
+      await screen.findByRole('heading', {
+        name: '等待时间较长，这次检查未完成',
+      })
     ).toBeVisible();
-    fireEvent.click(screen.getByRole('button', { name: '重试分析' }));
+    fireEvent.click(screen.getByRole('button', { name: '再试一次' }));
     expect(
       await screen.findByRole('heading', { name: '检查结果' })
     ).toBeVisible();
@@ -500,9 +503,9 @@ describe('ReviewExperience', () => {
       },
     });
     await waitFor(() =>
-      expect(screen.getByRole('button', { name: '开始分析' })).toBeEnabled()
+      expect(screen.getByRole('button', { name: '开始检查' })).toBeEnabled()
     );
-    fireEvent.click(screen.getByRole('button', { name: '开始分析' }));
+    fireEvent.click(screen.getByRole('button', { name: '开始检查' }));
 
     expect(
       await screen.findByRole('heading', { name: '本次检查额度已用完' })

@@ -1,5 +1,15 @@
 # Tasks
 
+## 2026-09-13 UX closeout
+
+- [x] Real waiting timer, stable preview lifetime, and stale-response protection.
+- [x] Independent confirm/exclude/browse controls and retained completion results.
+- [x] Scrollable uncapped result list, aligned boxes, cautious dimension display.
+- [x] Recoverable malformed-response handling and explicit landing demo labels.
+- [x] Unit/integration, TypeScript, and desktop/mobile browser regression.
+- [ ] Repository-wide formatting/lint debt remains outside this task.
+- [ ] Live provider reliability remains a separate backend acceptance task.
+
 ## Completed P0 front end
 
 - [x] Replace the public ShipAny landing experience with AI-PIC-DETECT P0.

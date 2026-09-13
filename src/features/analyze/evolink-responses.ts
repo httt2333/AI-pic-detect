@@ -21,7 +21,7 @@ C1 边缘与粘连；C2 衣物与褶皱；C3 背景与小物件；C4 层次完�
 4. 使用“疑似”“建议检查”“需人工确认”等谨慎表述。
 5. bbox 使用相对于原图的 0 到 1 坐标，且不得超出图片。
 6. 仅输出 confidence 大于等于 0.7 的候选。
-7. 最多输出 5 条最值得复核的候选，并按修改优先级排序。
+7. 输出所有满足证据和置信度要求的候选，并按修改优先级排序，不为了凑数添加问题。
 8. dimensions 覆盖 17 个维度。只有存在匹配 issue 时才使用 review_recommended；看不见或无法判断时使用 not_assessable；其余使用 no_high_confidence_issue。`;
 
 const USER_PROMPT =
@@ -76,7 +76,6 @@ function buildJsonSchema() {
       properties: {
         issues: {
           type: 'array',
-          maxItems: 5,
           items: {
             type: 'object',
             additionalProperties: false,

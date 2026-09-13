@@ -10,20 +10,18 @@ test('a creator can begin a single-image review from the public landing page', a
   expect(response?.ok()).toBe(true);
   await expect(
     page.getByRole('heading', {
-      name: '让 AI 图更经得住细看。',
+      name: '让你的 AI 图，经得住细看。',
     })
   ).toBeVisible();
 
-  await expect(page.getByText('AI IMAGE REVIEW FOR ANIME CREATORS')).toBeVisible();
-  const heroScanner = page.getByRole('slider', { name: '拖动扫描示例图' });
-  await expect(heroScanner).toHaveValue('100');
   await expect(
-    page.getByText('发现 2 处需要注意的细节')
-  ).toBeHidden();
-  await heroScanner.fill('60');
-  await expect(
-    page.getByText('发现 2 处需要注意的细节')
+    page.getByText('AI IMAGE REVIEW FOR ANIME CREATORS')
   ).toBeVisible();
+  const heroScanner = page.getByRole('slider', { name: '拖动查看示例图' });
+  await expect(heroScanner).toHaveValue('100');
+  await expect(page.getByText('这里有 2 处，值得再看一眼。')).toBeHidden();
+  await heroScanner.fill('60');
+  await expect(page.getByText('这里有 2 处，值得再看一眼。')).toBeVisible();
   await expect(page.getByRole('link', { name: '查看示例' })).toHaveAttribute(
     'href',
     '#review-story'
@@ -46,7 +44,7 @@ test('the landing story remains usable on a narrow mobile viewport', async ({
 
   await expect(
     page.getByRole('heading', {
-      name: '让 AI 图更经得住细看。',
+      name: '让你的 AI 图，经得住细看。',
     })
   ).toBeVisible();
   await expect(
@@ -60,15 +58,15 @@ test('the landing story remains usable on a narrow mobile viewport', async ({
   expect(hasHorizontalOverflow).toBe(false);
 });
 
-test('the hero scan automatically reaches its result state', async ({ page }) => {
+test('the hero scan automatically reaches its result state', async ({
+  page,
+}) => {
   await page.goto('/');
 
   await expect(
-    page.getByRole('slider', { name: '拖动扫描示例图' })
+    page.getByRole('slider', { name: '拖动查看示例图' })
   ).toHaveValue('0', { timeout: 5_000 });
-  await expect(
-    page.getByText('发现 2 处需要注意的细节')
-  ).toBeVisible();
+  await expect(page.getByText('这里有 2 处，值得再看一眼。')).toBeVisible();
 });
 
 test('the large story visual stays visible while the desktop story advances', async ({
@@ -107,25 +105,34 @@ test('a creator can review a marked local issue in the result workspace', async 
     .getByLabel('选择要检查的图片')
     .setInputFiles('public/images/ai-pic-detect/hero-review-sample.png');
 
-  await expect(page.getByRole('button', { name: '开始分析' })).toBeEnabled();
-  await page.getByRole('button', { name: '开始分析' }).click();
+  await expect(
+    page
+      .getByRole('main')
+      .getByRole('button', { name: '开始检查', exact: true })
+  ).toBeEnabled();
+  await page
+    .getByRole('main')
+    .getByRole('button', { name: '开始检查', exact: true })
+    .click();
 
   await expect(page.getByRole('heading', { name: '检查结果' })).toBeVisible();
-  await expect(page.getByText('修改优先级', { exact: true })).toBeVisible();
-  await expect(page.getByRole('button', { name: '定位问题 1' })).toBeVisible();
+  await expect(page.getByText('先看这几处', { exact: true })).toBeVisible();
+  await expect(page.getByRole('button', { name: '定位疑点 1' })).toBeVisible();
   await expect(
-    page.getByRole('heading', { name: '详细检查报告' })
+    page.getByRole('heading', { name: '还检查了这些地方' })
   ).toBeVisible();
 
-  await page.getByRole('button', { name: '问题 2：眼部比例建议检查' }).click();
+  await page
+    .getByRole('button', { name: '疑点 2：双眼高光方向不太一致' })
+    .click();
   await expect(
-    page.getByRole('heading', { name: '眼部比例建议检查' })
+    page.getByRole('heading', { name: '双眼高光方向不太一致' })
   ).toBeVisible();
   await page.getByRole('button', { name: '定位维度 B1 手部结构' }).click();
   await expect(
-    page.getByRole('heading', { name: '手部结构需要检查' })
+    page.getByRole('heading', { name: '手指和掌部接得有点生硬' })
   ).toBeVisible();
-  await expect(page.getByRole('button', { name: '下一项' })).toBeVisible();
+  await expect(page.getByRole('button', { name: '看下一处' })).toBeVisible();
 });
 
 test('a creator can view configured credit packs without starting an unavailable payment', async ({
