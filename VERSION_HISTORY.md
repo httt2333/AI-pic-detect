@@ -14,6 +14,8 @@ This file records what each Git checkpoint or backup contains. It is a human-rea
 
 ## Ledger
 
+| 2026-09-13 | this commit | Codex backup window | `chore` | Created a complete recovery checkpoint for the current project state based on `55154e7`, including frontend, backend analysis integration, authentication/database wiring, tests, and project documentation. | No new tests run; backup only. Existing verified checks remain recorded below. | Live production login and provider acceptance still require deployment-environment verification. Local only. |
+
 | Date | Commit | Agent/window | Type | Scope / summary | Checks run | Risks / follow-up | Remote status |
 |---|---|---|---|---|---|---|---|
 | 2026-09-09 | `dcce486` | Codex audit window | `chore` | Created the first local baseline backup containing the project source, tests, configuration, documentation, and assets. Excluded `.dev.vars` and `.pnpm-store/`. | No tests run; documentation/backup operation only. | `.dev.vars` and `.pnpm-store/` remain untracked; `.gitignore` should be reviewed. | Local only; push to `origin/main` failed because GitHub HTTPS/proxy/TLS connection was unavailable. |
