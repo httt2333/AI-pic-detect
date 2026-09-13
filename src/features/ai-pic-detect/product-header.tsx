@@ -15,25 +15,25 @@ export function ProductHeader() {
             href="/zh#how-it-works"
             className="hidden hover:text-violet-950 sm:block"
           >
-            怎么检查
+            检查流程
           </Link>
           <Link
             href="/zh#why-this"
             className="hidden hover:text-violet-950 lg:block"
           >
-            为什么这样做
+            产品理念
           </Link>
           <Link
             href="/zh#boundaries"
             className="hidden hover:text-violet-950 sm:block"
           >
-            产品边界
+            AI边界
           </Link>
           <Link
             href="/zh/pricing"
             className="hidden hover:text-violet-950 lg:block"
           >
-            额度与价格
+            购买额度
           </Link>
           <Link
             href="/reviews"

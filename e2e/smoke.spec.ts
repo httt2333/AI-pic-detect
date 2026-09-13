@@ -19,9 +19,9 @@ test('a creator can begin a single-image review from the public landing page', a
   ).toBeVisible();
   const heroScanner = page.getByRole('slider', { name: '拖动查看示例图' });
   await expect(heroScanner).toHaveValue('100');
-  await expect(page.getByText('这里有 2 处，值得再看一眼。')).toBeHidden();
+  await expect(page.getByText('这里有 2 处问题，值得再看一眼。')).toBeHidden();
   await heroScanner.fill('60');
-  await expect(page.getByText('这里有 2 处，值得再看一眼。')).toBeVisible();
+  await expect(page.getByText('这里有 2 处问题，值得再看一眼。')).toBeVisible();
   await expect(page.getByRole('link', { name: '查看示例' })).toHaveAttribute(
     'href',
     '#review-story'
@@ -30,9 +30,9 @@ test('a creator can begin a single-image review from the public landing page', a
   await page.getByRole('button', { name: '上传图片开始检查' }).first().click();
   await expect(page.getByLabel('选择要检查的图片')).toBeVisible();
 
-  await page.getByRole('link', { name: '怎么检查' }).click();
+  await page.getByRole('link', { name: '检查流程' }).click();
   await expect(
-    page.getByRole('heading', { name: '先看哪里值得改。' })
+    page.getByRole('heading', { name: '先找出最容易露出 AI 感的问题。' })
   ).toBeVisible();
 });
 
@@ -66,7 +66,7 @@ test('the hero scan automatically reaches its result state', async ({
   await expect(
     page.getByRole('slider', { name: '拖动查看示例图' })
   ).toHaveValue('0', { timeout: 5_000 });
-  await expect(page.getByText('这里有 2 处，值得再看一眼。')).toBeVisible();
+  await expect(page.getByText('这里有 2 处问题，值得再看一眼。')).toBeVisible();
 });
 
 test('the large story visual stays visible while the desktop story advances', async ({
@@ -141,11 +141,11 @@ test('a creator can view configured credit packs without starting an unavailable
   await page.goto('/zh/pricing');
 
   await expect(page.getByRole('banner')).toHaveClass(/fixed/);
-  await expect(page.getByRole('link', { name: '怎么检查' })).toHaveAttribute(
+  await expect(page.getByRole('link', { name: '检查流程' })).toHaveAttribute(
     'href',
     '/#how-it-works'
   );
-  await expect(page.getByRole('link', { name: '产品边界' })).toHaveAttribute(
+  await expect(page.getByRole('link', { name: 'AI边界' })).toHaveAttribute(
     'href',
     '/#boundaries'
   );

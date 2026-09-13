@@ -344,7 +344,7 @@ function ProductHeader({
             }}
             className="hidden hover:text-neutral-950 sm:block"
           >
-            怎么检查
+            检查流程
           </a>
           <a
             href="#boundaries"
@@ -354,7 +354,7 @@ function ProductHeader({
             }}
             className="hidden hover:text-neutral-950 sm:block"
           >
-            产品边界
+            AI边界
           </a>
           <a
             href="#why-this"
@@ -364,13 +364,13 @@ function ProductHeader({
             }}
             className="hidden hover:text-neutral-950 lg:block"
           >
-            为什么这样做
+            产品理念
           </a>
           <Link
             href="/zh/pricing"
             className="hidden hover:text-neutral-950 lg:block"
           >
-            额度与价格
+            购买额度
           </Link>
           <Link
             href="/reviews"

@@ -12,20 +12,20 @@ const storySteps = [
   {
     key: 'find',
     label: 'FIND',
-    title: '先看哪里值得改。',
+    title: '先找出最容易露出 AI 感的问题。',
     description: '定位观众最容易注意到的局部。',
   },
   {
     key: 'understand',
     label: 'UNDERSTAND',
-    title: '再看为什么不自然。',
-    description: '把结构、边界、遮挡、光影这些问题说清楚，再决定怎么改。',
+    title: '再看为什么会有AI感。',
+    description: '看清是结构、边界、遮挡还是光影，让这个地方显得像 AI。',
   },
   {
     key: 'fix',
     label: 'FIX',
-    title: '最后只改必要的地方。',
-    description: '只针对问题区域给出修改方向，其他地方尽量不动。',
+    title: '最后怎么改。',
+    description: '只针对问题区域，给出清楚、具体的修改建议。',
   },
 ] as const;
 
@@ -69,14 +69,14 @@ function RealReactions() {
     >
       <div className="mx-auto max-w-[1320px] px-5 sm:px-8">
         <div className="max-w-3xl">
-          <p className="text-xs font-semibold tracking-[0.18em] text-violet-700">
+          <p className="text-xs font-semibold tracking-[0.22em] text-violet-700">
             REAL REACTIONS
           </p>
           <h2 className="mt-5 max-w-2xl text-4xl leading-[1.08] font-semibold tracking-[-0.04em] text-balance sm:text-5xl">
-            这些，都是观众真的会看的地方。
+            你没注意到的细节，观众看得出 AI 感。
           </h2>
           <p className="mt-6 max-w-2xl text-base leading-7 text-neutral-600 sm:text-lg sm:leading-8">
-            手、眼睛、边界、透视、光影……很多 AI 感，最后都落在这些细节上。
+            手、眼睛、边界、透视、光影……AI 感往往就藏在这些局部里。
           </p>
         </div>
       </div>
@@ -164,10 +164,10 @@ function WhyThisApproach() {
           WHY THIS APPROACH
         </p>
         <h2 className="mt-5 text-4xl leading-tight font-semibold tracking-[-0.035em] text-balance sm:text-5xl">
-          比起直接给您一个结果，我们更在乎观众到底看到了什么。
+          一个“像不像 AI”的分数，解决不了具体哪里出了问题。
         </h2>
         <p className="mt-6 max-w-2xl text-base leading-7 text-neutral-600 sm:text-lg sm:leading-8">
-          生成模型一直在变，但观众指出的问题很具体。我们把这些真实反馈整理成检查方法，再交给多模态模型逐项看。
+          我们更关心哪些局部让画面露出 AI 感，以及这些地方应该怎么改。
         </p>
       </div>
       <div className="mt-12 grid gap-8 border-t border-neutral-200 pt-8 sm:grid-cols-3 sm:gap-6">
@@ -177,13 +177,7 @@ function WhyThisApproach() {
         <p className="text-lg font-medium text-neutral-900">
           1,149 条高价值反馈
         </p>
-        <p className="text-lg font-medium text-neutral-900">
-          50 次样本测试 · 28 轮调试
-        </p>
       </div>
-      <p className="mt-8 max-w-2xl text-sm leading-6 text-neutral-500">
-        不是追着模型版本跑，而是持续整理观众真正会在意的问题。
-      </p>
     </section>
   );
 }
@@ -341,7 +335,7 @@ function HeroVisual() {
         <div className="pointer-events-none absolute top-5 right-5 left-5 z-30 text-white [text-shadow:0_2px_16px_rgba(0,0,0,0.55)] sm:top-7 sm:right-7 sm:left-7">
           <p className="mb-2 text-xs font-medium">示例结果</p>
           <p className="text-base font-medium sm:text-lg">
-            第一眼，你注意到这些细节了吗？
+            试一试，你能发现有问题的地方吗？
           </p>
           <p className="mt-1.5 text-xs font-medium text-white/75 sm:text-sm">
             拖动查看 →
@@ -351,7 +345,7 @@ function HeroVisual() {
             aria-hidden="true"
             className="invisible mt-2 text-lg font-bold opacity-0 transition-opacity duration-200 sm:text-xl"
           >
-            这里有 2 处，值得再看一眼。
+            这里有 2 处问题，值得再看一眼。
           </p>
         </div>
 
@@ -372,14 +366,14 @@ function HeroVisual() {
           />
           <EditorialAnnotation
             number={1}
-            label="01　手指和掌部接得有点生硬"
+            label="手指和掌部接得有点生硬"
             className="top-[51%] left-[66%]"
             lineClassName="top-3.5 right-5 w-20 -rotate-12"
             delayClassName="delay-300"
           />
           <EditorialAnnotation
             number={2}
-            label="02　双眼高光方向不一致"
+            label="双眼高光方向不一致"
             className="top-[24%] left-[38%]"
             lineClassName="top-3.5 left-5 w-16 rotate-12"
             delayClassName="delay-500"
@@ -455,7 +449,9 @@ function StoryVisual({ activeStep }: { activeStep: StoryStep }) {
         ) : activeStep === 'understand' ? (
           <>
             <p className="text-xs font-semibold text-violet-700">示例</p>
-            <p className="mt-2 text-sm font-semibold">连接处缺少自然过渡</p>
+            <p className="mt-2 text-sm font-semibold">
+              手腕和手掌之间的过渡不自然
+            </p>
             <p className="mt-1 text-xs leading-5 text-neutral-600">
               手腕与手掌之间缺少自然过渡。
             </p>
@@ -504,30 +500,38 @@ function StoryStepNumber({
 
 function WorkspacePreview() {
   return (
-    <div className="motion-safe:animate-in motion-safe:fade-in motion-safe:zoom-in-95 grid overflow-hidden border border-neutral-200 bg-white shadow-[0_18px_50px_rgba(35,28,55,0.08)] motion-safe:duration-700 lg:grid-cols-[minmax(0,1.35fr)_minmax(340px,0.65fr)]">
+    <div
+      data-testid="workspace-preview"
+      className="motion-safe:animate-in motion-safe:fade-in motion-safe:zoom-in-95 grid overflow-hidden border border-neutral-200 bg-white shadow-[0_18px_50px_rgba(35,28,55,0.08)] motion-safe:duration-700 lg:grid-cols-[minmax(0,1.35fr)_minmax(340px,0.65fr)]"
+    >
       <div className="border-b border-neutral-200 p-3 sm:p-5 lg:border-r lg:border-b-0">
         <div className="mb-3 flex items-center justify-between text-xs text-neutral-500">
           <span className="font-medium text-neutral-800">示例结果</span>
-          <span>发现 3 处值得看的疑点</span>
+          <span>发现 2 处值得注意的问题</span>
         </div>
         <div className="relative aspect-[4/5] overflow-hidden bg-neutral-100">
           <ReviewImage alt="完整检查工作台中的示例人物图" />
-          <div className="absolute top-[47%] left-[61%] h-[22%] w-[17%] border border-violet-600 bg-violet-500/8">
+          <div
+            data-testid="preview-location"
+            className="absolute top-[47%] left-[61%] h-[22%] w-[17%] border border-violet-600 bg-violet-500/8"
+          >
             <span className="absolute -top-3 -left-3 grid size-6 place-items-center rounded-full bg-violet-700 text-[11px] font-bold text-white">
               1
+            </span>
+          </div>
+          <div
+            data-testid="preview-location"
+            className="absolute top-[20%] left-[32%] h-[12%] w-[34%] border border-violet-600 bg-violet-500/8"
+          >
+            <span className="absolute -top-3 -left-3 grid size-6 place-items-center rounded-full bg-violet-700 text-[11px] font-bold text-white">
+              2
             </span>
           </div>
         </div>
       </div>
       <div className="flex flex-col">
-        <div className="border-b border-neutral-200 p-5 sm:p-6">
-          <p className="text-sm font-semibold text-neutral-950">
-            疑点在哪，为什么，可以怎么改。
-          </p>
-          <p className="mt-2 text-sm leading-6 text-neutral-600">一目了然。</p>
-        </div>
         <div className="border-b border-neutral-200 px-5 py-4 sm:px-6">
-          <p className="text-xs font-semibold text-violet-700">这一处疑点</p>
+          <p className="text-xs font-semibold text-violet-700">问题 01</p>
           <h3 className="mt-2 text-xl font-semibold text-neutral-950">
             手指和掌部接得有点生硬
           </h3>
@@ -537,23 +541,18 @@ function WorkspacePreview() {
           <div>
             <p className="font-semibold text-neutral-950">为什么值得注意</p>
             <p className="mt-2 leading-6 text-neutral-600">
-              手腕与手掌连接缺少自然过渡。
+              手指根部与掌部的连接缺少自然过渡。
             </p>
           </div>
           <div>
-            <p className="font-semibold text-neutral-950">可以怎么改</p>
+            <p className="font-semibold text-neutral-950">怎么改</p>
             <p className="mt-2 leading-6 text-neutral-600">
-              调整连接和轮廓，其他地方不动。
+              调整手指根部与掌部的连接和轮廓，保留原来的手势与其他区域。
             </p>
           </div>
-          <div className="mt-auto grid grid-cols-2 gap-3">
-            <span className="grid min-h-11 place-items-center rounded-lg bg-violet-700 px-3 text-sm font-semibold text-white">
-              看下一处
-            </span>
-            <span className="grid min-h-11 place-items-center rounded-lg border border-neutral-300 px-3 text-sm font-semibold text-neutral-700">
-              排除疑点
-            </span>
-          </div>
+          <p className="mt-auto border-t border-neutral-200 pt-4 text-xs leading-5 text-neutral-600">
+            静态示例 · 上传图片后可确认或排除疑点
+          </p>
         </div>
       </div>
     </div>
@@ -595,11 +594,11 @@ export function LandingPage({ onUpload }: LandingPageProps) {
           <p className="text-xs font-semibold tracking-[0.18em] text-violet-700">
             AI IMAGE REVIEW FOR ANIME CREATORS
           </p>
-          <h1 className="mt-5 text-5xl leading-[1.06] font-semibold tracking-[-0.04em] text-balance sm:text-6xl lg:text-[4.5rem]">
+          <h1 className="mt-5 text-5xl leading-[1.06] font-semibold tracking-[-0.01em] text-balance sm:text-6xl lg:text-[4.5rem]">
             让你的 AI 图，经得住细看。
           </h1>
-          <p className="mt-6 max-w-lg text-base leading-7 text-neutral-600 sm:text-lg sm:leading-8">
-            发布前，再检查一遍容易忽略的局部细节。看看哪里值得注意、为什么看起来不自然，以及可以怎么改。
+          <p className="mt-6 max-w-lg text-base leading-7 tracking-[0.02em] text-neutral-600 sm:text-lg sm:leading-8">
+            发布前，找出图片中常见的AI漏洞，弄清为什么不自然、可以怎么改。
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-4">
             <button
@@ -618,7 +617,7 @@ export function LandingPage({ onUpload }: LandingPageProps) {
               <IconArrowRight size={17} stroke={1.8} />
             </a>
             <p className="w-full text-xs leading-5 text-neutral-500">
-              无需登录 · 一次检查一张图片
+              无需登录 · 免费尝试
             </p>
           </div>
         </div>
@@ -641,10 +640,10 @@ export function LandingPage({ onUpload }: LandingPageProps) {
               KEEP WHAT ALREADY WORKS
             </p>
             <h2 className="max-w-5xl text-5xl leading-[1.08] font-semibold tracking-[-0.04em] text-balance sm:text-6xl lg:text-7xl">
-              我们和您一起精益求精
+              我们和你一起精益求精
             </h2>
             <p className="mt-8 max-w-xl text-lg leading-8 text-neutral-600">
-              只改有问题的局部，保留已经满意的部分。
+              不止步于判断AI概率，我们更看重具体问题是什么。
             </p>
           </div>
           <div
@@ -741,11 +740,8 @@ export function LandingPage({ onUpload }: LandingPageProps) {
         <div className="mx-auto max-w-[1320px]">
           <div className="max-w-3xl">
             <h2 className="text-4xl leading-tight font-semibold tracking-[-0.035em] text-balance sm:text-5xl">
-              疑点在哪，为什么，可以怎么改。
+              最后呈现一个完整的修改流程。
             </h2>
-            <p className="mt-5 max-w-2xl text-lg leading-8 text-neutral-600">
-              一目了然。
-            </p>
           </div>
           <div className="mt-12">
             <WorkspacePreview />
@@ -760,10 +756,10 @@ export function LandingPage({ onUpload }: LandingPageProps) {
         <div className="border-t border-neutral-300 pt-10">
           <IconEye size={28} stroke={1.6} className="text-violet-700" />
           <h2 className="mt-5 max-w-3xl text-3xl leading-tight font-semibold tracking-[-0.03em] sm:text-4xl">
-            我们是您的助手，负责提出有依据的判断。
+            AI 帮你找问题，你决定是否修改。
           </h2>
           <p className="mt-4 max-w-2xl text-base leading-7 text-neutral-600">
-            有把握才提醒，最后改不改由您决定。
+            它会指出 AI 痕迹和视觉问题，但最后怎么处理，还是由你决定。
           </p>
         </div>
       </section>
@@ -777,10 +773,10 @@ export function LandingPage({ onUpload }: LandingPageProps) {
             ONE LAST REVIEW
           </p>
           <h2 className="mt-7 max-w-4xl text-4xl leading-tight font-semibold tracking-[-0.035em] text-balance sm:text-5xl lg:text-6xl">
-            每次发布前，我们先帮您把明显的问题找出来。
+            发出去之前，再检查一遍容易露出 AI 感的地方。
           </h2>
           <p className="mt-6 max-w-xl text-base leading-7 text-neutral-300 sm:text-lg">
-            少一点返工，也少一点风险。
+            看看还有没有被你漏掉的问题，再决定哪些值得处理。
           </p>
           <div className="mt-9 flex flex-wrap items-center gap-4">
             <button

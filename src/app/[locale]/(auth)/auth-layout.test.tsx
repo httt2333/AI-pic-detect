@@ -20,7 +20,7 @@ describe('AuthLayout', () => {
     );
 
     expect(screen.getByRole('banner')).toHaveClass('fixed');
-    expect(screen.getByRole('link', { name: '怎么检查' })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: '检查流程' })).toHaveAttribute(
       'href',
       '/zh#how-it-works'
     );

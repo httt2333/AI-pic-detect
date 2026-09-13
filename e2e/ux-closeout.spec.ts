@@ -3,6 +3,20 @@ import { expect, test, type Page } from '@playwright/test';
 import { getMockAnalysisResponse } from '../src/features/ai-pic-detect/mock';
 
 const image = 'public/images/ai-pic-detect/hero-review-sample.png';
+test('landing preview is honest about its scope and displayed locations', async ({
+  page,
+}) => {
+  await page.goto('/zh');
+  const preview = page.getByTestId('workspace-preview');
+  await expect(preview.getByText('示例结果', { exact: true })).toBeVisible();
+  await expect(preview.getByTestId('preview-location')).toHaveCount(2);
+  await expect(preview).not.toContainText('10%');
+  await expect(preview.getByRole('button')).toHaveCount(0);
+  await expect(
+    preview.getByText('静态示例 · 上传图片后可确认或排除疑点')
+  ).toBeVisible();
+});
+
 async function selectImage(page: Page) {
   await page.getByLabel('选择要检查的图片').setInputFiles(image);
   await page
@@ -109,13 +123,11 @@ test('mobile: validation, no_issue and recovery stay within the viewport', async
     route.fulfill({ json: getMockAnalysisResponse('no_issue') })
   );
   await openUpload(page);
-  await page
-    .getByLabel('选择要检查的图片')
-    .setInputFiles({
-      name: 'unsupported.gif',
-      mimeType: 'image/gif',
-      buffer: Buffer.from('GIF89a'),
-    });
+  await page.getByLabel('选择要检查的图片').setInputFiles({
+    name: 'unsupported.gif',
+    mimeType: 'image/gif',
+    buffer: Buffer.from('GIF89a'),
+  });
   await expect(page.getByRole('main').getByRole('alert')).toContainText(
     '仅支持 PNG、JPG 和 WebP'
   );
